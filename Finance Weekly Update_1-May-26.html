@@ -1,0 +1,2521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Orbitworks · Finance Weekly Dashboard</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+:root {
+  /* Orbitworks Brand */
+  --ow-black:   #000000;
+  --ow-teal:    #00aa82;
+  --ow-teal-dk: #006851;
+  --ow-teal-lt: #00c999;
+  /* UI Surface */
+  --bg:         #060a0a;
+  --surface:    #0c1414;
+  --surface2:   #121e1e;
+  --surface3:   #192828;
+  --border:     #1e3232;
+  --border-lt:  #254040;
+  /* Semantic */
+  --green:      #00e5a0;
+  --red:        #ff4d6d;
+  --amber:      #f5a623;
+  --blue:       #3ecfcf;
+  /* Text */
+  --text:       #e8f5f2;
+  --text-2:     #a8c4c0;
+  --muted:      #5a8080;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ─── TEAL MESH BACKGROUND ─── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 60% 40% at 10% 5%, rgba(0,170,130,0.08) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 30% at 90% 90%, rgba(0,104,81,0.06) 0%, transparent 55%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ─── HEADER ─── */
+header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(6,10,10,0.97);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+  border-top: 3px solid var(--ow-teal);
+  padding: 12px 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.logo-wrap {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.logo-wrap::after {
+  content: '';
+  display: block;
+  width: 1px;
+  height: 28px;
+  background: var(--border-lt);
+}
+.logo-wrap img {
+  height: 30px;
+  width: auto;
+  display: block;
+}
+
+.header-center {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+}
+.header-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -0.01em;
+}
+.header-subtitle {
+  font-size: 10.5px;
+  color: var(--muted);
+  letter-spacing: 0.03em;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+.header-badge {
+  background: rgba(0,170,130,0.12);
+  border: 1px solid rgba(0,170,130,0.35);
+  color: var(--ow-teal);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  padding: 4px 10px;
+  border-radius: 20px;
+}
+.header-date {
+  font-size: 10px;
+  color: var(--muted);
+  text-align: right;
+}
+.header-period { display: none; }
+.header-sub    { display: none; }
+
+/* ─── NAV ─── */
+nav {
+  position: sticky;
+  top: 61px;
+  z-index: 90;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  padding: 0 20px;
+}
+nav::-webkit-scrollbar { display: none; }
+
+nav button {
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: var(--muted);
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  padding: 13px 18px;
+  white-space: nowrap;
+  transition: color 0.2s, border-color 0.2s;
+  flex-shrink: 0;
+}
+nav button:hover { color: var(--text-2); }
+nav button.active {
+  color: var(--ow-teal);
+  border-bottom-color: var(--ow-teal);
+  font-weight: 600;
+}
+
+/* ─── MAIN ─── */
+main {
+  position: relative;
+  z-index: 1;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 24px 20px 80px;
+}
+
+.page { display: none; }
+.page.active { display: block; }
+
+/* ─── SECTION LABEL ─── */
+.sec-label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 16px;
+  margin-top: 32px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.sec-label::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+/* ─── KPI GRID ─── */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.kpi-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-top: 3px solid var(--card-color, var(--ow-teal));
+  border-radius: 10px;
+  padding: 16px 18px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+  cursor: default;
+}
+.kpi-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 32px rgba(0,170,130,0.18), 0 2px 8px rgba(0,0,0,0.3);
+  background: rgba(20,40,40,0.95);
+  border-color: var(--card-color, var(--ow-teal));
+}
+.kpi-label {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+.kpi-value {
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: var(--text);
+  line-height: 1;
+}
+.kpi-delta {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 11px;
+  font-weight: 600;
+  margin-top: 6px;
+  padding: 2px 7px;
+  border-radius: 4px;
+}
+.kpi-delta.pos { color: var(--green); background: rgba(0,229,160,0.1); }
+.kpi-delta.neg { color: var(--red);   background: rgba(255,77,109,0.1); }
+.kpi-delta.neu { color: var(--amber); background: rgba(245,166,35,0.1); }
+.kpi-sub {
+  font-size: 10px;
+  color: var(--muted);
+  margin-top: 3px;
+}
+
+/* ─── CHART GRID ─── */
+.chart-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 14px;
+  margin-bottom: 20px;
+}
+.chart-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 20px;
+}
+.c1  { grid-column: span 1; }
+.c4  { grid-column: span 4; }
+.c5  { grid-column: span 5; }
+.c6  { grid-column: span 6; }
+.c7  { grid-column: span 7; }
+.c8  { grid-column: span 8; }
+.c12 { grid-column: span 12; }
+
+.card-label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 4px;
+}
+.card-subval {
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: 14px;
+}
+
+/* ─── INSIGHT BOX ─── */
+.insight {
+  background: linear-gradient(135deg, rgba(0,170,130,0.07), rgba(0,104,81,0.04));
+  border: 1px solid rgba(0,170,130,0.2);
+  border-left: 3px solid var(--ow-teal);
+  border-radius: 8px;
+  padding: 14px 16px;
+  font-size: 12.5px;
+  line-height: 1.75;
+  color: var(--text-2);
+  margin-top: 14px;
+}
+.insight .itag {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--ow-teal);
+  display: block;
+  margin-bottom: 5px;
+}
+
+/* ─── TABLE ─── */
+.dtable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12.5px;
+}
+.dtable th {
+  text-align: left;
+  padding: 8px 12px;
+  font-size: 9.5px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  border-bottom: 1px solid var(--border);
+}
+.dtable td {
+  padding: 9px 12px;
+  border-bottom: 1px solid rgba(30,50,50,0.6);
+  vertical-align: middle;
+}
+.dtable tr:hover td { background: rgba(0,170,130,0.03); }
+.dtable .num { text-align: right; font-variant-numeric: tabular-nums; font-size: 12px; }
+.dtable .pos { color: var(--green); }
+.dtable .neg { color: var(--red); }
+.dtable .bold { font-weight: 600; }
+.dtable .grp td {
+  background: var(--surface2);
+  font-size: 9.5px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  padding: 6px 12px;
+}
+
+/* ─── PIPELINE ─── */
+.pipe-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.pipe-label { font-size: 12px; flex: 0 0 170px; }
+.pipe-track { flex: 1; height: 7px; background: var(--surface3); border-radius: 4px; overflow: hidden; }
+.pipe-fill  { height: 100%; border-radius: 4px; transition: width 0.8s ease; }
+.pipe-val   { flex: 0 0 65px; text-align: right; font-size: 11px; font-weight: 600; color: var(--muted); }
+
+/* ─── BADGE ─── */
+.badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-size: 10px;
+  font-weight: 600;
+}
+.b-green  { background: rgba(0,229,160,0.12);  color: var(--green); border: 1px solid rgba(0,229,160,0.25); }
+.b-amber  { background: rgba(245,166,35,0.12);  color: var(--amber); border: 1px solid rgba(245,166,35,0.25); }
+.b-red    { background: rgba(255,77,109,0.12);  color: var(--red);   border: 1px solid rgba(255,77,109,0.25); }
+.b-slate  { background: rgba(136,153,170,0.12); color: #8899aa;      border: 1px solid rgba(136,153,170,0.25); }
+.b-teal   { background: rgba(0,170,130,0.12);   color: var(--ow-teal); border: 1px solid rgba(0,170,130,0.25); }
+
+/* ─── STATUS ROW ─── */
+.srow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 9px 0;
+  border-bottom: 1px solid var(--border);
+}
+.srow:last-child { border-bottom: none; }
+.srow-name { font-size: 12px; color: var(--text-2); }
+.srow-right { display: flex; align-items: center; gap: 8px; }
+.srow-val { font-size: 12px; font-weight: 600; }
+.dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+
+/* ─── GAUGE ─── */
+.gauge-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 12px 0 8px;
+}
+.gauge-num {
+  font-size: 64px;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  background: linear-gradient(135deg, var(--ow-teal), var(--ow-teal-lt));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.gauge-unit {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--muted);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-top: 4px;
+}
+
+/* ─── RADAR FILTER BUTTONS ─── */
+.radar-filter {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  color: var(--fc, var(--muted));
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  font-size: 10.5px;
+  font-weight: 500;
+  padding: 5px 13px;
+  transition: all 0.2s;
+}
+.radar-filter:hover { border-color: var(--fc, var(--border-lt)); color: var(--fc, var(--text-2)); }
+.radar-filter.active {
+  background: color-mix(in srgb, var(--fc, var(--ow-teal)) 15%, transparent);
+  border-color: var(--fc, var(--ow-teal));
+  color: var(--fc, var(--ow-teal));
+  font-weight: 600;
+}
+.dlegend {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 7px;
+  margin-top: 12px;
+}
+.dleg-item { display: flex; align-items: center; gap: 6px; font-size: 10px; color: var(--text-2); }
+.dleg-dot  { width: 8px; height: 8px; border-radius: 2px; flex-shrink: 0; }
+
+/* ─── RESPONSIVE BREAKPOINTS ─── */
+@media (max-width: 1024px) {
+  .kpi-grid { grid-template-columns: repeat(4, 1fr); }
+  .c8  { grid-column: span 12; }
+  .c7  { grid-column: span 12; }
+}
+
+@media (max-width: 768px) {
+  header { padding: 10px 16px; }
+  .logo-wrap img { height: 24px; }
+  .header-title { font-size: 12px; }
+  .header-badge { font-size: 10px; padding: 3px 8px; }
+
+  nav { padding: 0 8px; }
+  nav button { padding: 11px 13px; font-size: 11px; }
+
+  main { padding: 16px 12px 70px; }
+
+  .kpi-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .kpi-value { font-size: 22px; }
+
+  .c4, .c5, .c6, .c7, .c8, .c12 { grid-column: span 12; }
+
+  .chart-card { padding: 16px; }
+
+  .gauge-num { font-size: 52px; }
+
+  .dtable { font-size: 11.5px; }
+  .dtable th, .dtable td { padding: 7px 8px; }
+
+  .pipe-label { flex: 0 0 120px; font-size: 11px; }
+
+  .insight { font-size: 12px; }
+}
+
+@media (max-width: 480px) {
+  .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+  .kpi-value { font-size: 20px; }
+
+  nav button { padding: 10px 11px; font-size: 10.5px; }
+
+  .dtable th { display: none; }
+  .dtable td[data-label]::before {
+    content: attr(data-label);
+    display: block;
+    font-size: 9px;
+    font-weight: 600;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 2px;
+  }
+}
+
+/* ─── OBJECTIVES / PACIOLI SECTION ─── */
+.obj-sec-label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 14px;
+  margin-top: 28px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.obj-sec-label::after { content:''; flex:1; height:1px; background:var(--border); }
+
+/* Pacioli completion banner */
+.pacioli-banner {
+  background: linear-gradient(135deg, rgba(0,229,160,0.10) 0%, rgba(0,104,81,0.04) 100%);
+  border: 1px solid rgba(0,229,160,0.3);
+  border-radius: 10px;
+  padding: 18px 22px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin-bottom: 14px;
+}
+.pacioli-progress-bar-bg {
+  flex: 1;
+  height: 22px;
+  background: rgba(255,255,255,0.04);
+  border-radius: 100px;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.07);
+  position: relative;
+}
+.pacioli-progress-bar-fill {
+  height: 100%;
+  border-radius: 100px;
+  background: linear-gradient(90deg, var(--ow-teal-dk) 0%, var(--ow-teal) 60%, var(--ow-teal-lt) 100%);
+  box-shadow: 0 0 14px rgba(0,170,130,0.5);
+}
+.pacioli-pct { font-size: 28px; font-weight: 800; color: var(--green); letter-spacing: -0.03em; flex-shrink: 0; }
+
+/* Deliverables accomplished grid */
+.deliverables-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  margin-top: 14px;
+}
+.deliv-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  background: rgba(200,215,215,0.07);
+  border: 1px solid rgba(180,200,200,0.15);
+  border-left: 3px solid rgba(0,229,160,0.35);
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 11.5px;
+  color: var(--text);
+  line-height: 1.5;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease, border-color 0.18s ease;
+}
+.deliv-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(0,229,160,0.10);
+  background: rgba(200,220,215,0.12);
+  border-left-color: rgba(0,229,160,0.6);
+}
+.deliv-check { color: var(--green); font-size: 13px; flex-shrink: 0; margin-top: 1px; }
+.deliv-sub { color: var(--muted); font-size: 10.5px; }
+
+/* Workstream health summary */
+.ws-summary-strip {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-top: 14px;
+}
+.ws-summary-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  cursor: pointer;
+  transition: border-color 0.2s, transform 0.15s, box-shadow 0.2s;
+}
+.ws-summary-card:hover { border-color: var(--border-lt); transform: translateY(-2px); box-shadow: 0 4px 16px rgba(0,0,0,0.3); }
+.ws-summary-card.active-green { border-color: var(--green); box-shadow: 0 0 0 1px rgba(0,229,160,0.25); }
+.ws-summary-card.active-amber { border-color: var(--amber); box-shadow: 0 0 0 1px rgba(245,166,35,0.25); }
+.ws-summary-card.active-red   { border-color: var(--red);   box-shadow: 0 0 0 1px rgba(255,77,109,0.25); }
+.ws-s-icon { width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
+.ws-s-label { font-size: 9.5px; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 3px; }
+.ws-s-label .filter-hint-ow { font-size: 9px; color: var(--muted); margin-left: 4px; opacity: 0; transition: opacity 0.3s; }
+.ws-s-label .filter-hint-ow.visible { opacity: 1; }
+.ws-s-value { font-size: 19px; font-weight: 700; color: var(--text); line-height: 1; }
+.ws-s-sub { font-size: 10px; color: var(--muted); margin-top: 2px; }
+
+/* Collapsible 7S element cards */
+.ws-outer-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-top: 14px;
+}
+.ws-el-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+  transition: border-color 0.2s, opacity 0.2s, box-shadow 0.2s;
+}
+.ws-el-card.filter-match-green { border-color: var(--green) !important; box-shadow: 0 0 0 1px rgba(0,229,160,0.2), 0 4px 16px rgba(0,229,160,0.1); }
+.ws-el-card.filter-match-amber { border-color: var(--amber) !important; box-shadow: 0 0 0 1px rgba(245,166,35,0.2), 0 4px 16px rgba(245,166,35,0.1); }
+.ws-el-card.filter-match-red   { border-color: var(--red) !important;   box-shadow: 0 0 0 1px rgba(255,77,109,0.2), 0 4px 16px rgba(255,77,109,0.1); }
+.ws-el-card.filter-dim         { opacity: 0.2 !important; }
+
+.ws-el-header {
+  padding: 13px 16px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface2);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+}
+.ws-el-header:hover { opacity: 0.85; }
+.ws-el-title { font-size: 11px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text); display: flex; align-items: center; gap: 7px; }
+.ws-el-count { font-size: 10px; color: var(--muted); }
+.ws-collapse-icon-ow { font-size: 9px; color: var(--muted); transition: transform 0.25s; margin-left: auto; padding-left: 8px; }
+.ws-el-card.collapsed .ws-collapse-icon-ow { transform: rotate(-90deg); }
+
+.ws-table-wrapper-ow { overflow: hidden; max-height: 800px; transition: max-height 0.3s ease, opacity 0.25s ease; opacity: 1; }
+.ws-el-card.collapsed .ws-table-wrapper-ow { max-height: 0; opacity: 0; }
+
+.ws-tbl { width: 100%; border-collapse: collapse; }
+.ws-tbl tr { border-bottom: 1px solid var(--border); transition: background 0.15s; }
+.ws-tbl tr:last-child { border-bottom: none; }
+.ws-tbl tr:hover { background: rgba(0,170,130,0.03); }
+.ws-tbl td { padding: 7px 14px; vertical-align: middle; }
+.ws-tbl tr.filtered-out { opacity: 0.15; }
+.ws-tbl tr.filtered-in  { opacity: 1; }
+.td-ws { color: var(--muted); font-size: 9px; letter-spacing: 0.07em; text-transform: uppercase; white-space: nowrap; width: 1%; padding-right: 6px; }
+.td-main-ow { padding: 7px 14px; }
+.td-deliv-text { color: var(--text); font-size: 11px; line-height: 1.35; }
+.td-status-text { font-size: 10px; color: var(--muted); line-height: 1.3; margin-top: 2px; }
+.td-risk-ow { width: 26px; text-align: center; padding: 7px 8px 7px 2px; white-space: nowrap; }
+
+/* 7S tag colours mapped to teal palette */
+.tag-ow { font-size: 9px; padding: 2px 6px; border-radius: 4px; letter-spacing: 0.08em; text-transform: uppercase; }
+.tag-strategy-ow { background: rgba(0,170,130,0.15); color: var(--ow-teal-lt); }
+.tag-systems-ow  { background: rgba(62,207,207,0.15); color: var(--blue); }
+.tag-structure-ow { background: rgba(245,166,35,0.15); color: var(--amber); }
+.tag-staff-ow    { background: rgba(0,229,160,0.15); color: var(--green); }
+.tag-shared-ow   { background: rgba(255,77,109,0.15); color: var(--red); }
+.tag-style-ow    { background: rgba(245,166,35,0.12); color: #fde68a; }
+.tag-skills-ow   { background: rgba(0,170,130,0.12); color: var(--ow-teal); }
+
+/* Next week focus */
+.nw-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-top: 12px; }
+.nw-item {
+  display: flex; align-items: flex-start; gap: 10px;
+  background: var(--surface); border: 1px solid var(--border); border-radius: 8px;
+  padding: 10px 14px; font-size: 11.5px; color: var(--text); line-height: 1.45;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease, border-color 0.18s ease;
+}
+.nw-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(0,170,130,0.10);
+  background: rgba(20,42,42,0.95);
+  border-color: rgba(0,170,130,0.3);
+}
+.nw-arrow { color: var(--ow-teal); font-size: 13px; flex-shrink: 0; margin-top: 1px; }
+.nw-risk-item {
+  display: flex; align-items: flex-start; gap: 10px;
+  background: rgba(255,77,109,0.05); border: 1px solid rgba(255,77,109,0.2); border-radius: 8px;
+  padding: 10px 14px; font-size: 11.5px; color: var(--text); line-height: 1.45;
+}
+
+/* Toggle button */
+.obj-toggle-btn {
+  background: rgba(0,170,130,0.1);
+  border: 1px solid rgba(0,170,130,0.3);
+  border-radius: 6px;
+  color: var(--muted);
+  font-family: 'Inter', sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 4px 11px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s, color 0.15s;
+  flex-shrink: 0;
+}
+.obj-toggle-btn:hover { background: rgba(0,170,130,0.2); color: var(--ow-teal); }
+
+@media (max-width: 768px) {
+  .deliverables-grid { grid-template-columns: 1fr; }
+  .ws-summary-strip  { grid-template-columns: 1fr; }
+  .ws-outer-grid     { grid-template-columns: 1fr !important; }
+  .nw-grid           { grid-template-columns: 1fr; }
+}
+
+/* ─── OPERATIONAL KPIs ─── */
+.ops-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 8px;
+}
+.ops-kpi-card {
+  background: var(--surface);
+  border: 1px solid var(--border-lt);
+  border-radius: 10px;
+  padding: 16px 18px;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease, border-color 0.18s ease;
+}
+.ops-kpi-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 24px rgba(0,170,130,0.13);
+  background: rgba(20,42,42,0.95);
+  border-color: rgba(0,170,130,0.25);
+}
+.ops-kpi-label {
+  font-size: 9.5px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 10px;
+}
+.ops-triband {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+  margin-top: 4px;
+}
+.ops-band {
+  padding: 8px 10px 6px 0;
+  border-right: 1px solid var(--border);
+}
+.ops-band:last-child { border-right: none; padding-left: 10px; padding-right: 0; }
+.ops-band:not(:first-child):not(:last-child) { padding: 8px 10px 6px 10px; }
+.ops-band-label { font-size: 8.5px; text-transform: uppercase; letter-spacing: 0.09em; color: var(--muted); margin-bottom: 5px; }
+.ops-band-val { font-size: 22px; font-weight: 600; letter-spacing: -0.03em; line-height: 1; }
+.ops-band-sub { font-size: 9.5px; color: var(--muted); margin-top: 3px; }
+.ops-single-val { font-size: 34px; font-weight: 600; letter-spacing: -0.04em; line-height: 1; margin-top: 6px; }
+.ops-gauge-bar { position: relative; height: 6px; background: var(--surface3); border-radius: 3px; margin: 8px 0 4px; }
+.ops-gauge-fill { position: absolute; top: 0; left: 0; height: 100%; border-radius: 3px; }
+.ops-gauge-tick { position: absolute; top: -2px; right: 0; width: 1.5px; height: 10px; }
+.ops-note { font-size: 9px; color: var(--muted); margin-top: 6px; padding-top: 6px; border-top: 1px solid var(--border); line-height: 1.5; }
+
+/* ─── OBJECTIVES SECTION ─── */
+.obj-charts-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+.obj-chart-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 18px 20px;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+}
+.obj-chart-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 24px rgba(0,170,130,0.12);
+  border-color: rgba(0,170,130,0.25);
+}
+.obj-chart-title { font-size: 10.5px; font-weight: 600; color: var(--text-2); margin-bottom: 3px; }
+.obj-chart-sub   { font-size: 9.5px; color: var(--muted); margin-bottom: 14px; }
+
+/* Objectives table */
+.obj-tbl { width: 100%; border-collapse: collapse; font-size: 11.5px; }
+.obj-tbl th {
+  font-size: 9px; text-transform: uppercase; letter-spacing: 0.08em;
+  color: var(--muted); padding: 0 10px 9px; text-align: left;
+  border-bottom: 1px solid var(--border);
+}
+.obj-tbl td { padding: 9px 10px; border-bottom: 1px solid rgba(30,50,50,0.5); vertical-align: middle; }
+.obj-tbl tr:last-child td { border-bottom: none; }
+.obj-tbl tr:hover td { background: rgba(0,170,130,0.025); }
+.obj-cat td {
+  background: var(--surface2); font-size: 9.5px; font-weight: 600;
+  letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-2);
+  padding: 7px 10px; border-bottom: 1px solid var(--border);
+}
+.obj-num { font-family: 'JetBrains Mono', 'Fira Mono', monospace; font-size: 10px; color: var(--muted); white-space: nowrap; }
+.obj-title { font-size: 12px; font-weight: 500; color: var(--text); }
+.obj-sub   { font-size: 10px; color: var(--muted); margin-top: 2px; }
+.obj-pbar  { background: var(--surface3); border-radius: 2px; height: 3px; width: 100%; min-width: 60px; }
+.obj-pfill { height: 3px; border-radius: 2px; }
+.obj-pill {
+  display: inline-flex; align-items: center; gap: 3px;
+  font-size: 9.5px; font-weight: 600; padding: 2px 8px;
+  border-radius: 4px; white-space: nowrap; margin: 0;
+}
+.obj-pill-g { background: rgba(0,229,160,0.1); color: var(--green); border: 1px solid rgba(0,229,160,0.25); }
+.obj-pill-a { background: rgba(245,166,35,0.1); color: var(--amber); border: 1px solid rgba(245,166,35,0.25); }
+.obj-pill-r { background: rgba(255,77,109,0.1); color: var(--red);   border: 1px solid rgba(255,77,109,0.25); }
+.obj-pill-b { background: rgba(62,207,207,0.1); color: var(--blue);  border: 1px solid rgba(62,207,207,0.25); }
+.obj-pill-m { background: rgba(90,128,128,0.12); color: var(--muted); border: 1px solid rgba(90,128,128,0.2); }
+.obj-status-active    { display:inline-flex;align-items:center;gap:3px;background:rgba(62,207,207,0.1);border:1px solid rgba(62,207,207,0.3);color:var(--blue);font-size:9.5px;font-weight:600;padding:2px 8px;border-radius:4px;white-space:nowrap; }
+.obj-status-done      { display:inline-flex;align-items:center;gap:3px;background:rgba(0,229,160,0.1);border:1px solid rgba(0,229,160,0.3);color:var(--green);font-size:9.5px;font-weight:600;padding:2px 8px;border-radius:4px;white-space:nowrap; }
+.obj-status-risk      { display:inline-flex;align-items:center;gap:3px;background:rgba(245,166,35,0.1);border:1px solid rgba(245,166,35,0.3);color:var(--amber);font-size:9.5px;font-weight:600;padding:2px 8px;border-radius:4px;white-space:nowrap; }
+.obj-status-critical  { display:inline-flex;align-items:center;gap:3px;background:rgba(255,77,109,0.1);border:1px solid rgba(255,77,109,0.3);color:var(--red);font-size:9.5px;font-weight:600;padding:2px 8px;border-radius:4px;white-space:nowrap; }
+.obj-status-notstart  { display:inline-flex;align-items:center;gap:3px;background:rgba(90,128,128,0.12);border:1px solid rgba(90,128,128,0.2);color:var(--muted);font-size:9.5px;font-weight:600;padding:2px 8px;border-radius:4px;white-space:nowrap; }
+
+/* Gantt */
+.gantt-wrap { padding: 20px; }
+.gantt-ruler { display:grid; gap:0; margin-bottom:6px; }
+.gantt-row   { display:grid; gap:0; align-items:center; margin-bottom:5px; }
+.gantt-name  { font-size:10.5px; font-weight:500; color:var(--text); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; padding-right:12px; }
+.gantt-note  { font-size:8.5px; margin-top:1px; }
+.gantt-bar-bg { position:relative; height:16px; background:var(--surface3); border-radius:3px; overflow:visible; }
+.gantt-bar-fill { position:absolute; top:0; left:0; height:100%; border-radius:3px; }
+.gantt-now   { position:absolute; top:-3px; width:1.5px; height:calc(100%+6px); background:rgba(0,170,130,0.6); z-index:2; }
+.gantt-deadline { position:absolute; top:-3px; width:1.5px; height:calc(100%+6px); background:rgba(255,255,255,0.15); z-index:1; }
+
+@media (max-width: 768px) {
+  .ops-kpi-grid { grid-template-columns: 1fr; }
+  .obj-charts-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="logo-wrap">
+    <img src="data:image/png;base64,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" alt="Orbitworks">
+  </div>
+  <div class="header-center">
+    <div class="header-title">Finance Weekly Dashboard</div>
+    <div class="header-subtitle">Orbitworks Satellite Manufacturing LLC SPC</div>
+  </div>
+  <div class="header-right">
+    <div class="header-badge">W/E 1 May 26</div>
+  </div>
+</header>
+
+<!-- NAV -->
+<nav id="mainnav">
+  <button class="active" onclick="showPage('overview',this)">Weekly Finance KPIs</button>
+  <button onclick="showPage('cash',this)">Cash &amp; Runway</button>
+
+</nav>
+
+<main>
+
+<!-- ══════════════════ PAGE: MISSION CONTROL ══════════════════ -->
+<div class="page active" id="page-overview">
+
+  <!-- ══ FINANCE KPIs — CASH SNAPSHOT ══ -->
+  <div class="sec-label">Cash Snapshot · As of 1 May 2026</div>
+  <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:8px;">
+
+    <!-- Bank Balances -->
+    <div class="kpi-card" style="--card-color: var(--green);">
+      <div class="kpi-label">Bank Balances — Group Summary</div>
+      <div style="margin-top:10px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid var(--border);">
+          <span style="font-size:11px; color:var(--muted);">Orbitworks</span>
+          <span style="font-size:16px; font-weight:600; color:var(--text);">USD 4.48M</span>
+        </div>
+        <div style="display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid var(--border);">
+          <span style="font-size:11px; color:var(--muted);">MLO JV</span>
+          <span style="font-size:16px; font-weight:600; color:var(--text);">USD 17.17M</span>
+        </div>
+        <div style="display:flex; justify-content:space-between; align-items:center; padding:10px 0 0;">
+          <span style="font-size:12px; font-weight:600; color:var(--green);">Consolidated</span>
+          <span style="font-size:20px; font-weight:700; color:var(--green);">USD 21.65M</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- OW Cash After Payments -->
+    <div class="kpi-card" style="--card-color: var(--amber);">
+      <div class="kpi-label">OW Cash After Week's Payments</div>
+      <div class="kpi-value">USD 4.12M</div>
+      <div class="kpi-sub" style="margin-top:10px; line-height:1.9;">
+        Pending CAPEX: <span style="color:var(--red);">USD 4.24M</span><br>
+        2025 Bonus: <span style="color:var(--red);">USD 0.12M</span>
+      </div>
+      <div class="kpi-delta neu" style="margin-top:8px;">⚠ Monitor</div>
+    </div>
+
+  </div>
+  <div style="font-size:10px; color:var(--muted); font-style:italic; text-align:right; margin-bottom:20px;">
+    Source: OW bank statement · FX rate: USD/AED 3.67
+  </div>
+  <!-- ══ OPERATIONAL KPIs ══ -->
+  <div class="sec-label" style="margin-top:24px;">Operational KPIs · Source: NetSuite · w/e 1 May 2026</div>
+  <div class="ops-kpi-grid">
+
+    <!-- Vendor Invoices Posted -->
+    <div class="ops-kpi-card">
+      <div class="ops-kpi-label">Vendor Invoices Posted</div>
+      <div class="ops-triband">
+        <div class="ops-band">
+          <div class="ops-band-label">Week · 1 May</div>
+          <div class="ops-band-val" style="color:var(--text)">56</div>
+          <div class="ops-band-sub">invoices WTD</div>
+        </div>
+        <div class="ops-band">
+          <div class="ops-band-label">Month · May-26</div>
+          <div class="ops-band-val" style="color:var(--text)">337</div>
+          <div class="ops-band-sub">invoices MTD</div>
+        </div>
+        <div class="ops-band">
+          <div class="ops-band-label">YTD · Jan–May</div>
+          <div class="ops-band-val" style="color:var(--text)">587</div>
+          <div class="ops-band-sub">invoices YTD</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Vendor Payments Made -->
+    <div class="ops-kpi-card">
+      <div class="ops-kpi-label">Vendor Payments Made</div>
+      <div class="ops-triband">
+        <div class="ops-band">
+          <div class="ops-band-label">Week · 1 May</div>
+          <div class="ops-band-val" style="color:var(--text)">USD 0.11M</div>
+          <div class="ops-band-sub">WTD</div>
+        </div>
+        <div class="ops-band">
+          <div class="ops-band-label">Month · May-26</div>
+          <div class="ops-band-val" style="color:var(--text)">USD 2.28M</div>
+          <div class="ops-band-sub">MTD</div>
+        </div>
+        <div class="ops-band">
+          <div class="ops-band-label">YTD · Jan–Apr</div>
+          <div class="ops-band-val" style="color:var(--text)">USD 3.43M</div>
+          <div class="ops-band-sub">YTD</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Vendor Advances -->
+    <div class="ops-kpi-card">
+      <div class="ops-kpi-label">Vendor Advances</div>
+      <div class="ops-triband">
+        <div class="ops-band">
+          <div class="ops-band-label">Week · 1 May</div>
+          <div class="ops-band-val" style="color:var(--text)">USD 92.3K</div>
+          <div class="ops-band-sub">WTD</div>
+        </div>
+        <div class="ops-band">
+          <div class="ops-band-label">Month · May-26</div>
+          <div class="ops-band-val" style="color:var(--text)">USD 92K</div>
+          <div class="ops-band-sub">MTD</div>
+        </div>
+        <div class="ops-band">
+          <div class="ops-band-label">YTD · Jan–Apr</div>
+          <div class="ops-band-val" style="color:var(--text)">USD 239K</div>
+          <div class="ops-band-sub">YTD</div>
+        </div>
+      </div>
+      <div class="ops-note" style="color:var(--amber);">⚠ Advance payment Risk review template shared with Procurement to create liquidity efficiencies</div>
+    </div>
+
+    <!-- Customer Invoices Posted -->
+    <div class="ops-kpi-card">
+      <div class="ops-kpi-label">Customer Invoices Posted</div>
+      <div class="ops-triband">
+        <div class="ops-band">
+          <div class="ops-band-label">Week · 1 May</div>
+          <div class="ops-band-val" style="color:var(--text)">0</div>
+          <div class="ops-band-sub">invoices WTD</div>
+        </div>
+        <div class="ops-band">
+          <div class="ops-band-label">Month · May-26</div>
+          <div class="ops-band-val" style="color:var(--text)">0</div>
+          <div class="ops-band-sub">invoices MTD</div>
+        </div>
+        <div class="ops-band">
+          <div class="ops-band-label">YTD · Jan–Apr</div>
+          <div class="ops-band-val" style="color:var(--text)">3</div>
+          <div class="ops-band-sub">USD 0.9M</div>
+        </div>
+      </div>
+      <div class="ops-note" style="color:var(--amber)">⚠ Rev. recognition policy pending · Obj 07a</div>
+    </div>
+
+    <!-- Customer Collections -->
+    <div class="ops-kpi-card">
+      <div class="ops-kpi-label">Customer Collections</div>
+      <div class="ops-triband">
+        <div class="ops-band">
+          <div class="ops-band-label">Week · 1 May</div>
+          <div class="ops-band-val" style="color:var(--text)">—</div>
+          <div class="ops-band-sub">AED · WTD</div>
+        </div>
+        <div class="ops-band">
+          <div class="ops-band-label">Month · May-26</div>
+          <div class="ops-band-val" style="color:var(--text)">—</div>
+          <div class="ops-band-sub">AED · MTD</div>
+        </div>
+        <div class="ops-band">
+          <div class="ops-band-label">YTD · Jan–Apr</div>
+          <div class="ops-band-val" style="color:var(--text)">USD 250K</div>
+          <div class="ops-band-sub">1 receipt</div>
+        </div>
+      </div>
+      <div class="ops-note" style="color:var(--amber);">⚠ ADFD recovery of $250k expected in following week</div>
+    </div>
+
+    <!-- Revenue YTD -->
+    <div class="ops-kpi-card">
+      <div class="ops-kpi-label">Revenue YTD</div>
+      <div style="margin-top:6px;">
+        <div style="font-size:9px;text-transform:uppercase;letter-spacing:.09em;color:var(--muted);margin-bottom:4px;">Recognised · Jan – 24 Apr 2026</div>
+        <div style="font-size:28px;font-weight:700;letter-spacing:-0.03em;color:var(--text);">USD 0.9M</div>
+        <div style="font-size:9.5px;color:var(--muted);margin-top:3px;">FY Target <strong style="color:var(--text-2);">USD 46.1M</strong></div>
+      </div>
+      <div class="ops-gauge-bar">
+        <div class="ops-gauge-fill" style="width:2.0%;background:var(--green);"></div>
+        <div class="ops-gauge-tick" style="background:rgba(0,229,160,0.4);"></div>
+      </div>
+      <div style="font-size:9px;color:var(--amber);">● 2.0% of FY target · 3 invoices YTD · FX: USD/AED 3.67</div>
+    </div>
+
+  </div><!-- end ops-kpi-grid -->
+
+  <!-- ══ DELIVERABLES ACCOMPLISHED THIS WEEK ══ -->
+  <div class="sec-label">Deliverables Accomplished This Week · w/e 1 May 2026</div>
+  <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:28px;">
+    <div class="deliv-item"><span class="deliv-check">✓</span><div>Fully FD-Backed PBG Financing Line — Approval by RG <span class="deliv-sub">— Procured RG approval on AED 25M FD-backed approach for guarantee line</span></div></div>
+    <div class="deliv-item"><span class="deliv-check">✓</span><div>CEO Snapshot of Longbow Reorder Memo <span class="deliv-sub">— Action point from Longbow Reorder Discussion requested by HM</span></div></div>
+    <div class="deliv-item"><span class="deliv-check">✓</span><div>Debt Memo for RG <span class="deliv-sub">— Updated for JL comments; floated with Hashan at RG Finance for initial feedback</span></div></div>
+    <div class="deliv-item"><span class="deliv-check">✓</span><div>ICV Certification / Consultant Selection <span class="deliv-sub">— Delivered selection memo for HM review and approval</span></div></div>
+    <div class="deliv-item"><span class="deliv-check">✓</span><div>Q1-26 Board Meeting Action Point from HM <span class="deliv-sub">— Shared 2026 Forecast vs. Budget breakdown and power connection update</span></div></div>
+    <div class="deliv-item"><span class="deliv-check">✓</span><div>Employee Benefit Analysis for HR Memo <span class="deliv-sub">— Validated forecast and actual vs. IHC memo threshold for HM discussions</span></div></div>
+    <div class="deliv-item"><span class="deliv-check">✓</span><div>Risk Assessment — Advance Payment for Walk-in Chamber Commissioning <span class="deliv-sub">— 100% advance (USD 5.5K) released on exception to mobilize India-based engineer due to Weiss Technik delays. Key risks: double charge, no delivery guarantee, no contractual security, immigration/legal exposure from tourist visa sponsorship. Approved by Manny and Raoul; Weiss double charge to be challenged when invoiced</span></div></div>
+  </div>
+
+  <div class="sec-label">Next Week's Focus · w/e 8 May 2026</div>
+  <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:12px;">
+    <div class="nw-item"><span class="nw-arrow">→</span><div>AED 25M FD-Backed Bank Guarantee Execution <span style="color:var(--muted);font-size:10.5px;">— Memo for CEO Brief; HM approval for execution; FAB confirmation on rates</span></div></div>
+    <div class="nw-item"><span class="nw-arrow">→</span><div>PBG Issuance — FADA SIRB-1 Contract AED 360k <span style="color:var(--muted);font-size:10.5px;">— Complete PBG issuance within 20 days from signing (est. 24 May 2026)</span></div></div>
+    <div class="nw-item"><span class="nw-arrow">→</span><div>2.5MW Electricity Connection Update <span style="color:var(--muted);font-size:10.5px;">— Update with Mohanraj on termination and transfer from Tarkett to OW; kick off ESP Subsidy steps right after</span></div></div>
+    <div class="nw-item"><span class="nw-arrow">→</span><div>ESOP Structure <span style="color:var(--muted);font-size:10.5px;">— Review structure docs and agreements; link up with Curtis</span></div></div>
+    <div class="nw-item"><span class="nw-arrow">→</span><div>2 Days at MIITE <span style="color:var(--muted);font-size:10.5px;">— Wednesday and Thursday</span></div></div>
+    <div class="nw-item"><span class="nw-arrow">→</span><div>Loft Invoice Value Allocation with Raoul <span style="color:var(--muted);font-size:10.5px;">— Opening balance fixes on NetSuite and Work Order corrections (currently showing at zero value)</span></div></div>
+  </div>
+  <div style="margin-bottom:24px;"></div>
+
+  <!-- ══ 2026 OBJECTIVES HEALTH ══ -->
+  <div class="sec-label" style="margin-top:28px;">2026 Finance Objectives · Health Overview · Q1 complete · Q2 active</div>
+  <div class="obj-charts-grid">
+
+    <!-- RAG DONUT — 13 individual interactive slices -->
+    <div class="obj-chart-card">
+      <div class="obj-chart-title">RAG Distribution — 14 Objectives</div>
+      <div class="obj-chart-sub">Hover to see objective · click to jump to it below</div>
+
+      <div id="rag-tip" style="display:none;position:fixed;background:#0c1414;border:1px solid #1e3232;border-radius:7px;padding:8px 12px;font-size:11px;color:#e8f5f2;pointer-events:none;z-index:9999;max-width:240px;line-height:1.5;box-shadow:0 4px 20px rgba(0,0,0,0.6);"></div>
+
+      <div style="display:flex;align-items:center;justify-content:center;gap:24px;padding:12px 0 8px;">
+        <div style="position:relative;flex-shrink:0;">
+          <svg id="ragSvg" width="290" height="290" viewBox="0 0 240 240">
+            <circle data-obj="obj-06" data-name="06 · Contracting Framework" data-rag="r" cx="120" cy="120" r="82" fill="none" stroke="#ff4d6d" stroke-width="34" stroke-dasharray="33.80 481.42" stroke-dashoffset="0.00" transform="rotate(-90 120 120)" style="cursor:pointer;transition:stroke-width .15s"/>
+            <circle data-obj="obj-02b" data-name="02b · Subsidy — ESP (Power)" data-rag="r" cx="120" cy="120" r="82" fill="none" stroke="#ff4d6d" stroke-width="34" stroke-dasharray="33.80 481.42" stroke-dashoffset="-36.80" transform="rotate(-90 120 120)" style="cursor:pointer;transition:stroke-width .15s"/>
+            <circle data-obj="obj-05" data-name="05 · Capital Strategy" data-rag="a" cx="120" cy="120" r="82" fill="none" stroke="#f5a623" stroke-width="34" stroke-dasharray="33.80 481.42" stroke-dashoffset="-73.60" transform="rotate(-90 120 120)" style="cursor:pointer;transition:stroke-width .15s"/>
+            <circle data-obj="obj-07a" data-name="07a · Revenue Recognition" data-rag="a" cx="120" cy="120" r="82" fill="none" stroke="#f5a623" stroke-width="34" stroke-dasharray="33.80 481.42" stroke-dashoffset="-110.40" transform="rotate(-90 120 120)" style="cursor:pointer;transition:stroke-width .15s"/>
+            <circle data-obj="obj-10" data-name="10 · DOA &amp; Governance" data-rag="a" cx="120" cy="120" r="82" fill="none" stroke="#f5a623" stroke-width="34" stroke-dasharray="33.80 481.42" stroke-dashoffset="-147.21" transform="rotate(-90 120 120)" style="cursor:pointer;transition:stroke-width .15s"/>
+            <circle data-obj="obj-11" data-name="11 · ERP Opening Balances" data-rag="a" cx="120" cy="120" r="82" fill="none" stroke="#f5a623" stroke-width="34" stroke-dasharray="33.80 481.42" stroke-dashoffset="-184.01" transform="rotate(-90 120 120)" style="cursor:pointer;transition:stroke-width .15s"/>
+            <circle data-obj="obj-01" data-name="01 · ICV Strategy" data-rag="g" cx="120" cy="120" r="82" fill="none" stroke="#00e5a0" stroke-width="34" stroke-dasharray="33.80 481.42" stroke-dashoffset="-220.81" transform="rotate(-90 120 120)" style="cursor:pointer;transition:stroke-width .15s"/>
+            <circle data-obj="obj-02a" data-name="02a · Subsidy — LRIP" data-rag="g" cx="120" cy="120" r="82" fill="none" stroke="#00e5a0" stroke-width="34" stroke-dasharray="33.80 481.42" stroke-dashoffset="-257.61" transform="rotate(-90 120 120)" style="cursor:pointer;transition:stroke-width .15s"/>
+            <circle data-obj="obj-04" data-name="04 · Bank Guarantee Line" data-rag="g" cx="120" cy="120" r="82" fill="none" stroke="#00e5a0" stroke-width="34" stroke-dasharray="33.80 481.42" stroke-dashoffset="-294.41" transform="rotate(-90 120 120)" style="cursor:pointer;transition:stroke-width .15s"/>
+            <circle data-obj="obj-05b" data-name="05b · ESOP Structuring" data-rag="g" cx="120" cy="120" r="82" fill="none" stroke="#00e5a0" stroke-width="34" stroke-dasharray="33.80 481.42" stroke-dashoffset="-331.21" transform="rotate(-90 120 120)" style="cursor:pointer;transition:stroke-width .15s"/>
+            <circle data-obj="obj-07b" data-name="07b · eInvoicing &amp; FTA" data-rag="g" cx="120" cy="120" r="82" fill="none" stroke="#00e5a0" stroke-width="34" stroke-dasharray="33.80 481.42" stroke-dashoffset="-368.02" transform="rotate(-90 120 120)" style="cursor:pointer;transition:stroke-width .15s"/>
+            <circle data-obj="obj-08" data-name="08 · Program Costing" data-rag="g" cx="120" cy="120" r="82" fill="none" stroke="#00e5a0" stroke-width="34" stroke-dasharray="33.80 481.42" stroke-dashoffset="-404.82" transform="rotate(-90 120 120)" style="cursor:pointer;transition:stroke-width .15s"/>
+            <circle data-obj="obj-09" data-name="09 · Reporting Dashboard" data-rag="g" cx="120" cy="120" r="82" fill="none" stroke="#00e5a0" stroke-width="34" stroke-dasharray="33.80 481.42" stroke-dashoffset="-441.62" transform="rotate(-90 120 120)" style="cursor:pointer;transition:stroke-width .15s"/>
+            <circle data-obj="obj-03" data-name="03 · Finance Stabilization" data-rag="d" cx="120" cy="120" r="82" fill="none" stroke="#5a8080" stroke-width="34" stroke-dasharray="33.80 481.42" stroke-dashoffset="-478.42" transform="rotate(-90 120 120)" style="cursor:pointer;transition:stroke-width .15s"/>
+            
+            <text x="120" y="114" text-anchor="middle" font-family="Inter,sans-serif" font-size="32" font-weight="700" fill="#e8f5f2">14</text>
+            <text x="120" y="133" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" fill="#5a8080" letter-spacing="0.1em">OBJECTIVES</text>
+          </svg>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          <div class="rag-leg" data-rag="r" style="display:flex;align-items:center;gap:10px;cursor:pointer;padding:4px 6px;border-radius:5px;transition:background .15s;"><div style="width:28px;height:10px;border-radius:2px;background:#ff4d6d;flex-shrink:0;"></div><div><div style="font-size:11px;font-weight:600;color:#e8f5f2;">Critical</div><div style="font-size:10px;color:#5a8080;">2 objectives</div></div></div>
+          <div class="rag-leg" data-rag="a" style="display:flex;align-items:center;gap:10px;cursor:pointer;padding:4px 6px;border-radius:5px;transition:background .15s;"><div style="width:28px;height:10px;border-radius:2px;background:#f5a623;flex-shrink:0;"></div><div><div style="font-size:11px;font-weight:600;color:#e8f5f2;">At Risk</div><div style="font-size:10px;color:#5a8080;">4 objectives</div></div></div>
+          <div class="rag-leg" data-rag="g" style="display:flex;align-items:center;gap:10px;cursor:pointer;padding:4px 6px;border-radius:5px;transition:background .15s;"><div style="width:28px;height:10px;border-radius:2px;background:#00e5a0;flex-shrink:0;"></div><div><div style="font-size:11px;font-weight:600;color:#e8f5f2;">On Track</div><div style="font-size:10px;color:#5a8080;">7 objectives</div></div></div>
+          <div class="rag-leg" data-rag="d" style="display:flex;align-items:center;gap:10px;cursor:pointer;padding:4px 6px;border-radius:5px;transition:background .15s;"><div style="width:28px;height:10px;border-radius:2px;background:#5a8080;flex-shrink:0;"></div><div><div style="font-size:11px;font-weight:600;color:#e8f5f2;">Completed</div><div style="font-size:10px;color:#5a8080;">1 objective</div></div></div>
+        </div>
+      </div>
+
+      <script>
+      (function(){
+        var colours = { r:'#ff4d6d', a:'#f5a623', g:'#00e5a0', d:'#5a8080' };
+        var ragLabels = { r:'Critical', a:'At Risk', g:'On Track', d:'Completed' };
+        var ragFirst = { r:'obj-06', a:'obj-05', g:'obj-01', d:'obj-03' };
+        var tip = document.getElementById('rag-tip');
+        if(tip && tip.parentNode !== document.body) document.body.appendChild(tip);
+
+        function moveTip(e){ var l=e.clientX+16,t=e.clientY-12; tip.style.left=l+'px'; tip.style.top=t+'px'; }
+
+        function scrollToObj(id){
+          // Try both with and without hyphen variants
+          var el = document.getElementById(id);
+          if(!el) el = document.getElementById(id.replace('-',''));
+          if(!el){
+            // Re-assign IDs and try again
+            assignRowIds();
+            el = document.getElementById(id);
+          }
+          if(!el){ console.warn('Row not found:',id); return; }
+          el.scrollIntoView({behavior:'smooth',block:'center'});
+          el.style.transition='background 0.5s';
+          el.style.background='rgba(0,170,130,0.18)';
+          setTimeout(function(){ el.style.background=''; },2000);
+        }
+
+        function assignRowIds(){
+          document.querySelectorAll('.obj-tbl td.obj-num').forEach(function(td){
+            var raw = td.textContent.trim().toLowerCase();
+            td.closest('tr').id = 'obj-' + raw;
+          });
+        }
+
+        // Run immediately and also after DOM ready
+        assignRowIds();
+        document.addEventListener('DOMContentLoaded', assignRowIds);
+
+        // Wire slices
+        document.querySelectorAll('#ragSvg circle[data-obj]').forEach(function(arc){
+          var objId = arc.dataset.obj;
+          var name  = arc.dataset.name;
+          var rag   = arc.dataset.rag;
+          arc.addEventListener('mouseenter',function(e){
+            arc.setAttribute('stroke-width','42');
+            tip.innerHTML='<span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:'+colours[rag]+'">'+ragLabels[rag]+'</span><br>'+name;
+            tip.style.display='block'; moveTip(e);
+          });
+          arc.addEventListener('mousemove',moveTip);
+          arc.addEventListener('mouseleave',function(){ arc.setAttribute('stroke-width','34'); tip.style.display='none'; });
+          arc.addEventListener('click',function(){ tip.style.display='none'; scrollToObj(objId); });
+        });
+
+        // Wire legend
+        document.querySelectorAll('.rag-leg').forEach(function(row){
+          var rag=row.dataset.rag;
+          row.addEventListener('mouseenter',function(){ row.style.background='rgba(255,255,255,0.04)'; });
+          row.addEventListener('mouseleave',function(){ row.style.background=''; });
+          row.addEventListener('click',function(){ scrollToObj(ragFirst[rag]); });
+        });
+      })();
+      </script>
+    </div>
+
+    <!-- PROGRESS BY OBJECTIVE — SVG radar chart -->
+    <div class="obj-chart-card">
+      <div class="obj-chart-title">Progress by Objective</div>
+      <div class="obj-chart-sub">% complete · axes sorted by RAG status · hover dot for detail</div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin:8px 0 4px;padding:8px 12px;background:rgba(0,170,130,0.07);border:1px solid rgba(0,170,130,0.18);border-radius:7px;">
+        <div style="font-size:10px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;">Overall Team Progress</div>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <span style="font-size:10px;color:var(--muted);">Last week: <strong style="color:var(--text);">25%</strong></span>
+          <span style="font-size:11px;color:var(--green);">▲</span>
+          <span style="font-size:18px;font-weight:700;color:var(--green);">31%</span>
+          <span style="font-size:9px;color:var(--green);font-weight:600;">+6pp</span>
+        </div>
+      </div>
+
+      <!-- Radar tooltip -->
+      <div id="radar-tip" style="display:none;position:fixed;background:#0c1414;border:1px solid #1e3232;border-radius:7px;padding:8px 12px;font-size:11px;color:#e8f5f2;pointer-events:none;z-index:9999;max-width:210px;line-height:1.6;box-shadow:0 4px 20px rgba(0,0,0,0.6);"></div>
+
+      <div style="display:flex;justify-content:center;align-items:center;padding:4px 0;">
+        <svg id="radarSvg" width="350" height="350" viewBox="0 0 350 350" xmlns="http://www.w3.org/2000/svg">
+
+          <!-- Grid rings -->
+          <polygon points="175.0,147.5 186.9,150.2 196.5,157.9 201.8,168.9 201.8,181.1 196.5,192.1 186.9,199.8 175.0,202.5 163.1,199.8 153.5,192.1 148.2,181.1 148.2,168.9 153.5,157.9 163.1,150.2" fill="none" stroke="rgba(30,50,50,0.9)" stroke-width="1"/>
+          <polygon points="175.0,120.0 198.9,125.4 218.0,140.7 228.6,162.8 228.6,187.2 218.0,209.3 198.9,224.6 175.0,230.0 151.1,224.6 132.0,209.3 121.4,187.2 121.4,162.8 132.0,140.7 151.1,125.4" fill="none" stroke="rgba(30,50,50,0.9)" stroke-width="1"/>
+          <polygon points="175.0,92.5 210.8,100.7 239.5,123.6 255.4,156.6 255.4,193.4 239.5,226.4 210.8,249.3 175.0,257.5 139.2,249.3 110.5,226.4 94.6,193.4 94.6,156.6 110.5,123.6 139.2,100.7" fill="none" stroke="rgba(30,50,50,0.9)" stroke-width="1"/>
+          <polygon points="175.0,65.0 222.7,75.9 261.0,106.4 282.2,150.5 282.2,199.5 261.0,243.6 222.7,274.1 175.0,285.0 127.3,274.1 89.0,243.6 67.8,199.5 67.8,150.5 89.0,106.4 127.3,75.9" fill="none" stroke="rgba(30,50,50,0.7)" stroke-width="1"/>
+
+          <!-- Ring % labels -->
+          <text x="177" y="148" font-family="Inter,sans-serif" font-size="7" fill="#5a8080">25%</text>
+          <text x="177" y="121" font-family="Inter,sans-serif" font-size="7" fill="#5a8080">50%</text>
+          <text x="177" y="94" font-family="Inter,sans-serif" font-size="7" fill="#5a8080">75%</text>
+          <text x="177" y="67" font-family="Inter,sans-serif" font-size="7" fill="#5a8080">100%</text>
+
+          <!-- Spokes -->
+          <line x1="175" y1="175" x2="175.0" y2="65.0" stroke="rgba(30,50,50,0.9)" stroke-width="1"/>
+          <line x1="175" y1="175" x2="222.7" y2="75.9" stroke="rgba(30,50,50,0.9)" stroke-width="1"/>
+          <line x1="175" y1="175" x2="261.0" y2="106.4" stroke="rgba(30,50,50,0.9)" stroke-width="1"/>
+          <line x1="175" y1="175" x2="282.2" y2="150.5" stroke="rgba(30,50,50,0.9)" stroke-width="1"/>
+          <line x1="175" y1="175" x2="282.2" y2="199.5" stroke="rgba(30,50,50,0.9)" stroke-width="1"/>
+          <line x1="175" y1="175" x2="261.0" y2="243.6" stroke="rgba(30,50,50,0.9)" stroke-width="1"/>
+          <line x1="175" y1="175" x2="222.7" y2="274.1" stroke="rgba(30,50,50,0.9)" stroke-width="1"/>
+          <line x1="175" y1="175" x2="175.0" y2="285.0" stroke="rgba(30,50,50,0.9)" stroke-width="1"/>
+          <line x1="175" y1="175" x2="127.3" y2="274.1" stroke="rgba(30,50,50,0.9)" stroke-width="1"/>
+          <line x1="175" y1="175" x2="89.0" y2="243.6" stroke="rgba(30,50,50,0.9)" stroke-width="1"/>
+          <line x1="175" y1="175" x2="67.8" y2="199.5" stroke="rgba(30,50,50,0.9)" stroke-width="1"/>
+          <line x1="175" y1="175" x2="67.8" y2="150.5" stroke="rgba(30,50,50,0.9)" stroke-width="1"/>
+          <line x1="175" y1="175" x2="89.0" y2="106.4" stroke="rgba(30,50,50,0.9)" stroke-width="1"/>
+          <line x1="175" y1="175" x2="127.3" y2="75.9" stroke="rgba(30,50,50,0.9)" stroke-width="1"/>
+
+          <!-- Data polygon -->
+          <polygon points="175.0,169.5 176.0,173.0 183.6,168.1 228.6,162.8 185.7,177.4 200.8,195.6 198.9,224.6 175.0,257.5 151.1,224.6 170.7,178.4 158.9,178.7 153.6,170.1 157.8,161.3 127.3,75.9" fill="rgba(0,170,130,0.08)" stroke="rgba(0,170,130,0.5)" stroke-width="1.5" stroke-linejoin="round"/>
+
+          <!-- Interactive dots -->
+          <circle class="rdot" cx="175.0" cy="169.5" r="5" fill="#ff4d6d" stroke="#0c1414" stroke-width="1.5" style="cursor:pointer;" data-obj="obj-06" data-name="Contracting Framework" data-pct="5%" data-rag="Critical"/>
+          <circle class="rdot" cx="176.0" cy="173.0" r="5" fill="#ff4d6d" stroke="#0c1414" stroke-width="1.5" style="cursor:pointer;" data-obj="obj-02b" data-name="Subsidy — ESP (Power)" data-pct="0%" data-rag="Critical"/>
+          <circle class="rdot" cx="183.6" cy="168.1" r="5" fill="#f5a623" stroke="#0c1414" stroke-width="1.5" style="cursor:pointer;" data-obj="obj-07a" data-name="Revenue Recognition" data-pct="10%" data-rag="At Risk"/>
+          <circle class="rdot" cx="228.6" cy="162.8" r="5" fill="#f5a623" stroke="#0c1414" stroke-width="1.5" style="cursor:pointer;" data-obj="obj-05" data-name="Capital Strategy" data-pct="50%" data-rag="At Risk"/>
+          <circle class="rdot" cx="185.7" cy="177.4" r="5" fill="#f5a623" stroke="#0c1414" stroke-width="1.5" style="cursor:pointer;" data-obj="obj-10" data-name="DOA &amp; Governance" data-pct="10%" data-rag="At Risk"/>
+          <circle class="rdot" cx="200.8" cy="195.6" r="5" fill="#f5a623" stroke="#0c1414" stroke-width="1.5" style="cursor:pointer;" data-obj="obj-11" data-name="ERP Opening Balances" data-pct="30%" data-rag="At Risk"/>
+          <circle class="rdot" cx="198.9" cy="224.6" r="5" fill="#00e5a0" stroke="#0c1414" stroke-width="1.5" style="cursor:pointer;" data-obj="obj-07b" data-name="eInvoicing &amp; FTA" data-pct="50%" data-rag="On Track"/>
+          <circle class="rdot" cx="175.0" cy="257.5" r="5" fill="#00e5a0" stroke="#0c1414" stroke-width="1.5" style="cursor:pointer;" data-obj="obj-04" data-name="Bank Guarantee Line (FAB)" data-pct="75%" data-rag="On Track"/>
+          <circle class="rdot" cx="151.1" cy="224.6" r="5" fill="#00e5a0" stroke="#0c1414" stroke-width="1.5" style="cursor:pointer;" data-obj="obj-09" data-name="Reporting Dashboard" data-pct="50%" data-rag="On Track"/>
+          <circle class="rdot" cx="170.7" cy="178.4" r="5" fill="#00e5a0" stroke="#0c1414" stroke-width="1.5" style="cursor:pointer;" data-obj="obj-05b" data-name="ESOP Structuring" data-pct="5%" data-rag="On Track"/>
+          <circle class="rdot" cx="158.9" cy="178.7" r="5" fill="#00e5a0" stroke="#0c1414" stroke-width="1.5" style="cursor:pointer;" data-obj="obj-01" data-name="ICV Strategy" data-pct="15%" data-rag="On Track"/>
+          <circle class="rdot" cx="153.6" cy="170.1" r="5" fill="#00e5a0" stroke="#0c1414" stroke-width="1.5" style="cursor:pointer;" data-obj="obj-02a" data-name="Subsidy — LRIP" data-pct="20%" data-rag="On Track"/>
+          <circle class="rdot" cx="157.8" cy="161.3" r="5" fill="#00e5a0" stroke="#0c1414" stroke-width="1.5" style="cursor:pointer;" data-obj="obj-08" data-name="Program Costing &amp; EAC" data-pct="20%" data-rag="On Track"/>
+          <circle class="rdot" cx="127.3" cy="75.9" r="5" fill="#5a8080" stroke="#0c1414" stroke-width="1.5" style="cursor:pointer;" data-obj="obj-03" data-name="Finance Stabilization Plan" data-pct="100%" data-rag="Completed"/>
+
+          <!-- Labels -->
+          <text x="175.0" y="41.0" text-anchor="middle" font-family="Inter,sans-serif" font-size="8.5" fill="#ff4d6d" font-weight="600"><tspan x="175.0" dy="-5">Contracting</tspan><tspan x="175.0" dy="10">Framework</tspan></text>
+          <text x="233.1" y="54.3" text-anchor="start" font-family="Inter,sans-serif" font-size="8.5" fill="#ff4d6d" font-weight="600"><tspan x="233.1" dy="-5">Subsidy</tspan><tspan x="233.1" dy="10">ESP</tspan></text>
+          <text x="279.8" y="91.5" text-anchor="start" font-family="Inter,sans-serif" font-size="8.5" fill="#f5a623" font-weight="600"><tspan x="279.8" dy="-5">Revenue</tspan><tspan x="279.8" dy="10">Recognit.</tspan></text>
+          <text x="305.6" y="145.2" text-anchor="start" font-family="Inter,sans-serif" font-size="8.5" fill="#f5a623" font-weight="600"><tspan x="305.6" dy="-5">Capital</tspan><tspan x="305.6" dy="10">Strategy</tspan></text>
+          <text x="305.6" y="204.8" text-anchor="start" font-family="Inter,sans-serif" font-size="8.5" fill="#f5a623" font-weight="600"><tspan x="305.6" dy="-5">DOA &amp;</tspan><tspan x="305.6" dy="10">Govern.</tspan></text>
+          <text x="279.8" y="258.5" text-anchor="start" font-family="Inter,sans-serif" font-size="8.5" fill="#f5a623" font-weight="600"><tspan x="279.8" dy="-5">ERP</tspan><tspan x="279.8" dy="10">Balances</tspan></text>
+          <text x="233.1" y="295.7" text-anchor="start" font-family="Inter,sans-serif" font-size="8.5" fill="#00e5a0" font-weight="600"><tspan x="233.1" dy="-5">eInvoicing</tspan><tspan x="233.1" dy="10">&amp; FTA</tspan></text>
+          <text x="175.0" y="309.0" text-anchor="middle" font-family="Inter,sans-serif" font-size="8.5" fill="#00e5a0" font-weight="600"><tspan x="175.0" dy="-5">BG Line</tspan><tspan x="175.0" dy="10">(FAB)</tspan></text>
+          <text x="116.9" y="295.7" text-anchor="end" font-family="Inter,sans-serif" font-size="8.5" fill="#00e5a0" font-weight="600"><tspan x="116.9" dy="-5">Reporting</tspan><tspan x="116.9" dy="10">Dashboard</tspan></text>
+          <text x="70.2" y="258.5" text-anchor="end" font-family="Inter,sans-serif" font-size="8.5" fill="#00e5a0" font-weight="600"><tspan x="70.2" dy="-5">ESOP</tspan><tspan x="70.2" dy="10">Structuring</tspan></text>
+          <text x="44.4" y="204.8" text-anchor="end" font-family="Inter,sans-serif" font-size="8.5" fill="#00e5a0" font-weight="600"><tspan x="44.4" dy="-5">ICV</tspan><tspan x="44.4" dy="10">Strategy</tspan></text>
+          <text x="44.4" y="145.2" text-anchor="end" font-family="Inter,sans-serif" font-size="8.5" fill="#00e5a0" font-weight="600"><tspan x="44.4" dy="-5">Subsidy</tspan><tspan x="44.4" dy="10">LRIP</tspan></text>
+          <text x="70.2" y="91.5" text-anchor="end" font-family="Inter,sans-serif" font-size="8.5" fill="#00e5a0" font-weight="600"><tspan x="70.2" dy="-5">Program</tspan><tspan x="70.2" dy="10">Costing</tspan></text>
+          <text x="116.9" y="54.3" text-anchor="end" font-family="Inter,sans-serif" font-size="8.5" fill="#5a8080" font-weight="600"><tspan x="116.9" dy="-5">Finance</tspan><tspan x="116.9" dy="10">Stabiliz.</tspan></text>
+
+        </svg>
+      </div>
+
+      <script>
+      window.addEventListener('load', function(){
+        // Move tooltip to body so it's never clipped by any overflow:hidden parent
+        var tip = document.getElementById('radar-tip');
+        if(tip && tip.parentNode !== document.body) document.body.appendChild(tip);
+        if(!tip) {
+          tip = document.createElement('div');
+          tip.id = 'radar-tip';
+          tip.style.cssText = 'display:none;position:fixed;background:#0c1414;border:1px solid #1e3232;border-radius:7px;padding:10px 14px;font-size:11px;color:#e8f5f2;pointer-events:none;z-index:99999;max-width:220px;line-height:1.7;box-shadow:0 6px 28px rgba(0,0,0,0.7);';
+          document.body.appendChild(tip);
+        }
+
+        var ragCol = { 'Critical':'#ff4d6d', 'At Risk':'#f5a623', 'On Track':'#00e5a0', 'Completed':'#5a8080' };
+
+        function moveTip(e){
+          var x = e.clientX, y = e.clientY;
+          var tw = 230, th = 80;
+          var left = (x + 16 + tw > window.innerWidth) ? x - tw - 8 : x + 16;
+          var top  = (y - 14 + th > window.innerHeight) ? y - th - 4 : y - 14;
+          tip.style.left = left + 'px';
+          tip.style.top  = top  + 'px';
+        }
+
+        function scrollToObj(id){
+          var el = document.getElementById(id);
+          if(!el){
+            document.querySelectorAll('.obj-tbl td.obj-num').forEach(function(td){
+              td.closest('tr').id = 'obj-' + td.textContent.trim().toLowerCase();
+            });
+            el = document.getElementById(id);
+          }
+          if(!el) return;
+          el.scrollIntoView({behavior:'smooth', block:'center'});
+          el.style.transition='background 0.5s';
+          el.style.background='rgba(0,170,130,0.18)';
+          setTimeout(function(){ el.style.background=''; }, 2000);
+        }
+
+        document.querySelectorAll('.rdot').forEach(function(dot){
+          (function(d){
+            var name  = d.getAttribute('data-name');
+            var pct   = d.getAttribute('data-pct');
+            var rag   = d.getAttribute('data-rag');
+            var objId = d.getAttribute('data-obj');
+            var col   = ragCol[rag] || '#e8f5f2';
+            var origR = d.getAttribute('r');
+
+            d.addEventListener('mouseenter', function(e){
+              d.setAttribute('r', '7');
+              tip.style.display = 'block';
+              tip.innerHTML =
+                '<div style="font-weight:700;color:'+col+';font-size:15px;line-height:1.2;margin-bottom:4px;">'+pct+'</div>'+
+                '<div style="color:#e8f5f2;font-size:11px;font-weight:500;">'+name+'</div>'+
+                '<div style="color:'+col+';font-size:9px;margin-top:5px;letter-spacing:.09em;text-transform:uppercase;">'+rag+' &nbsp;·&nbsp; click to jump</div>';
+              moveTip(e);
+            });
+            d.addEventListener('mousemove', moveTip);
+            d.addEventListener('mouseleave', function(){
+              d.setAttribute('r', origR);
+              tip.style.display = 'none';
+            });
+            d.addEventListener('click', function(){
+              tip.style.display = 'none';
+              if(objId) scrollToObj(objId);
+            });
+          })(dot);
+        });
+      });
+      </script>
+    </div>
+
+  </div>
+
+  <!-- ══ 2026 OBJECTIVES TABLE ══ -->
+  <div class="sec-label">2026 Finance Objectives · Biny Ninan / Nathan Waite / Ella Cano · 11 objectives</div>
+  <div class="chart-card c12" style="padding:0;overflow:hidden;border-radius:10px;">
+    <table class="obj-tbl">
+      <thead><tr>
+        <th style="width:32px">#</th>
+        <th>Objective</th>
+        <th style="width:180px">Target Outcome</th>
+        <th style="width:50px;text-align:center">Owner</th>
+        <th style="width:65px;text-align:center">Priority</th>
+        <th style="width:72px;text-align:center">Q1 RAG</th>
+        <th style="width:95px">Progress</th>
+        <th style="width:130px;text-align:center">Status</th>
+      </tr></thead>
+      <tbody>
+        <tr class="obj-cat"><td colspan="8">Strategic Value Creation &amp; National Industrial Positioning</td></tr>
+        <tr>
+          <td class="obj-num">01</td>
+          <td><div class="obj-title">ICV Strategy &amp; Optimization</div><div class="obj-sub">Financial tracking &amp; procurement for ICV</div></td>
+          <td style="font-size:10.5px;color:var(--muted)">2025 cert + 10% improvement in 2026 ICV</td>
+          <td style="text-align:center;font-size:9px;font-weight:600;color:var(--blue)">Biny Ninan</td>
+          <td style="text-align:center"><span class="obj-pill obj-pill-m">Must</span></td>
+          <td style="text-align:center"><span class="obj-pill obj-pill-g">On Track</span></td>
+          <td><div style="display:flex;align-items:center;gap:6px"><div class="obj-pbar" style="flex:1"><div class="obj-pfill" style="width:15%;background:var(--green)"></div></div><span style="font-size:9px;font-weight:600;color:var(--green);min-width:26px;text-align:right">15%</span></div></td>
+          <td style="text-align:center"><span class="obj-status-active">● Active</span></td>
+        </tr>
+        <tr>
+          <td class="obj-num">02a</td>
+          <td><div class="obj-title">Subsidy — LRIP (Rent)</div><div class="obj-sub">Facility rent subsidy application</div></td>
+          <td style="font-size:10.5px;color:var(--muted)">Savings up to AED 1M on rent</td>
+          <td style="text-align:center;font-size:9px;font-weight:600;color:var(--ow-teal)">Ella Cano</td>
+          <td style="text-align:center"><span class="obj-pill obj-pill-m">Must</span></td>
+          <td style="text-align:center"><span class="obj-pill obj-pill-g">On Track</span></td>
+          <td><div style="display:flex;align-items:center;gap:6px"><div class="obj-pbar" style="flex:1"><div class="obj-pfill" style="width:20%;background:var(--green)"></div></div><span style="font-size:9px;font-weight:600;color:var(--green);min-width:26px;text-align:right">20%</span></div></td>
+          <td style="text-align:center"><span class="obj-status-active">● Active</span></td>
+        </tr>
+        <tr>
+          <td class="obj-num">02b</td>
+          <td><div class="obj-title">Subsidy — ESP (Power)</div><div class="obj-sub">Power usage subsidy application</div></td>
+          <td style="font-size:10.5px;color:var(--muted)">AED 0.5M savings (cond. to 2.5MW)</td>
+          <td style="text-align:center;font-size:9px;font-weight:600;color:var(--ow-teal)">Ella Cano</td>
+          <td style="text-align:center"><span class="obj-pill obj-pill-m">Must</span></td>
+          <td style="text-align:center"><span class="obj-pill obj-pill-r">Critical</span></td>
+          <td><div style="display:flex;align-items:center;gap:6px"><div class="obj-pbar" style="flex:1"><div class="obj-pfill" style="width:0%;background:var(--red)"></div></div><span style="font-size:9px;font-weight:600;color:var(--red);min-width:26px;text-align:right">0%</span></div></td>
+          <td style="text-align:center"><span class="obj-status-critical">▲ At Risk</span></td>
+        </tr>
+        <tr class="obj-cat"><td colspan="8">Capital Strategy &amp; Financing</td></tr>
+        <tr style="opacity:0.7">
+          <td class="obj-num">03</td>
+          <td><div class="obj-title">Finance Stabilization Plan</div><div class="obj-sub">Completed Q1-26 at 95% · items transitioned to BAU</div></td>
+          <td style="font-size:10.5px;color:var(--muted)">ERP live, 2025 FS issued, Playbook</td>
+          <td style="text-align:center;font-size:9px;font-weight:600;color:var(--blue)">Biny Ninan</td>
+          <td style="text-align:center"><span class="obj-pill obj-pill-m">Must</span></td>
+          <td style="text-align:center"><span class="obj-pill obj-pill-g">On Track</span></td>
+          <td><div style="display:flex;align-items:center;gap:6px"><div class="obj-pbar" style="flex:1"><div class="obj-pfill" style="width:100%;background:var(--green)"></div></div><span style="font-size:9px;font-weight:600;color:var(--green);min-width:26px;text-align:right">100%</span></div></td>
+          <td style="text-align:center"><span class="obj-status-done">✓ Completed Q1-26</span></td>
+        </tr>
+        <tr>
+          <td class="obj-num">04</td>
+          <td><div class="obj-title">Bank Guarantee Financing Line</div><div class="obj-sub">AED 25M BG facility — FAB</div></td>
+          <td style="font-size:10.5px;color:var(--muted)">AED 25M BG line ready by 30 Jun 2026</td>
+          <td style="text-align:center;font-size:9px;font-weight:600;color:var(--blue)">Biny Ninan</td>
+          <td style="text-align:center"><span class="obj-pill obj-pill-m">Must</span></td>
+          <td style="text-align:center"><span class="obj-pill obj-pill-g">On Track</span></td>
+          <td><div style="display:flex;align-items:center;gap:6px"><div class="obj-pbar" style="flex:1"><div class="obj-pfill" style="width:75%;background:var(--green)"></div></div><span style="font-size:9px;font-weight:600;color:var(--green);min-width:26px;text-align:right">75%</span></div></td>
+          <td style="text-align:center"><span class="obj-status-active">● Active</span></td>
+        </tr>
+        <tr>
+          <td class="obj-num">05</td>
+          <td><div class="obj-title">Capital Strategy / Debt Financing</div><div class="obj-sub">Amended: equity-driven strategy</div></td>
+          <td style="font-size:10.5px;color:var(--muted)">US$25M facility structured &amp; available</td>
+          <td style="text-align:center;font-size:9px;font-weight:600;color:var(--blue)">Biny Ninan</td>
+          <td style="text-align:center"><span class="obj-pill obj-pill-m">Support</span></td>
+          <td style="text-align:center"><span class="obj-pill obj-pill-a">At Risk</span></td>
+          <td><div style="display:flex;align-items:center;gap:6px"><div class="obj-pbar" style="flex:1"><div class="obj-pfill" style="width:50%;background:var(--amber)"></div></div><span style="font-size:9px;font-weight:600;color:var(--amber);min-width:26px;text-align:right">50%</span></div></td>
+          <td style="text-align:center"><span class="obj-status-risk">▲ At Risk</span></td>
+        </tr>
+        <tr class="obj-cat"><td colspan="8">Operational Finance &amp; Systems-Based Reporting</td></tr>
+        <tr>
+          <td class="obj-num">05b</td>
+          <td><div class="obj-title">ESOP Structuring</div><div class="obj-sub">Employee stock option plan structure &amp; agreements</div></td>
+          <td style="font-size:10.5px;color:var(--muted)">Structure docs and agreements in place</td>
+          <td style="text-align:center;font-size:9px;font-weight:600;color:var(--blue)">Biny Ninan</td>
+          <td style="text-align:center"><span class="obj-pill obj-pill-m">Support</span></td>
+          <td style="text-align:center"><span class="obj-pill obj-pill-g">On Track</span></td>
+          <td><div style="display:flex;align-items:center;gap:6px"><div class="obj-pbar" style="flex:1"><div class="obj-pfill" style="width:5%;background:var(--green)"></div></div><span style="font-size:9px;font-weight:600;color:var(--green);min-width:26px;text-align:right">5%</span></div></td>
+          <td style="text-align:center"><span class="obj-status-active">● Active</span></td>
+        </tr>
+        <tr>
+          <td class="obj-num">06</td>
+          <td><div class="obj-title">Contracting Framework</div><div class="obj-sub">Standardized T&amp;Cs with Contracts function</div></td>
+          <td style="font-size:10.5px;color:var(--muted)">Templates across agreements by 30 Sep</td>
+          <td style="text-align:center;font-size:9px;font-weight:600;color:var(--blue)">Biny Ninan</td>
+          <td style="text-align:center"><span class="obj-pill obj-pill-m">Support</span></td>
+          <td style="text-align:center"><span class="obj-pill obj-pill-r">Critical</span></td>
+          <td><div style="display:flex;align-items:center;gap:6px"><div class="obj-pbar" style="flex:1"><div class="obj-pfill" style="width:5%;background:var(--red)"></div></div><span style="font-size:9px;font-weight:600;color:var(--red);min-width:26px;text-align:right">5%</span></div></td>
+          <td style="text-align:center"><span class="obj-status-risk">▲ At Risk</span></td>
+        </tr>
+        <tr>
+          <td class="obj-num">07a</td>
+          <td><div class="obj-title">Revenue Recognition Principles</div><div class="obj-sub">IFRS policy for US$46M revenues</div></td>
+          <td style="font-size:10.5px;color:var(--muted)">Audit-approved policy + FTA by 30 Jun</td>
+          <td style="text-align:center;font-size:9px;font-weight:600;color:var(--blue)">Biny Ninan</td>
+          <td style="text-align:center"><span class="obj-pill obj-pill-m">Support</span></td>
+          <td style="text-align:center"><span class="obj-pill obj-pill-a">At Risk</span></td>
+          <td><div style="display:flex;align-items:center;gap:6px"><div class="obj-pbar" style="flex:1"><div class="obj-pfill" style="width:10%;background:var(--amber)"></div></div><span style="font-size:9px;font-weight:600;color:var(--amber);min-width:26px;text-align:right">10%</span></div></td>
+          <td style="text-align:center"><span class="obj-status-risk">▲ At Risk</span></td>
+        </tr>
+        <tr>
+          <td class="obj-num">07b</td>
+          <td><div class="obj-title">eInvoicing &amp; FTA Compliance</div><div class="obj-sub">NetSuite → FTA platform</div></td>
+          <td style="font-size:10.5px;color:var(--muted)">FTA deadline: 30 Jun 2026</td>
+          <td style="text-align:center;font-size:9px;font-weight:600;color:var(--ow-teal)">Ella Cano</td>
+          <td style="text-align:center"><span class="obj-pill obj-pill-m">Must</span></td>
+          <td style="text-align:center"><span class="obj-pill obj-pill-g">On Track</span></td>
+          <td><div style="display:flex;align-items:center;gap:6px"><div class="obj-pbar" style="flex:1"><div class="obj-pfill" style="width:75%;background:var(--green)"></div></div><span style="font-size:9px;font-weight:600;color:var(--green);min-width:26px;text-align:right">75%</span></div></td>
+          <td style="text-align:center"><span class="obj-status-active">● Active</span></td>
+        </tr>
+        <tr>
+          <td class="obj-num">08</td>
+          <td><div class="obj-title">Program Costing &amp; EAC Tracking</div><div class="obj-sub">System-driven cost reports</div></td>
+          <td style="font-size:10.5px;color:var(--muted)">EAC tracking operational by Q3</td>
+          <td style="text-align:center;font-size:9px;font-weight:600;color:var(--green)">Nathan Waite</td>
+          <td style="text-align:center"><span class="obj-pill obj-pill-m">Must</span></td>
+          <td style="text-align:center"><span class="obj-pill obj-pill-g">On Track</span></td>
+          <td><div style="display:flex;align-items:center;gap:6px"><div class="obj-pbar" style="flex:1"><div class="obj-pfill" style="width:20%;background:var(--green)"></div></div><span style="font-size:9px;font-weight:600;color:var(--green);min-width:26px;text-align:right">20%</span></div></td>
+          <td style="text-align:center"><span class="obj-status-active">● Active</span></td>
+        </tr>
+        <tr class="obj-cat"><td colspan="8">Financial Governance &amp; Automation Roadmap</td></tr>
+        <tr>
+          <td class="obj-num">09</td>
+          <td><div class="obj-title">Unified Reporting Dashboard</div><div class="obj-sub">PowerBI + Claude dashboard on GitHub</div></td>
+          <td style="font-size:10.5px;color:var(--muted)">Dashboards integrated by 30 Jun</td>
+          <td style="text-align:center;font-size:9px;font-weight:600;color:var(--green)">Nathan Waite</td>
+          <td style="text-align:center"><span class="obj-pill obj-pill-m">Must</span></td>
+          <td style="text-align:center"><span class="obj-pill obj-pill-g">On Track</span></td>
+          <td><div style="display:flex;align-items:center;gap:6px"><div class="obj-pbar" style="flex:1"><div class="obj-pfill" style="width:50%;background:var(--green)"></div></div><span style="font-size:9px;font-weight:600;color:var(--green);min-width:26px;text-align:right">50%</span></div></td>
+          <td style="text-align:center"><span class="obj-status-active">● Active</span></td>
+        </tr>
+        <tr>
+          <td class="obj-num">10</td>
+          <td><div class="obj-title">DOA &amp; Governance Framework</div><div class="obj-sub">Alignment on approval limits across all workflows in NetSuite</div></td>
+          <td style="font-size:10.5px;color:var(--muted)">DOA implemented by 30 Sep</td>
+          <td style="text-align:center;font-size:9px;font-weight:600;color:var(--blue)">Biny Ninan</td>
+          <td style="text-align:center"><span class="obj-pill obj-pill-m">Must</span></td>
+          <td style="text-align:center"><span class="obj-pill obj-pill-a">At Risk</span></td>
+          <td><div style="display:flex;align-items:center;gap:6px"><div class="obj-pbar" style="flex:1"><div class="obj-pfill" style="width:10%;background:var(--amber)"></div></div><span style="font-size:9px;font-weight:600;color:var(--amber);min-width:26px;text-align:right">10%</span></div></td>
+          <td style="text-align:center"><span class="obj-status-risk">▲ At Risk</span></td>
+        </tr>
+        <tr>
+          <td class="obj-num">11</td>
+          <td><div class="obj-title">ERP Opening Balance Migration</div><div class="obj-sub">Inventory &amp; asset balances into NS</div></td>
+          <td style="font-size:10.5px;color:var(--muted)">All opening balances migrated by 30 Jun 2026</td>
+          <td style="text-align:center;font-size:9px;font-weight:600;color:var(--ow-teal)">Ella Cano</td>
+          <td style="text-align:center"><span class="obj-pill obj-pill-m">Must</span></td>
+          <td style="text-align:center"><span class="obj-pill obj-pill-a">At Risk</span></td>
+          <td><div style="display:flex;align-items:center;gap:6px"><div class="obj-pbar" style="flex:1"><div class="obj-pfill" style="width:30%;background:var(--amber)"></div></div><span style="font-size:9px;font-weight:600;color:var(--amber);min-width:26px;text-align:right">30%</span></div></td>
+          <td style="text-align:center"><span class="obj-status-active">● Active</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>
+
+<!-- ══════════════════ PAGE: CASH ══════════════════ -->
+<div class="page" id="page-cash">
+  <div class="sec-label">Cash Management &amp; Runway Analysis</div>
+
+  <div class="kpi-grid">
+    <!-- Cash: teal -->
+    <div class="kpi-card" style="--card-color: var(--ow-teal)">
+      <div class="kpi-label">OW+MLO Cash · 24-Apr-26</div>
+      <div class="kpi-value">$21.65M</div>
+      <div class="kpi-delta neg">▼ $0.40M vs Mar-26</div>
+      <div class="kpi-sub">-1.8% month-on-month</div>
+    </div>
+    <!-- Runway -->
+    <div class="kpi-card" style="--card-color: var(--green)">
+      <div class="kpi-label">Runway <sup style="color:var(--ow-teal);font-weight:700">**</sup></div>
+      <div class="kpi-value">15 months</div>
+      <div class="kpi-delta pos">Ahead of budgeted plan</div>
+      <div class="kpi-sub">Budget assumed 14 months</div>
+    </div>
+    <!-- Burn Rate -->
+    <div class="kpi-card" style="--card-color: var(--green)">
+      <div class="kpi-label">Burn Rate · Steady State <sup style="color:var(--ow-teal);font-weight:700">*</sup></div>
+      <div class="kpi-value">$1.48M</div>
+      <div class="kpi-delta neg">▲ +1.4% vs Budget</div>
+      <div class="kpi-sub">Budget: $1.46M/month</div>
+    </div>
+    <!-- Drop-dead date -->
+    <div class="kpi-card" style="--card-color: var(--green)">
+      <div class="kpi-label">Drop-Dead Date <sup style="color:var(--ow-teal);font-weight:700">***</sup></div>
+      <div class="kpi-value">15-Jun-27</div>
+      <div class="kpi-delta pos">~15 months from Apr-26</div>
+      <div class="kpi-sub">Projected cash-out date</div>
+    </div>
+  </div>
+
+  <!-- ── FORECASTED CASH POSITION ── -->
+  <div class="chart-grid" style="margin-top:20px;">
+    <div class="chart-card c12">
+      <div class="card-label" style="font-size:13px;font-weight:600;margin-bottom:4px;">Forecasted Cash Position (USD M) · Apr-26 – Jun-27</div>
+      <div style="font-size:10px;color:var(--muted);margin-bottom:14px;">
+        Closing cash balance by month · bars = net monthly cash flow · line = cumulative closing balance · hover for detail
+        <span style="margin-left:12px;color:var(--ow-teal);font-weight:500;">✦ Inflows from signed Term Sheet milestones are incorporated in this forecast</span>
+      </div>
+
+      <!-- Tooltip -->
+      <div id="cf-tip" style="display:none;position:fixed;background:#0c1414;border:1px solid #1e3232;border-radius:8px;padding:10px 14px;font-size:11px;color:#e8f5f2;pointer-events:none;z-index:9999;min-width:200px;line-height:1.7;box-shadow:0 4px 24px rgba(0,0,0,0.6);"></div>
+
+      <div style="position:relative;width:100%;overflow-x:auto;">
+        <svg id="cfSvg" viewBox="0 0 1060 280" width="100%" style="display:block;min-width:700px;" xmlns="http://www.w3.org/2000/svg"></svg>
+      </div>
+
+      <!-- Legend -->
+      <div style="display:flex;gap:20px;margin-top:10px;flex-wrap:wrap;">
+        <span style="display:flex;align-items:center;gap:6px;font-size:10px;color:var(--muted)"><span style="display:inline-block;width:14px;height:10px;border-radius:2px;background:rgba(0,229,160,0.8);"></span>Inflows (invoicing)</span>
+        <span style="display:flex;align-items:center;gap:6px;font-size:10px;color:var(--muted)"><span style="display:inline-block;width:14px;height:10px;border-radius:2px;background:rgba(255,77,109,0.65);"></span>Outflows (spends)</span>
+        <span style="display:flex;align-items:center;gap:6px;font-size:10px;color:var(--muted)"><span style="display:inline-block;width:28px;height:2px;background:#00aa82;vertical-align:middle;"></span>Closing balance</span>
+      </div>
+    </div>
+  </div>
+
+  <script>
+  (function(){
+    // Data from snapshot (all USD, converted from AED at 3.67)
+    var months = ['Apr-26','May-26','Jun-26','Jul-26','Aug-26','Sep-26','Oct-26','Nov-26','Dec-26','Jan-27','Feb-27','Mar-27','Apr-27','May-27','Jun-27'];
+    var closing = [20.00,18.28,16.36,15.37,13.70,12.07,11.12,9.55,5.75,6.40,5.79,4.13,2.37,2.74,0.76]; // USD M (÷3.67 approx)
+    var netFlow = [-2.76,-1.72,-1.92,-0.99,-1.67,-1.62,-0.95,-1.58,-3.80,-0.61,-1.65,-1.76,0.37,-1.98,-1.63];
+    var invoicing= [0,1.79,0.40,0.45,0,0,0.55,0.02,0.02,1.22,0.12,0.02,2.14,0.44,0.14];
+    var spends   = [-2.76,-3.51,-2.32,-1.44,-1.57,-1.47,-1.50,-1.59,-3.21,-1.78,-1.78,-1.78,-1.78,-1.78,-1.78];
+
+    // Tooltip details
+    var details = [
+      // Apr-26
+      'Opening: $22.77M\nInvoicing: $0\nSpends: -$2.76M\n  Opex: -$0.50M | Payroll: -$0.64M | Capex: -$1.63M\nNet: -$2.76M',
+      // May-26
+      'Opening: $20.00M\nInvoicing: $1.79M\n  Loft Optical MLT3 (Payload Integration): $0.30M\n  ADMA/ADFD MLT2 (Contract Signature): $1.25M\n  FADA SIRB-1 milestones: $0.24M\nSpends: -$3.51M\n  Opex: -$0.74M | Payroll: -$0.82M | Capex: -$1.95M\nNet: -$1.72M',
+      // Jun-26
+      'Opening: $18.28M\nInvoicing: $0.40M\n  Loft Optical MLT4 (Pre-Ship Review): $0.20M\n  SAR I&T MLT2 (Bus Manufacture Complete): $0.30M\n  (net of adjustments)\nSpends: -$2.32M\n  Opex: -$0.67M | Payroll: -$0.86M | Capex: -$0.78M\nNet: -$1.92M',
+      // Jul-26
+      'Opening: $16.36M\nInvoicing: $0.45M\n  ADMA/ADFD MLT3 (1st Satellite Pre-shipment Review): $0.25M\n  SAR I&T adjustment: ~$0.20M\nSpends: -$1.44M\n  Opex: -$0.54M | Payroll: -$0.89M | Capex: -$0.01M\nNet: -$0.99M',
+      // Aug-26
+      'Opening: $15.37M\nInvoicing: $0\nSpends: -$1.67M\n  Opex: -$0.70M | Payroll: -$0.87M\n  Program: Transport costs -$0.10M\nNet: -$1.67M',
+      // Sep-26
+      'Opening: $13.70M\nInvoicing: $0\nSpends: -$1.62M\n  Opex: -$0.63M | Payroll: -$0.83M | Capex: -$0.02M\n  Program: Misc insurance -$0.10M | Launch campaign -$0.05M\nNet: -$1.62M',
+      // Oct-26
+      'Opening: $12.07M\nInvoicing: $0.55M\n  FR Contract MLT3 In-Orbit fees: $0.20M\n  Loft Optical MLT5 (Platform commissioning): $0.10M\n  SAR I&T MLT3 (Payload Integration): $0.10M\n  ADMA/ADFD In-Orbit fees: $0.02M\n  FADA WP3.1 Part1 + WP1.3: $0.14M\nSpends: -$1.50M\n  Opex: -$0.62M | Payroll: -$0.87M | Capex: -$0.01M\nNet: -$0.95M',
+      // Nov-26
+      'Opening: $11.12M\nInvoicing: $0.02M\n  ADMA/ADFD In-Orbit fees: $0.02M\nSpends: -$1.59M\n  Opex: -$0.66M | Payroll: -$0.93M\nNet: -$1.58M',
+      // Dec-26
+      'Opening: $9.55M\nInvoicing: $0.02M\n  ADMA/ADFD In-Orbit fees: $0.02M\nSpends: -$3.21M\n  Opex: -$0.73M | Payroll: -$2.48M (annual bonus)\n  Program: Transport costs -$0.60M\nNet: -$3.80M',
+      // Jan-27
+      'Opening: $5.75M\nInvoicing: $1.22M\n  FR Contract MLT3 In-Orbit fees: $1.00M\n  SAR I&T MLT4 (Pre-Ship Review): $0.20M\n  ADMA/ADFD In-Orbit fees: $0.02M\nSpends: -$1.78M\n  Opex: -$0.53M | Payroll: -$0.84M | Capex: -$0.40M\n  Program: Launch campaign -$0.05M\nNet: -$0.61M',
+      // Feb-27
+      'Opening: $6.40M\nInvoicing: $0.12M\n  FADA WP3.1 Part1 Completion: $0.11M\n  ADMA/ADFD In-Orbit fees: $0.02M\nSpends: -$1.78M\n  Opex: -$0.53M | Payroll: -$0.84M | Capex: -$0.40M\nNet: -$1.65M',
+      // Mar-27
+      'Opening: $5.79M\nInvoicing: $0.02M\n  ADMA/ADFD In-Orbit fees: $0.02M\nSpends: -$1.78M\n  Opex: -$0.53M | Payroll: -$0.84M | Capex: -$0.40M\nNet: -$1.76M',
+      // Apr-27
+      'Opening: $4.13M\nInvoicing: $2.14M\n  FR Contract: $2.00M\n  FADA WP3.3.1 + WP1.3: $0.13M\n  ADMA/ADFD In-Orbit fees: $0.02M\nSpends: -$1.78M\n  Opex: -$0.53M | Payroll: -$0.84M | Capex: -$0.40M\nNet: +$0.37M',
+      // May-27
+      'Opening: $2.37M\nInvoicing: $0.44M\n  SAR I&T MLT15 (Platform commissioning): $0.10M\n  FADA WP3.3.1 + WP1.3: $0.13M\n  ADMA/ADFD In-Orbit fees: $0.02M\n  Other: $0.19M\nSpends: -$1.78M\n  Opex: -$0.53M | Payroll: -$0.84M | Capex: -$0.40M\n  Program: Transport -$0.60M\nNet: -$1.98M',
+      // Jun-27
+      'Opening: $2.74M\nInvoicing: $0.14M\n  FADA WP3.3.1 + WP1.3: $0.13M\n  ADMA/ADFD In-Orbit fees: $0.02M\nSpends: -$1.78M\n  Opex: -$0.53M | Payroll: -$0.84M | Capex: -$0.40M\nNet: -$1.63M\n⚠ Closing: $0.76M — Cash-out risk',
+    ];
+
+    var svg = document.getElementById('cfSvg');
+    if(!svg) return;
+
+    var W=1060, H=280, padL=52, padR=18, padT=24, padB=48;
+    var chartW = W-padL-padR, chartH = H-padT-padB;
+    var n = months.length;
+    var barW = Math.floor(chartW/n * 0.55);
+    var colW = chartW/n;
+
+    // Dual-axis layout
+    // Upper zone: closing balance line (top 60% of chartH)
+    var lineZoneH = chartH * 0.60;
+    var lineYMax = 24, lineYMin = 0;
+    function lineYPx(v){ return padT + lineZoneH * (1 - (v - lineYMin)/(lineYMax - lineYMin)); }
+
+    // Lower zone: net cash flow bars (bottom 40%, with a divider gap)
+    var barZoneTop  = padT + lineZoneH + 10;
+    var barZoneH    = chartH - lineZoneH - 10;
+    var barMax = 4.2; // slightly above max abs value (~3.8)
+    // Centre line of bar zone = zero line
+    var barZeroY = barZoneTop + barZoneH / 2;
+    function barYPx(v){ return barZeroY - (v / barMax) * (barZoneH / 2); }
+
+    function xMid(i){ return padL + colW*i + colW/2; }
+
+    var ns = 'http://www.w3.org/2000/svg';
+    function el(tag, attrs){
+      var e = document.createElementNS(ns, tag);
+      Object.keys(attrs).forEach(function(k){ e.setAttribute(k,attrs[k]); });
+      return e;
+    }
+
+    // Divider between zones
+    svg.appendChild(el('line',{x1:padL,y1:barZoneTop-4,x2:padL+chartW,y2:barZoneTop-4,
+      stroke:'rgba(255,255,255,0.05)','stroke-width':'1','stroke-dasharray':'3 4'}));
+
+    // Bar zone zero line
+    svg.appendChild(el('line',{x1:padL,y1:barZeroY,x2:padL+chartW,y2:barZeroY,
+      stroke:'rgba(255,255,255,0.12)','stroke-width':'1'}));
+
+    // Closing balance grid lines (upper zone)
+    [0,5,10,15,20].forEach(function(v){
+      var y = lineYPx(v);
+      svg.appendChild(el('line',{x1:padL,y1:y,x2:padL+chartW,y2:y,stroke:'rgba(30,50,50,0.8)','stroke-width':'1'}));
+      var t=document.createElementNS(ns,'text');
+      t.setAttribute('x',padL-6); t.setAttribute('y',y+4);
+      t.setAttribute('text-anchor','end'); t.setAttribute('font-size','9');
+      t.setAttribute('fill','#5a8080'); t.setAttribute('font-family','Inter,sans-serif');
+      t.textContent='$'+v+'M';
+      svg.appendChild(t);
+    });
+
+    // Bar zone y-axis labels
+    var brLabel = document.createElementNS(ns,'text');
+    brLabel.setAttribute('x',padL-6); brLabel.setAttribute('y',barZoneTop+10);
+    brLabel.setAttribute('text-anchor','end'); brLabel.setAttribute('font-size','8');
+    brLabel.setAttribute('fill','#5a8080'); brLabel.setAttribute('font-family','Inter,sans-serif');
+    brLabel.textContent='Net $M'; svg.appendChild(brLabel);
+    // Stacked bars: outflows (red, downward) + inflows (green, upward) in bar zone
+    var stackBarW = Math.floor(colW * 0.6);
+    netFlow.forEach(function(v,i){
+      var inflow  =  invoicing[i];   // positive, draw upward
+      var outflow =  Math.abs(spends[i]); // positive magnitude, draw downward
+
+      // Outflow bar (downward from zero)
+      var outH = Math.max((outflow / 4.2) * (barZoneH / 2), 2);
+      var outBar = el('rect',{
+        x: xMid(i) - stackBarW/2, y: barZeroY,
+        width: stackBarW, height: outH,
+        fill: 'rgba(255,77,109,0.65)', rx: '2'
+      });
+      outBar.style.cursor = 'pointer';
+      svg.appendChild(outBar);
+
+      // Inflow bar (upward from zero)
+      if(inflow > 0){
+        var inH = Math.max((inflow / 4.2) * (barZoneH / 2), 2);
+        var inBar = el('rect',{
+          x: xMid(i) - stackBarW/2, y: barZeroY - inH,
+          width: stackBarW, height: inH,
+          fill: 'rgba(0,229,160,0.80)', rx: '2'
+        });
+        inBar.style.cursor = 'pointer';
+        svg.appendChild(inBar);
+        // Wire inflow bar tooltip too
+        (function(idx){ inBar.addEventListener('mouseenter',function(e){ showTip(e,idx); }); inBar.addEventListener('mousemove',function(e){ moveTip(e); }); inBar.addEventListener('mouseleave',function(){ hideTip(); }); })(i);
+      }
+
+      // Wire outflow bar tooltip
+      (function(idx){ outBar.addEventListener('mouseenter',function(e){ showTip(e,idx); }); outBar.addEventListener('mousemove',function(e){ moveTip(e); }); outBar.addEventListener('mouseleave',function(){ hideTip(); }); })(i);
+    });
+
+    // Closing balance line — drawn in upper zone
+    var linePts = closing.map(function(v,i){ return xMid(i)+','+lineYPx(v); }).join(' ');
+    svg.appendChild(el('polyline',{points:linePts,fill:'none',stroke:'#00aa82','stroke-width':'2.2',
+      'stroke-linejoin':'round','stroke-linecap':'round'}));
+
+    // Dots on line
+    closing.forEach(function(v,i){
+      var d = el('circle',{cx:xMid(i),cy:lineYPx(v),r:'4',fill:'#00aa82',stroke:'#0c1414','stroke-width':'1.5'});
+      d.style.cursor='pointer';
+      svg.appendChild(d);
+      (function(idx){
+        d.addEventListener('mouseenter',function(e){ showTip(e,idx); });
+        d.addEventListener('mousemove', function(e){ moveTip(e); });
+        d.addEventListener('mouseleave',function(){ hideTip(); });
+      })(i);
+
+      if([0,4,8,11,14].indexOf(i)>-1){
+        var lbl=document.createElementNS(ns,'text');
+        lbl.setAttribute('x',xMid(i)); lbl.setAttribute('y',lineYPx(v)-9);
+        lbl.setAttribute('text-anchor','middle'); lbl.setAttribute('font-size','8.5');
+        lbl.setAttribute('fill','#a8c4c0'); lbl.setAttribute('font-family','Inter,sans-serif');
+        lbl.textContent='$'+v.toFixed(1)+'M';
+        svg.appendChild(lbl);
+      }
+    });
+
+    // Warning marker for Jun-27 (cash-out risk) — above the dot
+    var lastX = xMid(14), lastY = lineYPx(closing[14]);
+    var warn=document.createElementNS(ns,'text');
+    warn.setAttribute('x',lastX); warn.setAttribute('y',lastY-14);
+    warn.setAttribute('text-anchor','middle'); warn.setAttribute('font-size','9');
+    warn.setAttribute('fill','#ff4d6d'); warn.setAttribute('font-family','Inter,sans-serif');
+    warn.textContent='⚠ Cash-out risk';
+    svg.appendChild(warn);
+
+    // X-axis labels
+    months.forEach(function(m,i){
+      var t=document.createElementNS(ns,'text');
+      t.setAttribute('x',xMid(i)); t.setAttribute('y',H-padB+14);
+      t.setAttribute('text-anchor','middle'); t.setAttribute('font-size','8.5');
+      t.setAttribute('fill',i===14?'#ff4d6d':'#5a8080');
+      t.setAttribute('font-weight',i===14?'600':'400');
+      t.setAttribute('font-family','Inter,sans-serif');
+      t.textContent=m;
+      svg.appendChild(t);
+    });
+
+    // Divider line between 2026 and 2027
+    var divX = xMid(8)+colW/2+2;
+    svg.appendChild(el('line',{x1:divX,y1:padT,x2:divX,y2:padT+chartH,stroke:'rgba(255,255,255,0.1)',
+      'stroke-width':'1','stroke-dasharray':'6 3'}));
+    var yr26=document.createElementNS(ns,'text');
+    yr26.setAttribute('x',padL+chartW*9/30); yr26.setAttribute('y',padT-8);
+    yr26.setAttribute('text-anchor','middle'); yr26.setAttribute('font-size','9');
+    yr26.setAttribute('fill','#5a8080'); yr26.setAttribute('font-family','Inter,sans-serif');
+    yr26.textContent='2026'; svg.appendChild(yr26);
+    var yr27=document.createElementNS(ns,'text');
+    yr27.setAttribute('x',divX+(chartW-9*colW)/2); yr27.setAttribute('y',padT-8);
+    yr27.setAttribute('text-anchor','middle'); yr27.setAttribute('font-size','9');
+    yr27.setAttribute('fill','#5a8080'); yr27.setAttribute('font-family','Inter,sans-serif');
+    yr27.textContent='2027'; svg.appendChild(yr27);
+
+    // Tooltip logic
+    var tip = document.getElementById('cf-tip');
+    if(tip && tip.parentNode !== document.body) document.body.appendChild(tip);
+    var tipIdx = -1;
+    function showTip(e,i){
+      tipIdx=i;
+      tip.innerHTML =
+        '<div style="font-size:10px;font-weight:700;color:var(--ow-teal);margin-bottom:4px;">'+months[i]+'</div>'+
+        '<div style="color:#a8c4c0;white-space:pre-line;font-size:10.5px;">'+details[i]+'</div>'+
+        '<div style="margin-top:6px;padding-top:6px;border-top:1px solid #1e3232;font-size:10px;color:#e8f5f2;">Closing balance: <strong>$'+closing[i].toFixed(2)+'M</strong></div>';
+      tip.style.display='block';
+      moveTip(e);
+    }
+    function moveTip(e){ var l=e.clientX+16,t=e.clientY-20; tip.style.left=l+'px'; tip.style.top=t+'px'; }
+    function hideTip(){ tip.style.display='none'; tipIdx=-1; }
+  })();
+  </script>
+
+  <!-- ── AP / AR Ageing ── -->
+  <div class="chart-grid" style="margin-top:20px;">
+    <!-- AP Ageing -->
+    <div class="chart-card c6">
+      <div class="card-label" style="font-size:13px;font-weight:600;">Accounts Payable Ageing · 24 Apr 2026 (USD)</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 12px;">
+        <div style="flex:1;min-width:90px;background:rgba(0,170,130,0.08);border:1px solid rgba(0,170,130,0.2);border-radius:6px;padding:8px 10px;">
+          <div style="font-size:9.5px;color:var(--muted);margin-bottom:2px;">Current</div>
+          <div style="font-size:13px;font-weight:700;color:var(--ow-teal);">$47k</div>
+        </div>
+        <div style="flex:1;min-width:90px;background:rgba(0,170,130,0.06);border:1px solid rgba(0,170,130,0.15);border-radius:6px;padding:8px 10px;">
+          <div style="font-size:9.5px;color:var(--muted);margin-bottom:2px;">&lt; 1 Month</div>
+          <div style="font-size:13px;font-weight:700;color:var(--text);">$723k</div>
+        </div>
+        <div style="flex:1;min-width:90px;background:rgba(245,166,35,0.07);border:1px solid rgba(245,166,35,0.2);border-radius:6px;padding:8px 10px;">
+          <div style="font-size:9.5px;color:var(--muted);margin-bottom:2px;">1 Month</div>
+          <div style="font-size:13px;font-weight:700;color:var(--amber);">$139k</div>
+        </div>
+        <div style="flex:1;min-width:90px;background:rgba(245,166,35,0.07);border:1px solid rgba(245,166,35,0.2);border-radius:6px;padding:8px 10px;">
+          <div style="font-size:9.5px;color:var(--muted);margin-bottom:2px;">2 Months</div>
+          <div style="font-size:13px;font-weight:700;color:var(--amber);">$35k</div>
+        </div>
+        <div style="flex:1;min-width:90px;background:rgba(255,77,109,0.07);border:1px solid rgba(255,77,109,0.2);border-radius:6px;padding:8px 10px;">
+          <div style="font-size:9.5px;color:var(--muted);margin-bottom:2px;">3 Months+</div>
+          <div style="font-size:13px;font-weight:700;color:var(--red);">$33k</div>
+        </div>
+      </div>
+      <canvas id="apAgeChart" height="130"></canvas>
+      <div style="margin-top:10px;font-size:10px;color:var(--muted);border-top:1px solid var(--border);padding-top:8px;">
+        Total AP: <strong style="color:var(--text-2)">$0.98M</strong> · Values converted from AED at 3.67<br>
+        <span style="color:var(--text-2)">* ALJARAF Travel</span> balances are with a Royal Group company — historical invoice reconciliations are ongoing and dues expected to be cleared before April end.
+      </div>
+    </div>
+
+    <!-- AR Ageing -->
+    <div class="chart-card c6">
+      <div class="card-label" style="font-size:13px;font-weight:600;">Accounts Receivable Ageing · 24 Apr 2026 (USD)</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 12px;">
+        <div style="flex:1;min-width:120px;background:rgba(0,170,130,0.08);border:1px solid rgba(0,170,130,0.2);border-radius:6px;padding:8px 10px;">
+          <div style="font-size:9.5px;color:var(--muted);margin-bottom:2px;">Current</div>
+          <div style="font-size:13px;font-weight:700;color:var(--ow-teal);">$0</div>
+        </div>
+        <div style="flex:1;min-width:120px;background:rgba(245,166,35,0.07);border:1px solid rgba(245,166,35,0.2);border-radius:6px;padding:8px 10px;">
+          <div style="font-size:9.5px;color:var(--muted);margin-bottom:2px;">1 Month — ADFD</div>
+          <div style="font-size:13px;font-weight:700;color:var(--amber);">$263k</div>
+        </div>
+        <div style="flex:1;min-width:120px;background:rgba(255,77,109,0.07);border:1px solid rgba(255,77,109,0.2);border-radius:6px;padding:8px 10px;">
+          <div style="font-size:9.5px;color:var(--muted);margin-bottom:2px;">2 Months — Loft</div>
+          <div style="font-size:13px;font-weight:700;color:var(--red);">$400k</div>
+        </div>
+      </div>
+      <canvas id="arAgeChart" height="130"></canvas>
+      <div style="margin-top:10px;font-size:10px;color:var(--muted);border-top:1px solid var(--border);padding-top:8px;">
+        Total AR: <strong style="color:var(--text-2)">$663k</strong> · Values converted from AED at 3.67<br>
+        Note: $250k received from ADMA on 30 Mar 2026 for their half of the first milestone invoice.<br>
+        <strong style="color:var(--text-2)">Loft ($400k)</strong> — to be netted off against future AP procurement invoices from Loft for the program.<br>
+        <strong style="color:var(--text-2)">ADFD ($263k)</strong> — balance followed up; payment expected before April end.
+      </div>
+    </div>
+  </div>
+
+  <!-- Definitions footnote -->
+  <div style="margin-top:18px; padding:14px 16px; border-top:1px solid rgba(0,170,130,0.2); line-height:2;">
+    <div style="font-size:10.5px; color:var(--muted);">
+      <div><sup style="color:var(--ow-teal);font-weight:700">*</sup> <strong style="color:var(--text-2)">Steady-state Burn Rate</strong> is the Company's ongoing US$ monthly spending level based on current headcount and operating structure, excluding program-specific or one-time project costs.</div>
+      <div><sup style="color:var(--ow-teal);font-weight:700">**</sup> <strong style="color:var(--text-2)">Runway</strong> reflects the number of months the Company can operate before cash is depleted, based on the steady-state burn rate.</div>
+      <div><sup style="color:var(--ow-teal);font-weight:700">***</sup> <strong style="color:var(--text-2)">Drop-dead date</strong> is the projected date when cash would be exhausted after factoring in expected receipts from signed contracts and committed inflows.</div>
+    </div>
+  </div>
+</div>
+
+<!-- PIPELINE PAGE REMOVED -->
+<div class="page" id="page-pipeline" style="display:none!important">
+  <div class="sec-label">Revenue Pipeline &amp; Contract TCV <span style="font-size:11px; font-weight:400; color:var(--muted); letter-spacing:0">(TCV — Total Contract Value)</span></div>
+
+  <div class="kpi-grid">
+    <div class="kpi-card" style="--card-color: var(--ow-teal)">
+      <div class="kpi-label">Total Expected TCV</div>
+      <div class="kpi-value">$277.8M</div>
+      <div class="kpi-delta neu">27% achieved ($64.3M) TS signed to date</div>
+    </div>
+    <div class="kpi-card" style="--card-color: var(--amber)">
+      <div class="kpi-label">2026 Revenue Target</div>
+      <div class="kpi-value">$46.1M</div>
+      <div class="kpi-delta neg">1.5% ($0.9M) YTD achieved</div>
+    </div>
+  </div>
+
+  <!-- GAUGE + DETAIL -->
+  <div class="chart-grid" style="align-items:start">
+    <!-- Gauge Canvas -->
+    <div class="chart-card c6" style="position:relative; min-height:380px; display:flex; flex-direction:column; align-items:center;">
+      <div class="card-label" style="width:100%">Pipeline Achievement Gauge — TCV by Status</div>
+      <div style="width:100%; max-width:360px; margin:0 auto; position:relative;">
+        <canvas id="gaugeCanvas" style="width:100%"></canvas>
+      </div>
+      <!-- Filter toggles -->
+      <div style="display:flex; gap:8px; margin-top:4px; flex-wrap:wrap; justify-content:center;">
+        <button class="radar-filter active" data-filter="all"       onclick="filterGauge('all',this)"         style="--fc:#a8c4c0">All</button>
+        <button class="radar-filter"        data-filter="completed"  onclick="filterGauge('completed',this)"   style="--fc:#00e5a0">✓ Completed</button>
+        <button class="radar-filter"        data-filter="progress"   onclick="filterGauge('progress',this)"    style="--fc:#f5a623">⟳ In Progress</button>
+        <button class="radar-filter"        data-filter="notachieved" onclick="filterGauge('notachieved',this)" style="--fc:#ff4d6d">✕ Not Achieved</button>
+        <button class="radar-filter"        data-filter="notawarded"  onclick="filterGauge('notawarded',this)"  style="--fc:#8899aa">✕ Not Awarded</button>
+      </div>
+    </div>
+
+    <!-- Contract detail panel -->
+    <div class="chart-card c6">
+      <div class="card-label">Contract Detail</div>
+      <div id="contractDetail" style="margin-top:10px">
+        <div id="detailDefault" style="display:flex; flex-direction:column; gap:8px;">
+          <div style="font-size:11px; color:var(--muted); margin-bottom:4px; padding:6px 0; border-bottom:1px solid var(--border);">
+            All Contracts — Mar 2026
+          </div>
+          <div id="contractList"></div>
+          <div style="margin-top:10px; font-size:10.5px; color:var(--muted); font-style:italic; border-top:1px solid var(--border); padding-top:8px;">
+            * <strong style="color:var(--text-2)">FADA</strong> — The current geopolitical environment has affected progress on this discussion and progress is paused for the moment.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="chart-grid">
+    <div class="chart-card c12">
+      <div class="card-label">Other Updates</div>
+
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:12px;">
+
+        <!-- Advanced Stage -->
+        <div>
+          <div style="font-size:11px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:var(--ow-teal); background:rgba(0,170,130,0.08); border:1px solid rgba(0,170,130,0.2); border-radius:6px; padding:6px 12px; text-align:center; margin-bottom:10px;">Advanced Stage</div>
+          <div style="display:flex; flex-direction:column; gap:8px;">
+
+            <div style="border:1px solid rgba(0,170,130,0.2); border-radius:6px; padding:10px 12px;">
+              <div style="font-size:12px; font-weight:700; color:var(--text);">DESIR SAR Integration</div>
+              <div style="font-size:11px; color:var(--muted); margin-top:2px;">OW to sign ~$1M satellite AIT subcontract from Loft</div>
+            </div>
+
+            <div style="border:1px solid rgba(0,170,130,0.2); border-radius:6px; padding:10px 12px;">
+              <div style="font-size:12px; font-weight:700; color:var(--text);">UAE MOD (SRC)</div>
+              <div style="font-size:11px; color:var(--muted); margin-top:2px;">Evaluating capacity vs ownership models; technical questionnaire in progress, workshop pending</div>
+            </div>
+
+            <div style="border:1px solid rgba(0,170,130,0.2); border-radius:6px; padding:10px 12px;">
+              <div style="font-size:12px; font-weight:700; color:var(--text);">Nigeria</div>
+              <div style="font-size:11px; color:var(--muted); margin-top:2px;">Shortlisted. RFP response submitted. Loft is prime with Content Oasis (local partner). Program to be executed at OW.</div>
+            </div>
+
+            <div style="border:1px solid rgba(245,166,35,0.3); border-radius:6px; padding:10px 12px; background:rgba(245,166,35,0.04);">
+              <div style="font-size:12px; font-weight:700; color:var(--text);">FADA EO Program</div>
+              <div style="font-size:11px; color:var(--muted); margin-top:2px;">Slowing down due to current geopolitical situation</div>
+            </div>
+
+            <div style="border:1px solid rgba(0,170,130,0.2); border-radius:6px; padding:10px 12px;">
+              <div style="font-size:12px; font-weight:700; color:var(--text);">Armenia</div>
+              <div style="font-size:11px; color:var(--muted); margin-top:2px;">Shortlisted — submitting v3 RFP with 50cm solution</div>
+            </div>
+
+            <div style="border:1px solid rgba(136,153,170,0.3); border-radius:6px; padding:10px 12px; background:rgba(136,153,170,0.04);">
+              <div style="font-size:12px; font-weight:700; color:var(--text);">IRH</div>
+              <div style="font-size:11px; color:var(--muted); margin-top:2px;">Not Awarded</div>
+            </div>
+
+            <div style="border:1px solid rgba(0,170,130,0.2); border-radius:6px; padding:10px 12px;">
+              <div style="font-size:12px; font-weight:700; color:var(--text);">Kenya</div>
+              <div style="font-size:11px; color:var(--muted); margin-top:2px;">Proposal submitted; awaiting feedback from Kenya government</div>
+            </div>
+
+            <div style="border:1px solid rgba(0,170,130,0.2); border-radius:6px; padding:10px 12px;">
+              <div style="font-size:12px; font-weight:700; color:var(--text);">Malaysia</div>
+              <div style="font-size:11px; color:var(--muted); margin-top:2px;">Proposal shared; in active discussion</div>
+            </div>
+
+            <div style="background:var(--surface3); border-radius:6px; padding:10px 12px; text-align:center;">
+              <div style="font-size:12px; font-weight:700; color:var(--ow-teal);">No. of Contracts close to signature: 2</div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Early Stage -->
+        <div>
+          <div style="font-size:11px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:var(--amber); background:rgba(245,166,35,0.08); border:1px solid rgba(245,166,35,0.2); border-radius:6px; padding:6px 12px; text-align:center; margin-bottom:10px;">Early Stage</div>
+          <div style="display:flex; flex-direction:column; gap:10px;">
+
+            <div style="border:1px solid var(--border); border-radius:6px; padding:10px 12px;">
+              <div style="font-size:12px; font-weight:700; color:var(--text); margin-bottom:6px;">Government &amp; Sovereign Engagements</div>
+              <ul style="margin:0; padding-left:16px; font-size:11px; color:var(--muted); line-height:1.8;">
+                <li><strong style="color:var(--text-2)">Benin:</strong> President and Minister of Finance invited to Abu Dhabi; MOF anticipated as next President post-April elections</li>
+                <li><strong style="color:var(--text-2)">Bahrain:</strong> Awaiting RFP release</li>
+                <li><strong style="color:var(--text-2)">New Dialogues:</strong> Rwanda, Kazakhstan, Uzbekistan, Senegal, Kyrgyzstan initiatives launched</li>
+                <li><strong style="color:var(--text-2)">Davos Outreach:</strong> Angola, Papua New Guinea, Congo, ESA connections established</li>
+                <li><strong style="color:var(--text-2)">Maldives:</strong> Proposal shared</li>
+                <li><strong style="color:var(--text-2)">MBRSC:</strong> Bidding on three projects — vibration testing for 2U camera, MBZ-SAT 2 testing, and the PHI project</li>
+              </ul>
+            </div>
+
+            <div style="border:1px solid var(--border); border-radius:6px; padding:10px 12px;">
+              <div style="font-size:12px; font-weight:700; color:var(--text); margin-bottom:6px;">Commercial Partnerships</div>
+              <ul style="margin:0; padding-left:16px; font-size:11px; color:var(--muted); line-height:1.8;">
+                <li><strong style="color:var(--text-2)">Dragonfly:</strong> Inbound custom satellite build request; requirements capture underway</li>
+                <li><strong style="color:var(--text-2)">Space42 D2D:</strong> Abu Dhabi assembly evaluation in progress; positioning OW as local manufacturer</li>
+                <li><strong style="color:var(--text-2)">LEO PNT Constellation:</strong> Early partnership discussions with NSSTC and payload provider Safran</li>
+                <li><strong style="color:var(--text-2)">Vortexa:</strong> Future AIS/satellite requirements identified; follow-up meeting scheduled</li>
+                <li><strong style="color:var(--text-2)">Aldoria:</strong> AIT partnership along with rideshare for payload under discussion</li>
+              </ul>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+      <div style="margin-top:12px; font-size:11px; color:var(--muted); font-style:italic; border-top:1px solid var(--border); padding-top:8px;">
+        Please refer to the <strong style="color:var(--text-2)">BD Update Dashboard</strong> for more details on these opportunities.
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- KPIS PAGE REMOVED -->
+<div class="page" id="page-kpis" style="display:none!important"></div>
+
+</main>
+
+<script>
+// ─── CHART DEFAULTS ───
+Chart.defaults.color = '#5a8080';
+Chart.defaults.font.family = "'Inter', sans-serif";
+Chart.defaults.font.size = 11;
+
+const gc = 'rgba(30,50,50,0.7)';
+const TL = '#00aa82';
+const TLD = '#006851';
+const TLL = '#00c999';
+
+const months = ['Dec-24','Jan-25','Feb-25','Mar-25','Apr-25','May-25','Jun-25','Jul-25','Aug-25','Sep-25','Oct-25','Nov-25','Dec-25','Jan-26','Feb-26','Mar-26'];
+const cashData = [0,3.88,2.32,0.49,3.77,2.58,6.72,5.32,3.69,2.04,1.31,12.15,25.61,24.95,23.49,22.80];
+
+const tip = { backgroundColor:'#0c1414', borderColor:'#1e3232', borderWidth:1, padding:10, titleColor:'#e8f5f2', bodyColor:'#a8c4c0' };
+
+// ─── AP Ageing Chart ───
+const apVendors = {
+  'Current':    ['Daman Insurance: $47k', 'Sonta Tools: $1k'],
+  '< 1 Month':  ['LACO Technologies: $240k', 'Weiss Technik: $176k', 'Cogent Contracting: $163k', 'Loft Orbital: $17k', 'ALJARAF Travel*: $26k', 'Goodwill Infotech: $16k', 'One Connect: $6k', 'GLENAIR: $6k', 'Others: $73k'],
+  '1 Month':    ['LACO Technologies: $82k', 'Goodwill Infotech: $19k', 'Qatama Limited: $16k', 'Nexa Technologies: $4k', 'Others: $18k'],
+  '2 Months':   ['ALJARAF Travel*: $32k', 'Goodwill Infotech: $3k', 'Fedex: <$1k'],
+  '3 Months+':  ['ALJARAF Travel*: $33k — Royal Group company; reconciliation ongoing, dues to clear before April end'],
+};
+new Chart(document.getElementById('apAgeChart'), {
+  type: 'bar',
+  data: {
+    labels: ['Current','< 1 Month','1 Month','2 Months','3 Months+'],
+    datasets: [{
+      data: [47, 723, 139, 35, 33],
+      backgroundColor: ['rgba(0,170,130,0.6)','rgba(0,170,130,0.4)','rgba(245,166,35,0.6)','rgba(245,166,35,0.7)','rgba(255,77,109,0.6)'],
+      borderColor:     ['#00aa82','#00aa82','#f5a623','#f5a623','#ff4d6d'],
+      borderWidth: 1.5, borderRadius: 4
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      legend:{display:false},
+      tooltip:{
+        ...tip,
+        callbacks:{
+          title: ctx => ctx[0].label + ' — $' + ctx[0].parsed.y.toLocaleString() + 'k',
+          label: ctx => '',
+          afterBody: ctx => apVendors[ctx[0].label] || [],
+        }
+      }
+    },
+    scales: {
+      x: { grid:{display:false} },
+      y: { grid:{color:gc}, ticks:{callback:v=>'$'+v+'k'} }
+    }
+  }
+});
+
+// ─── AR Ageing Chart ───
+const arVendors = {
+  'Current':             [],
+  '1 Month — ADFD':      ['Abu Dhabi Fund for Development: $263k', 'Payment expected before April end'],
+  '2 Months — Loft':     ['Loft Orbital Technologies: $400k', 'To be netted off against future Loft AP procurement invoices'],
+};
+new Chart(document.getElementById('arAgeChart'), {
+  type: 'bar',
+  data: {
+    labels: ['Current','1 Month — ADFD','2 Months — Loft'],
+    datasets: [{
+      data: [0, 263, 400],
+      backgroundColor: ['rgba(0,170,130,0.5)','rgba(245,166,35,0.6)','rgba(255,77,109,0.6)'],
+      borderColor:     ['#00aa82','#f5a623','#ff4d6d'],
+      borderWidth: 1.5, borderRadius: 4
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      legend:{display:false},
+      tooltip:{
+        ...tip,
+        callbacks:{
+          title: ctx => ctx[0].label + ' — $' + ctx[0].parsed.y.toLocaleString() + 'k',
+          label: ctx => '',
+          afterBody: ctx => arVendors[ctx[0].label] || [],
+        }
+      }
+    },
+    scales: {
+      x: { grid:{display:false} },
+      y: { grid:{color:gc}, ticks:{callback:v=>'$'+v+'k'} }
+    }
+  }
+});
+
+// ─── Spend Comparison ───
+new Chart(document.getElementById('spendComp'), {
+  type: 'bar',
+  data: {
+    labels: ['OpEx','Payroll','CapEx'],
+    datasets: [
+      { label:'Budget YTD', data:[1.64,2.17,4.04], backgroundColor:'rgba(0,104,81,0.6)', borderColor:TLD, borderWidth:1.5, borderRadius:4 },
+      { label:'Actual YTD', data:[1.083,1.243,0.607], backgroundColor:'rgba(0,201,153,0.6)', borderColor:TLL, borderWidth:1.5, borderRadius:4 }
+    ]
+  },
+  options: {
+    responsive: true,
+    plugins: { legend:{position:'bottom',labels:{boxWidth:10,padding:10,color:'#a8c4c0'}}, tooltip:{...tip} },
+    scales: {
+      x: { grid:{display:false} },
+      y: { grid:{color:gc}, ticks:{callback:v=>'$'+v+'M'} }
+    }
+  }
+});
+
+// ─── OpEx Donut ───
+new Chart(document.getElementById('opexDonut'), {
+  type: 'doughnut',
+  data: {
+    labels: ['Salaries','Power & Maint','Consulting','IT & Infra','Insurance','Lease Rental','Freight','G&A','Biz Dev','Facility OVH','Marketing'],
+    datasets: [{
+      // Q1-26 AED converted to USD at 3.67
+      data: [53.1, 12.4, 8.8, 6.8, 3.8, 3.8, 3.2, 3.3, 2.1, 1.7, 0.9],
+      backgroundColor: ['#00aa82','#00c999','#3ecfcf','#006851','#2d8f7a','#4db8a8','#5abfb0','#80d4c8','#a0ddd5','#3a6060','#1a4040'],
+      borderWidth: 0, hoverOffset: 6
+    }]
+  },
+  options: {
+    responsive: true,
+    cutout: '68%',
+    plugins: { legend:{display:false}, tooltip:{...tip, callbacks:{label:c=>' '+c.label+': '+c.parsed.toFixed(1)+'%'}} }
+  }
+});
+
+// ─── Headcount Bar ───
+new Chart(document.getElementById('hcBar'), {
+  type: 'bar',
+  data: {
+    labels: ['Facilities','HR and Office *','Solutions Architect','Finance','Marketing *','Program','Supply Chain','Quality','Systems & Test Eng *','Business Dev','IT and Infra','Leadership *','AI&T'],
+    datasets: [{
+      data: [33106, 41281, 47816, 67354, 69744, 77372, 87057, 92356, 96603, 99374, 119515, 143825, 255006],
+      backgroundColor: (ctx) => {
+        const alpha = 0.4 + (ctx.dataIndex / 12) * 0.4;
+        return `rgba(0,170,130,${alpha})`;
+      },
+      borderColor: TL, borderWidth: 0, borderRadius: 3
+    }]
+  },
+  options: {
+    indexAxis: 'y',
+    responsive: true,
+    plugins: { legend:{display:false}, tooltip:{...tip} },
+    scales: {
+      x: { grid:{color:gc}, ticks:{callback:v=>'$'+(v/1000).toFixed(0)+'k'} },
+      y: { grid:{display:false}, ticks:{font:{size:10}} }
+    }
+  }
+});
+// Payroll footnote
+document.getElementById('hcBar').parentElement.insertAdjacentHTML('beforeend',
+  '<div style="margin-top:8px; font-size:10px; color:var(--muted); font-style:italic">* Includes consultant costs</div>'
+);
+
+// ─── EBITDA Trend ───
+new Chart(document.getElementById('ebitdaTrend'), {
+  type: 'bar',
+  data: {
+    labels: ['Jul-24','Aug-24','Sep-24','Oct-24','Nov-24','Dec-24','Jan-25','Feb-25','Mar-25','Apr-25','May-25','Jun-25','Jul-25','Aug-25','Sep-25','Oct-25','Nov-25','Dec-25','Jan-26','Feb-26','Mar-26'],
+    datasets: [{
+      data: [0,-0.001,-0.0005,-0.0004,-0.0105,-0.0247,-0.2091,-0.1236,-0.1184,-0.2477,-0.2184,-0.3214,-0.5787,-0.4177,-0.6212,-0.6338,-0.6491,-1.0781,-0.3205,-0.4472,-0.9126],
+      backgroundColor: ctx => ctx.raw < 0 ? 'rgba(255,77,109,0.55)' : 'rgba(0,229,160,0.55)',
+      borderColor:     ctx => ctx.raw < 0 ? '#ff4d6d' : '#00e5a0',
+      borderWidth: 1.5, borderRadius: 3
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      legend:{display:false},
+      tooltip:{
+        ...tip,
+        callbacks:{
+          label: c => "EBITDA: $" + c.parsed.y.toFixed(4) + "M",
+          afterLabel: c => {
+            if (c.label === 'Jan-26') return '📌 Loft I&T — Milestone 1: +$0.40M';
+            if (c.label === 'Feb-26') return '📌 ADMA/ADFD — Milestone 1: +$0.50M';
+            return null;
+          }
+        }
+      }
+    },
+    scales: {
+      x: { grid:{display:false} },
+      y: { grid:{color:gc}, ticks:{callback:v=>'$'+v.toFixed(2)+'M'} }
+    }
+  },
+  plugins: []
+});
+
+// ─── P&L Waterfall ───
+(function() {
+  // rows: [label, actual $M, budget $M]
+  const rows = [
+    ['Revenue',               0.90,   0.00],
+    ['Salaries & Employee',  -1.24,  -2.17],
+    ['IT & Infrastructure',  -0.15,  -0.49],
+    ['Power & Maintenance',  -0.32,  -0.36],
+    ['Facility & Handling',  -0.04,  -0.15],
+    ['Lease Rental',         -0.10,  -0.09],
+    ['Consulting',           -0.23,  -0.12],
+    ['Insurance',            -0.06,  -0.06],
+    ['Freight & Logistics',  -0.08,  -0.07],
+    ['Marketing',            -0.02,  -0.18],
+    ['Business Development', -0.05,  -0.08],
+    ['G&A',                  -0.08,  -0.04],
+    ['EBITDA',               -1.68, -14.01],
+  ];
+
+  const labels  = rows.map(r => r[0]);
+  const actuals = rows.map(r => r[1]);
+  const budgets = rows.map(r => r[2]);
+  const isEBITDA = rows.map(r => r[0] === 'EBITDA');
+
+  const varColors = rows.map(r => {
+    if (r[0] === 'Revenue') return '#00e5a0';
+    if (r[0] === 'EBITDA') return '#00e5a0'; // actual less negative than budget = favourable
+    return (r[1] - r[2]) >= 0 ? '#00e5a0' : '#ff4d6d';
+  });
+  const varData = rows.map(r => +(r[1] - r[2]).toFixed(2));
+
+  new Chart(document.getElementById('plWaterfall'), {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [
+        { label:'Actual',   data: actuals,  backgroundColor: rows.map((_,i) => isEBITDA[i] ? '#007a5e' : '#00aa82'), borderRadius:3, barPercentage:0.6, categoryPercentage:0.85, order:1 },
+        { label:'Budget',   data: budgets,  backgroundColor: rows.map((_,i) => isEBITDA[i] ? '#2a4a4a' : '#3a5a5a'), borderRadius:3, barPercentage:0.6, categoryPercentage:0.85, order:2 },
+        { label:'Variance', data: varData,  backgroundColor: varColors, borderRadius:3, barPercentage:0.3, categoryPercentage:0.85, order:0 },
+      ]
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          ...tip,
+          callbacks: {
+            label: ctx => {
+              const v = ctx.parsed.x;
+              const sign = v >= 0 ? '+' : '';
+              return ` ${ctx.dataset.label}: ${sign}$${v.toFixed(2)}M`;
+            }
+          }
+        },
+      },
+      scales: {
+        x: { grid:{color:gc}, ticks:{callback:v=>'$'+v.toFixed(1)+'M'} },
+        y: {
+          grid: { display:false },
+          ticks: {
+            font: ctx => ({ size:11, weight: ctx.tick.label === 'EBITDA' ? '700':'400', family:'Inter, sans-serif' }),
+            color: ctx => ctx.tick.label === 'EBITDA' ? '#e8f5f2' : '#a8c4c0',
+          }
+        }
+      }
+    },
+    plugins: [{
+      id: 'plValueLabels',
+      afterDatasetsDraw(chart) {
+        const { ctx } = chart;
+        chart.data.datasets.forEach((ds, di) => {
+          const meta = chart.getDatasetMeta(di);
+          meta.data.forEach((bar, i) => {
+            const v = ds.data[i];
+            if (v === 0 || v === null) return;
+            const sign = v > 0 ? '+' : '';
+            const txt = sign + '$' + Math.abs(v).toFixed(2) + 'M';
+            ctx.save();
+            ctx.font = `${isEBITDA[i] ? '600' : '400'} 9.5px Inter, sans-serif`;
+            ctx.fillStyle = '#e8f5f2';
+            ctx.textBaseline = 'middle';
+            const x = v >= 0 ? bar.x + 4 : bar.x - 4;
+            ctx.textAlign = v >= 0 ? 'left' : 'right';
+            ctx.fillText(txt, x, bar.y);
+            ctx.restore();
+          });
+        });
+      }
+    }]
+  });
+})();
+
+
+// ─── PIPELINE RADAR ───
+const contracts = [
+  { id:'altair-af',  name:'Altair Asia',        tcv:51.5,   status:'notachieved', sector:'Satellite Mfg',    region:'Asia',        notes:'Second Altair contract. Follows ME framework terms.' },
+  { id:'altair-me',  name:'Altair ME',          tcv:85,     status:'progress',    sector:'Satellite Mfg',    region:'Middle East', notes:'Largest contract in pipeline. Milestone delivery gates TBD.' },
+  { id:'fada',       name:'FADA *',             tcv:18,     status:'progress',    sector:'Government',       region:'Africa',      notes:'Contract in progress. * Geopolitical environment has affected progress — discussions paused.' },
+  { id:'sar-it',     name:'SAR I&T',            tcv:1,      status:'progress',    sector:'Defence',          region:'UAE',         notes:'Integration & test phase underway.' },
+  { id:'malaysia',   name:'Malaysian Constellation', tcv:30, status:'progress',   sector:'Government',       region:'Asia',        notes:'EO Constellation contract in progress.' },
+  { id:'mod-eo',     name:'MOD EO AI&T',        tcv:10,     status:'progress',    sector:'Defence',          region:'UAE',         notes:'MOD EO AI&T contract in progress.' },
+  { id:'french-gov', name:'French Gov',         tcv:60,     status:'completed',   sector:'Government',       region:'Europe',      notes:'Sovereign contract. Completed.' },
+  { id:'adma',       name:'ADMA',               tcv:2.4,    status:'completed',   sector:'Energy / O&G',     region:'UAE',         notes:'Fully delivered and recognised.' },
+  { id:'sirb',       name:'SIRB',               tcv:0.9,    status:'completed',   sector:'Research',         region:'UAE',         notes:'Research contract completed.' },
+  { id:'optical-pld',name:'Optical PLD',        tcv:1,      status:'completed',   sector:'Optical / Payload',region:'Intl',        notes:'Completed and delivered.' },
+  { id:'irh',        name:'IRH',                tcv:18,     status:'notawarded',  sector:'Institutional',    region:'UAE',         notes:'Contract not awarded.' },
+  { id:'tii-lander', name:'TII Lander',         tcv:0.63,   status:'notawarded',  sector:'Optical / Payload',region:'Intl',        notes:'Contract not awarded. $0.63M TCV no longer included in pipeline.' },
+];
+
+const statusMeta = {
+  completed:   { color:'#00e5a0', label:'Completed',    badgeClass:'b-green' },
+  progress:    { color:'#f5a623', label:'In Progress',  badgeClass:'b-amber' },
+  notachieved: { color:'#ff4d6d', label:'Not Achieved', badgeClass:'b-red'   },
+  notawarded:  { color:'#8899aa', label:'Not Awarded',  badgeClass:'b-slate' },
+};
+
+let activeFilter = 'all';
+let gaugeChart = null;
+
+// ── Build gauge segments from contract data ──
+function getGaugeData(filter) {
+  const gaugeContracts = contracts.filter(c => c.id !== 'tii-lander');
+  const filtered = filter === 'all' ? gaugeContracts : gaugeContracts.filter(c => c.status === filter);
+  const total = filtered.reduce((s, c) => s + c.tcv, 0);
+  return {
+    labels: filtered.map(c => c.name),
+    data:   filtered.map(c => c.tcv),
+    colors: filtered.map(c => statusMeta[c.status].color),
+    ids:    filtered.map(c => c.id),
+    total,
+  };
+}
+
+function buildGauge() {
+  const canvas = document.getElementById('gaugeCanvas');
+  const wrap = canvas.parentElement;
+  const w = Math.min(Math.max(wrap.clientWidth || 320, 220), 360);
+  canvas.style.width  = w + 'px';
+  canvas.style.height = (w * 0.62) + 'px';
+
+  const gd = getGaugeData(activeFilter);
+  const totalTCV = 277.8;
+  const achieved = 0.40;
+
+  // Build doughnut data — half-circle gauge (rotation -90deg, circumference = half)
+  if (gaugeChart) gaugeChart.destroy();
+
+  gaugeChart = new Chart(canvas, {
+    type: 'doughnut',
+    data: {
+      labels: gd.labels,
+      datasets: [{
+        data: gd.data,
+        backgroundColor: gd.colors.map(c => c + 'cc'),
+        borderColor:     gd.colors,
+        borderWidth: 2,
+        hoverOffset: 10,
+        hoverBorderWidth: 3,
+      }]
+    },
+    options: {
+      responsive: false,
+      cutout: '68%',
+      rotation: -90,
+      circumference: 180,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          ...tip,
+          callbacks: {
+            label: ctx => {
+              const c = contracts.find(c => c.name === ctx.label);
+              const pct = (ctx.parsed / totalTCV * 100).toFixed(1);
+              return ` $${ctx.parsed}M  (${pct}% of pipeline)`;
+            },
+            afterLabel: ctx => {
+              const c = contracts.find(c => c.name === ctx.label);
+              return c ? ` ${statusMeta[c.status].label}  ·  ${c.sector}` : '';
+            }
+          }
+        }
+      },
+      animation: { animateRotate: true, duration: 600 },
+    },
+    plugins: [{
+      id: 'gaugeCenter',
+      afterDraw(chart) {
+        const { ctx, chartArea: { left, right, top, bottom, width, height } } = chart;
+        const cx = (left + right) / 2;
+        const cy = bottom; // bottom of half-circle
+        ctx.save();
+
+        // Centre label — show summary
+        {
+          ctx.fillStyle = '#5a8080';
+          ctx.font = `500 ${Math.max(9, width*0.038)}px Inter, sans-serif`;
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'bottom';
+          ctx.fillText('TOTAL TCV', cx, cy - height * 0.32);
+          ctx.fillStyle = '#00aa82';
+          ctx.font = `700 ${Math.max(18, width*0.1)}px Inter, sans-serif`;
+          ctx.fillText('$' + totalTCV.toFixed(1) + 'M', cx, cy - height * 0.1);
+          ctx.fillStyle = '#5a8080';
+          ctx.font = `500 ${Math.max(9, width*0.036)}px Inter, sans-serif`;
+          ctx.fillText(gd.labels.length + ' contract' + (gd.labels.length !== 1 ? 's' : ''), cx, cy + 2);
+        }
+
+        // Bottom legend: Achieved / Target needles
+        const achievedAngle = Math.PI * (achieved / totalTCV); // tiny
+        ctx.restore();
+      }
+    }]
+  });
+}
+
+// ── Filter ──
+function filterGauge(filter, btn) {
+  activeFilter = filter;
+  selectedContract = null;
+  document.querySelectorAll('.radar-filter').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  buildGauge();
+  renderDetail();
+}
+
+// ── Build default list ──
+function buildContractList() {
+  const el = document.getElementById('contractList');
+  const totalTCV = contracts.reduce((s, c) => s + c.tcv, 0);
+  const statusTotals = {};
+  contracts.forEach(c => { statusTotals[c.status] = (statusTotals[c.status] || 0) + c.tcv; });
+  const statusOrder = { notachieved: 0, progress: 1, completed: 2, notawarded: 3 };
+  const sorted = [...contracts].sort((a, b) => statusOrder[a.status] - statusOrder[b.status]);
+  el.innerHTML = sorted.map(c => {
+    const meta = statusMeta[c.status];
+    const statusPct = ((statusTotals[c.status] / totalTCV) * 100).toFixed(1);
+    return `
+      <div class="srow">
+        <div class="srow-name">${c.name} <span style="font-size:10px;color:var(--muted)">$${c.tcv}M</span></div>
+        <div class="srow-right">
+          <span class="badge ${meta.badgeClass}">${meta.label}</span>
+          <span style="font-size:10px;color:var(--muted);min-width:36px;text-align:right">${statusPct}%</span>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+// ── Init ──
+buildContractList();
+
+function initGauge() {
+  if (!gaugeChart) buildGauge();
+}
+window.addEventListener('resize', () => { if (gaugeChart) { gaugeChart.destroy(); gaugeChart = null; buildGauge(); } });
+
+// ─── NAVIGATION ───
+function showPage(id, btn) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  btn.classList.add('active');
+  btn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  if (id === 'pipeline') setTimeout(initGauge, 50);
+}
+
+
+
+
+function owToggleCard(headerEl) {
+  const card = headerEl.closest('.ws-el-card');
+  if (card) card.classList.toggle('collapsed');
+}
+
+function owToggleAllCards() {
+  const cards = document.querySelectorAll('.ws-el-card');
+  const btn = document.getElementById('ow-toggle-all-btn');
+  const anyExpanded = [...cards].some(c => !c.classList.contains('collapsed'));
+  cards.forEach(c => {
+    if (anyExpanded) c.classList.add('collapsed');
+    else c.classList.remove('collapsed');
+  });
+  btn.textContent = anyExpanded ? 'Expand All' : 'Collapse All';
+}
+
+// ─── OBJECTIVES: FILTER BY STATUS ───
+let owActiveFilter = null;
+
+function owFilterDeliverables(color, clickedCard) {
+  const rows = document.querySelectorAll('.ws-tbl tr[data-risk]');
+  const cards = document.querySelectorAll('.ws-summary-card');
+  const elCards = document.querySelectorAll('.ws-el-card');
+  const label = document.getElementById('ow-deliverables-label');
+  const hints = document.querySelectorAll('.filter-hint-ow');
+
+  if (owActiveFilter === color) {
+    owActiveFilter = null;
+    rows.forEach(r => r.classList.remove('filtered-out', 'filtered-in'));
+    cards.forEach(c => c.classList.remove('active-green', 'active-amber', 'active-red'));
+    elCards.forEach(c => { c.classList.remove('filter-match-green','filter-match-amber','filter-match-red','filter-dim'); });
+    hints.forEach(h => { h.classList.remove('visible'); h.textContent = '· click to filter'; });
+    if (label) label.textContent = 'Weekly Update on Project Pacioli Deliverables';
+    return;
+  }
+
+  owActiveFilter = color;
+  rows.forEach(r => {
+    r.classList.toggle('filtered-out', r.dataset.risk !== color);
+    r.classList.toggle('filtered-in',  r.dataset.risk === color);
+  });
+  elCards.forEach(card => {
+    const matches = card.querySelectorAll(`tr[data-risk="${color}"]`);
+    card.classList.remove('filter-match-green','filter-match-amber','filter-match-red','filter-dim');
+    if (matches.length > 0) {
+      card.classList.add(`filter-match-${color}`);
+      if (card.classList.contains('collapsed')) card.classList.remove('collapsed');
+    } else {
+      card.classList.add('filter-dim');
+    }
+  });
+  cards.forEach(c => c.classList.remove('active-green','active-amber','active-red'));
+  clickedCard.classList.add('active-' + color);
+  hints.forEach(h => { h.classList.remove('visible'); h.textContent = '· click to filter'; });
+  const activeHint = document.getElementById('ow-hint-' + color);
+  if (activeHint) { activeHint.textContent = '· click to clear'; activeHint.classList.add('visible'); }
+  const labels = { green: 'On Track', amber: 'In Progress', red: 'Needs Attention' };
+  if (label) label.textContent = `Project Pacioli Deliverables · Showing: ${labels[color]}`;
+}
+</script>
+</body>
+</html>
