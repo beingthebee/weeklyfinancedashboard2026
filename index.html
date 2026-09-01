@@ -814,9 +814,12 @@ main {
 .obj-pill-b { background: rgba(62,207,207,0.1); color: var(--blue);  border: 1px solid rgba(62,207,207,0.25); }
 .obj-pill-m { background: rgba(90,128,128,0.12); color: var(--muted); border: 1px solid rgba(90,128,128,0.2); }
 .obj-status-active    { display:inline-flex;align-items:center;gap:3px;background:rgba(62,207,207,0.1);border:1px solid rgba(62,207,207,0.3);color:var(--blue);font-size:9.5px;font-weight:600;padding:2px 8px;border-radius:4px;white-space:nowrap; }
-.obj-status-done      { display:inline-flex;align-items:center;gap:3px;background:rgba(0,229,160,0.1);border:1px solid rgba(0,229,160,0.3);color:var(--green);font-size:9.5px;font-weight:600;padding:2px 8px;border-radius:4px;white-space:nowrap; }
+/* Finance Stabilization Plan tooltip */
+.obj-title:hover .fsp-tooltip { display:block !important; background:#0a1616 !important; }
+align-items:center;gap:3px;background:rgba(0,229,160,0.1);border:1px solid rgba(0,229,160,0.3);color:var(--green);font-size:9.5px;font-weight:600;padding:2px 8px;border-radius:4px;white-space:nowrap; }
 .obj-status-risk      { display:inline-flex;align-items:center;gap:3px;background:rgba(245,166,35,0.1);border:1px solid rgba(245,166,35,0.3);color:var(--amber);font-size:9.5px;font-weight:600;padding:2px 8px;border-radius:4px;white-space:nowrap; }
 .obj-status-critical  { display:inline-flex;align-items:center;gap:3px;background:rgba(255,77,109,0.1);border:1px solid rgba(255,77,109,0.3);color:var(--red);font-size:9.5px;font-weight:600;padding:2px 8px;border-radius:4px;white-space:nowrap; }
+.obj-status-done      { display:inline-flex;align-items:center;gap:3px;background:rgba(90,128,128,0.12);border:1px solid rgba(90,128,128,0.3);color:#5a8080;font-size:9.5px;font-weight:600;padding:2px 8px;border-radius:4px;white-space:nowrap; }
 .obj-status-notstart  { display:inline-flex;align-items:center;gap:3px;background:rgba(90,128,128,0.12);border:1px solid rgba(90,128,128,0.2);color:var(--muted);font-size:9.5px;font-weight:600;padding:2px 8px;border-radius:4px;white-space:nowrap; }
 
 /* Gantt */
@@ -848,13 +851,14 @@ main {
     <div class="header-subtitle">Orbitworks Satellite Manufacturing LLC SPC</div>
   </div>
   <div class="header-right">
-    <div class="header-badge">W/E 17 Jul 26</div>
+    <div class="header-badge">W/E 28 Aug 26</div>
   </div>
 </header>
 
 <!-- NAV -->
 <nav id="mainnav">
   <button class="active" onclick="showPage('missions',this)">Mission Control</button>
+  <button onclick="showPage('initiatives',this)">Other Initiatives</button>
   <button onclick="showPage('overview',this)">Weekly KPIs &amp; Deliverables</button>
   <button onclick="showPage('cash',this)">Cash &amp; Runway</button>
 
@@ -866,7 +870,7 @@ main {
 <div class="page" id="page-overview">
 
   <!-- ══ FINANCE KPIs — CASH SNAPSHOT ══ -->
-  <div class="sec-label">Cash Snapshot · As of 17 Jul 2026</div>
+  <div class="sec-label">Cash Snapshot · As of 28 Aug 2026</div>
   <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:8px;">
 
     <!-- Bank Balances -->
@@ -875,7 +879,7 @@ main {
       <div style="margin-top:10px;">
         <div style="display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid var(--border);">
           <span style="font-size:11px; color:var(--muted);">Orbitworks</span>
-          <span style="font-size:16px; font-weight:600; color:var(--text);">USD 7.91M</span>
+          <span style="font-size:16px; font-weight:600; color:var(--text);">USD 6.36M</span>
         </div>
         <div style="display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid var(--border);">
           <span style="font-size:11px; color:var(--muted);">MLO JV</span>
@@ -883,7 +887,7 @@ main {
         </div>
         <div style="display:flex; justify-content:space-between; align-items:center; padding:10px 0 0;">
           <span style="font-size:12px; font-weight:600; color:var(--green);">Consolidated</span>
-          <span style="font-size:20px; font-weight:700; color:var(--green);">USD 18.28M</span>
+          <span style="font-size:20px; font-weight:700; color:var(--green);">USD 16.73M</span>
         </div>
       </div>
     </div>
@@ -891,11 +895,12 @@ main {
     <!-- OW Cash After Payments -->
     <div class="kpi-card" style="--card-color: var(--amber);">
       <div class="kpi-label">OW Cash After Week's Payments</div>
-      <div class="kpi-value">USD 7.76M</div>
+      <div class="kpi-value">USD 6.36M</div>
       <div class="kpi-sub" style="margin-top:10px; line-height:1.9;">
         Pending CAPEX: <span style="color:var(--red);">USD 4.20M</span>
       </div>
       <div class="kpi-delta neu" style="margin-top:8px;">⚠ Monitor</div>
+
     </div>
 
   </div>
@@ -903,7 +908,7 @@ main {
     Source: OW bank statement · FX rate: USD/AED 3.67
   </div>
   <!-- ══ OPERATIONAL KPIs ══ -->
-  <div class="sec-label" style="margin-top:24px;">Operational KPIs · Source: NetSuite · w/e 17 Jul 2026</div>
+  <div class="sec-label" style="margin-top:24px;">Operational KPIs · Source: NetSuite · w/e 28 Aug 2026</div>
   <div class="ops-kpi-grid">
 
     <!-- Vendor Invoices Posted -->
@@ -911,18 +916,18 @@ main {
       <div class="ops-kpi-label">Vendor Invoices Posted</div>
       <div class="ops-triband">
         <div class="ops-band">
-          <div class="ops-band-label">Week · 17 Jul</div>
-          <div class="ops-band-val" style="color:var(--text)">24</div>
+          <div class="ops-band-label">Week · 28 Aug</div>
+          <div class="ops-band-val" style="color:var(--text)">36</div>
           <div class="ops-band-sub">invoices WTD</div>
         </div>
         <div class="ops-band">
-          <div class="ops-band-label">Month · Jul-26</div>
-          <div class="ops-band-val" style="color:var(--text)">101</div>
+          <div class="ops-band-label">Month · Aug-26</div>
+          <div class="ops-band-val" style="color:var(--text)">36</div>
           <div class="ops-band-sub">invoices MTD</div>
         </div>
         <div class="ops-band">
-          <div class="ops-band-label">YTD · Jan–Jul</div>
-          <div class="ops-band-val" style="color:var(--text)">1,005</div>
+          <div class="ops-band-label">YTD · Jan–Aug</div>
+          <div class="ops-band-val" style="color:var(--text)">1,097</div>
           <div class="ops-band-sub">invoices YTD</div>
         </div>
       </div>
@@ -933,18 +938,18 @@ main {
       <div class="ops-kpi-label">Payments Made (including Payroll)</div>
       <div class="ops-triband">
         <div class="ops-band">
-          <div class="ops-band-label">Week · 17 Jul</div>
-          <div class="ops-band-val" style="color:var(--text)">USD 0.12M</div>
+          <div class="ops-band-label">Week · 28 Aug</div>
+          <div class="ops-band-val" style="color:var(--text)">USD 104K</div>
           <div class="ops-band-sub">WTD</div>
         </div>
         <div class="ops-band">
-          <div class="ops-band-label">Month · Jul-26</div>
-          <div class="ops-band-val" style="color:var(--text)">USD 0.5M</div>
+          <div class="ops-band-label">Month · Aug-26</div>
+          <div class="ops-band-val" style="color:var(--text)">USD 104K</div>
           <div class="ops-band-sub">MTD</div>
         </div>
         <div class="ops-band">
           <div class="ops-band-label">YTD · Jan–Jun</div>
-          <div class="ops-band-val" style="color:var(--text)">USD 6.47M</div>
+          <div class="ops-band-val" style="color:var(--text)">USD 7.47M</div>
           <div class="ops-band-sub">YTD</div>
         </div>
       </div>
@@ -955,18 +960,18 @@ main {
       <div class="ops-kpi-label">Vendor Advances</div>
       <div class="ops-triband">
         <div class="ops-band">
-          <div class="ops-band-label">Week · 17 Jul</div>
-          <div class="ops-band-val" style="color:var(--text)">USD 1.2K</div>
+          <div class="ops-band-label">Week · 28 Aug</div>
+          <div class="ops-band-val" style="color:var(--text)">—</div>
           <div class="ops-band-sub">WTD</div>
         </div>
         <div class="ops-band">
-          <div class="ops-band-label">Month · Jul-26</div>
-          <div class="ops-band-val" style="color:var(--text)">USD 15.7K</div>
+          <div class="ops-band-label">Month · Aug-26</div>
+          <div class="ops-band-val" style="color:var(--text)">—</div>
           <div class="ops-band-sub">MTD</div>
         </div>
         <div class="ops-band">
-          <div class="ops-band-label">YTD · Jan–Jun</div>
-          <div class="ops-band-val" style="color:var(--text)">USD 276.7K</div>
+          <div class="ops-band-label">YTD · Jan–Aug</div>
+          <div class="ops-band-val" style="color:var(--text)">USD 312.2K</div>
           <div class="ops-band-sub">YTD</div>
         </div>
       </div>
@@ -978,9 +983,9 @@ main {
       <div class="ops-kpi-label">Customer Invoices Posted</div>
       <div class="ops-triband">
         <div class="ops-band">
-          <div class="ops-band-label">Week · 17 Jul</div>
-          <div class="ops-band-val" style="color:var(--text)">1</div>
-          <div class="ops-band-sub">invoices WTD</div>
+          <div class="ops-band-label">Week · 28 Aug</div>
+          <div class="ops-band-val" style="color:var(--text)">—</div>
+          <div class="ops-band-sub">WTD</div>
         </div>
         <div class="ops-band">
           <div class="ops-band-label">Month · Jul-26</div>
@@ -989,8 +994,8 @@ main {
         </div>
         <div class="ops-band">
           <div class="ops-band-label">YTD · Jan–Jul</div>
-          <div class="ops-band-val" style="color:var(--text)">4</div>
-          <div class="ops-band-sub">USD 1.1M</div>
+          <div class="ops-band-val" style="color:var(--text)">5</div>
+          <div class="ops-band-sub">USD 1.7M</div>
         </div>
       </div>
       <div class="ops-note" style="color:var(--amber)">⚠ Rev. recognition policy pending · Obj 07a</div>
@@ -1001,7 +1006,7 @@ main {
       <div class="ops-kpi-label">Customer Collections</div>
       <div class="ops-triband">
         <div class="ops-band">
-          <div class="ops-band-label">Week · 17 Jul</div>
+          <div class="ops-band-label">Week · 28 Aug</div>
           <div class="ops-band-val" style="color:var(--text)">—</div>
           <div class="ops-band-sub">WTD</div>
         </div>
@@ -1023,74 +1028,46 @@ main {
     <div class="ops-kpi-card">
       <div class="ops-kpi-label">Revenue YTD</div>
       <div style="margin-top:6px;">
-        <div style="font-size:9px;text-transform:uppercase;letter-spacing:.09em;color:var(--muted);margin-bottom:4px;">Recognised · Jan – 17 Jul 2026</div>
-        <div style="font-size:28px;font-weight:700;letter-spacing:-0.03em;color:var(--text);">USD 0.9M</div>
+        <div style="font-size:9px;text-transform:uppercase;letter-spacing:.09em;color:var(--muted);margin-bottom:4px;">Recognised · Jan – 28 Aug 2026</div>
+        <div style="font-size:28px;font-weight:700;letter-spacing:-0.03em;color:var(--text);">USD 1.7M</div>
         <div style="font-size:9.5px;color:var(--muted);margin-top:3px;">FY Target <strong style="color:var(--text-2);">USD 46.1M</strong></div>
       </div>
       <div class="ops-gauge-bar">
-        <div class="ops-gauge-fill" style="width:2.0%;background:var(--green);"></div>
+        <div class="ops-gauge-fill" style="width:3.7%;background:var(--green);"></div>
         <div class="ops-gauge-tick" style="background:rgba(0,229,160,0.4);"></div>
       </div>
-      <div style="font-size:9px;color:var(--amber);">● $190K 1st milestone invoice to FADA · Total Revenue YTD: $1.1M · 4 invoices YTD · FX: USD/AED 3.67</div>
+      <div style="font-size:9px;color:var(--amber);">● $1M invoice to Loft + ADMA/ADFD $500K, $190K FADA milestone · Total Revenue YTD: $1.7M · 5 invoices YTD · FX: USD/AED 3.67</div>
     </div>
 
   </div><!-- end ops-kpi-grid -->
 
   <!-- ══ DELIVERABLES ACCOMPLISHED THIS WEEK ══ -->
-  <div class="sec-label" style="font-size:14.5px;letter-spacing:0.06em;">Deliverables Accomplished This Week · w/e 17 Jul 2026</div>
+  <div class="sec-label" style="font-size:14.5px;letter-spacing:0.06em;">Deliverables Accomplished This Week · w/e 28 Aug 2026</div>
   <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:28px;">
-    <div class="deliv-item"><span class="deliv-check">✓</span><div>Q2-26 Management Accounts <span class="deliv-sub">— Submitted to RG Finance.</span></div></div>
-    <div class="deliv-item"><span class="deliv-check">✓</span><div>ERP Migration &amp; Alaan Integration <span class="deliv-sub">— Completed 2025 data imports and sanity check; kicked off Alaan integration to ERP.</span></div></div>
-    <div class="deliv-item"><span class="deliv-check">✓</span><div>National Air Cargo Master Agreement <span class="deliv-sub">— Reviewed, negotiated, and executed agreement for FM1 shipment/launch.</span></div></div>
-    <div class="deliv-item"><span class="deliv-check">✓</span><div>Naming Rights Discussion <span class="deliv-sub">— Exploratory call with National Air; in-person meeting next.</span></div></div>
-    <div class="deliv-item"><span class="deliv-check">✓</span><div>Property Insurance Renewal <span class="deliv-sub">— Completed annual renewal with increased coverage at the same premium.</span></div></div>
-    <div class="deliv-item"><span class="deliv-check">✓</span><div>ADIO Rebate Valuations <span class="deliv-sub">— Finalized 10-year ADIO Rebate workings.</span></div></div>
-    <div class="deliv-item"><span class="deliv-check">✓</span><div>Carta Proposal Finalization <span class="deliv-sub">— Finalized Carta platform negotiations for Cap Table Management and Valuations work.</span></div></div>
-    <div class="deliv-item"><span class="deliv-check">✓</span><div>ERP Suite Projects Review <span class="deliv-sub">— Finalized ERP Suite Modules review for Project Management, ARMS, WIP Modules.</span></div></div>
-    <div class="deliv-item"><span class="deliv-check">✓</span><div>OMS Finance Matrix <span class="deliv-sub">— Submitted Finance collaboration matrix.</span></div></div>
+    <div class="deliv-item"><span class="deliv-check">✓</span><div>Tax Filings Review <span class="deliv-sub">— Review with RG Tax completed.</span></div></div>
+    <div class="deliv-item"><span class="deliv-check">✓</span><div>Transfer Pricing Update <span class="deliv-sub">— In preparation for Local and Master File of OW.</span></div></div>
+    <div class="deliv-item"><span class="deliv-check">✓</span><div>DOA Policy Draft <span class="deliv-sub">— Drafted for GM Review.</span></div></div>
+    <div class="deliv-item"><span class="deliv-check">✓</span><div>RG Deck Preparation <span class="deliv-sub">— Deck prepared for RG meeting.</span></div></div>
+    <div class="deliv-item"><span class="deliv-check">✓</span><div>eInvoicing Kick-off <span class="deliv-sub">— Kick-off meeting completed with RG Tax team.</span></div></div>
+    <div class="deliv-item"><span class="deliv-check">✓</span><div>Shory Follow-up <span class="deliv-sub">— Discussion on cost-benefit analysis of insurance stack vs PR Package.</span></div></div>
+    <div class="deliv-item"><span class="deliv-check">✓</span><div>HR &amp; Corp Services Provider CBA <span class="deliv-sub">— Cost-benefit analysis completed.</span></div></div>
+    <div class="deliv-item"><span class="deliv-check">✓</span><div>Workload &amp; Headcount Forecast Prep <span class="deliv-sub">— Prepared with Manny and Programs team.</span></div></div>
   </div>
 
-  <div class="sec-label" style="font-size:14.5px;letter-spacing:0.06em;">Next Week's Focus · w/e 24 Jul 2026</div>
+  <div class="sec-label" style="font-size:14.5px;letter-spacing:0.06em;">Next Week's Focus · w/e 4 Sep 2026</div>
   <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:12px;">
-    <div class="nw-item"><span class="nw-arrow">→</span><div>Meeting with RG Finance <span style="color:var(--muted);font-size:10.5px;">— Quarterly update meeting with RG Finance</span></div></div>
-    <div class="nw-item"><span class="nw-arrow">→</span><div>Harness Strategy Discussion <span style="color:var(--muted);font-size:10.5px;">— Business case for harnessing strategy reviewed with Supply Chain and Engineering</span></div></div>
-    <div class="nw-item"><span class="nw-arrow">→</span><div>Aleria Meeting <span style="color:var(--muted);font-size:10.5px;">— Discovery call for unified AI-driven dashboards</span></div></div>
-    <div class="nw-item"><span class="nw-arrow">→</span><div>Revenue Recognition Framework <span style="color:var(--muted);font-size:10.5px;">— Finalizing framework</span></div></div>
-    <div class="nw-item"><span class="nw-arrow">→</span><div>Naming Rights Discussion <span style="color:var(--muted);font-size:10.5px;">— Exploratory call with Shory Ins and e&amp;</span></div></div>
-    <div class="nw-item"><span class="nw-arrow">→</span><div>ICV 2025 Certification <span style="color:var(--muted);font-size:10.5px;">— Certificate to be issued</span></div></div>
-    <div class="nw-item"><span class="nw-arrow">→</span><div>Space Insurance Assessments <span style="color:var(--muted);font-size:10.5px;">— Pick up on export clause on NDA with Shory; contact Willis for quote discussions</span></div></div>
-    <div class="nw-item"><span class="nw-arrow">→</span><div>Program Cost Models Review <span style="color:var(--muted);font-size:10.5px;">— Review program cost models prepared by Zag for building baseline for forecasting</span></div></div>
-    <div class="nw-item"><span class="nw-arrow">→</span><div>Inventory Count Adjustments <span style="color:var(--muted);font-size:10.5px;">— Inventory adjustments of $x posted</span></div></div>
+    <div class="nw-item"><span class="nw-arrow">→</span><div>FY25 Tax Filing Draft <span style="color:var(--muted);font-size:10.5px;">— Awaited from RG Tax (deadline 30 Sep)</span></div></div>
+    <div class="nw-item"><span class="nw-arrow">→</span><div>RG Deck Finalization <span style="color:var(--muted);font-size:10.5px;">— Finalize deck and meeting with RG team</span></div></div>
+    <div class="nw-item"><span class="nw-arrow">→</span><div>ERP Phase 2 Project Steps <span style="color:var(--muted);font-size:10.5px;">— Finalize with Manny and Arjay</span></div></div>
+    <div class="nw-item"><span class="nw-arrow">→</span><div>HR &amp; Corp Services Provider <span style="color:var(--muted);font-size:10.5px;">— Finalize provider, submit notice to OneConnect</span></div></div>
+    <div class="nw-item"><span class="nw-arrow">→</span><div>AIS Model Update <span style="color:var(--muted);font-size:10.5px;">— Update and review</span></div></div>
+    <div class="nw-item"><span class="nw-arrow">→</span><div>ADIO Model Update <span style="color:var(--muted);font-size:10.5px;">— Update model</span></div></div>
+    <div class="nw-item"><span class="nw-arrow">→</span><div>August Leadership Meeting <span style="color:var(--muted);font-size:10.5px;">— Finance Dashboard for August Leadership Meeting</span></div></div>
+    <div class="nw-item"><span class="nw-arrow">→</span><div>DOA v1 Finalization <span style="color:var(--muted);font-size:10.5px;">— Finalize DOA v1 for HM review</span></div></div>
   </div>
   <div style="margin-bottom:24px;"></div>
 
   <!-- ── Q2-26 BOARD PREP ── -->
-  <div class="sec-label" style="font-size:14.5px;letter-spacing:0.06em;">Q2-26 Board Preparation</div>
-  <div style="margin-bottom:12px;padding:10px 16px;background:rgba(26,106,255,0.06);border-left:3px solid rgba(26,106,255,0.5);border-radius:0 8px 8px 0;font-size:10.5px;color:var(--muted);">
-    Board meeting date changed to <strong style="color:var(--text-2);">July 20th</strong> · Prep timeline as discussed with RH
-  </div>
-  <div style="display:flex;flex-direction:column;gap:0;margin-bottom:32px;border:1px solid var(--border);border-radius:10px;overflow:hidden;">
-    <div style="display:grid;grid-template-columns:160px 1fr;align-items:stretch;border-bottom:1px solid var(--border);">
-      <div style="padding:12px 16px;background:rgba(90,128,128,0.12);font-size:10.5px;font-weight:600;color:#a8c4c0;border-right:1px solid var(--border);text-decoration:line-through;">Mon 22 Jun</div>
-      <div style="padding:12px 16px;font-size:10.5px;color:var(--muted);text-decoration:line-through;opacity:0.6;">BN to share May-26 Actual vs. Budget for HODs to commence review</div>
-    </div>
-    <div style="display:grid;grid-template-columns:160px 1fr;align-items:stretch;border-bottom:1px solid var(--border);">
-      <div style="padding:12px 16px;background:rgba(90,128,128,0.12);font-size:10.5px;font-weight:600;color:#a8c4c0;border-right:1px solid var(--border);text-decoration:line-through;">Wed 1 Jul</div>
-      <div style="padding:12px 16px;font-size:10.5px;color:var(--muted);text-decoration:line-through;opacity:0.6;">Company Objectives progress &amp; Q3 roadmaps discussion with RH/SS</div>
-    </div>
-    <div style="display:grid;grid-template-columns:160px 1fr;align-items:stretch;border-bottom:1px solid var(--border);">
-      <div style="padding:12px 16px;background:rgba(90,128,128,0.12);font-size:10.5px;font-weight:600;color:#a8c4c0;border-right:1px solid var(--border);text-decoration:line-through;">Fri 3 Jul</div>
-      <div style="padding:12px 16px;font-size:10.5px;color:var(--muted);text-decoration:line-through;opacity:0.6;">Headcount review with RH · HODs submit 6+6 forecast update to BN</div>
-    </div>
-    <div style="display:grid;grid-template-columns:160px 1fr;align-items:stretch;border-bottom:1px solid var(--border);">
-      <div style="padding:12px 16px;background:rgba(90,128,128,0.12);font-size:10.5px;font-weight:600;color:#a8c4c0;border-right:1px solid var(--border);text-decoration:line-through;">Mon 6 Jul</div>
-      <div style="padding:12px 16px;font-size:10.5px;color:var(--muted);text-decoration:line-through;opacity:0.6;">RH, BN and SS review Jun-26 Actuals and 6+6 Forecast updates</div>
-    </div>
-    <div style="display:grid;grid-template-columns:160px 1fr;align-items:stretch;">
-      <div style="padding:12px 16px;background:rgba(90,128,128,0.12);font-size:10.5px;font-weight:600;color:#a8c4c0;border-right:1px solid var(--border);text-decoration:line-through;">Wed 8 Jul</div>
-      <div style="padding:12px 16px;font-size:10.5px;color:var(--muted);text-decoration:line-through;opacity:0.6;">Jun-26 Actuals and 6+6 Forecast alignment with HM</div>
-    </div>
-  </div>
 
 
 </div>
@@ -1101,17 +1078,17 @@ main {
 <div class="page active" id="page-missions">
 
   <!-- ══ 2026 OBJECTIVES HEALTH ══ -->
-  <div class="sec-label" style="margin-top:28px;">2026 Finance Objectives · Health Overview · Q1 complete · Q2 active · <span style="color:var(--ow-teal);font-weight:700;">15 Objectives</span></div>
+  <div class="sec-label" style="margin-top:28px;">2026 Finance Objectives · Health Overview · Q1 complete · Q2 complete · Q3 Active · <span style="color:var(--ow-teal);font-weight:700;">15 Objectives</span></div>
   <!-- ══ TEAM PROGRESS HERO CARD ══ -->
   <div style="display:flex;align-items:stretch;gap:16px;margin:20px 0 18px;">
     <div style="flex:0 0 auto;background:linear-gradient(135deg,#0d2525 0%,#0a1e1e 100%);border:1px solid rgba(0,229,160,0.25);border-radius:14px;padding:22px 32px;display:flex;flex-direction:column;justify-content:center;align-items:center;min-width:180px;box-shadow:0 4px 24px rgba(0,229,160,0.08);">
       <div style="font-size:9px;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);margin-bottom:6px;">Team Progress</div>
-      <div style="font-size:52px;font-weight:800;color:#00e5a0;line-height:1;letter-spacing:-2px;">61%</div>
+      <div style="font-size:52px;font-weight:800;color:#00e5a0;line-height:1;letter-spacing:-2px;">68%</div>
       <div style="margin-top:8px;display:flex;align-items:center;gap:6px;">
         <span style="font-size:10px;color:var(--muted);">Last week:</span>
-        <span style="font-size:11px;font-weight:600;color:var(--text-2);">57%</span>
+        <span style="font-size:11px;font-weight:600;color:var(--text-2);">65%</span>
         <span style="font-size:12px;color:#00e5a0;">▲</span>
-        <span style="font-size:13px;font-weight:700;color:#00e5a0;">+4pp</span>
+        <span style="font-size:13px;font-weight:700;color:#00e5a0;">+3pp</span>
       </div>
     </div>
     <div style="flex:1;background:rgba(13,37,37,0.5);border:1px solid rgba(0,229,160,0.12);border-radius:14px;padding:18px 22px;display:flex;flex-direction:column;justify-content:center;">
@@ -1119,7 +1096,7 @@ main {
       <div style="display:flex;flex-direction:column;gap:9px;">
         <div onclick="document.getElementById('obj-07')?.scrollIntoView({behavior:'smooth',block:'center'})" style="display:flex;align-items:center;gap:10px;cursor:pointer;border-radius:5px;padding:2px 4px;transition:background .15s;" onmouseover="this.style.background='rgba(255,77,109,0.06)'" onmouseout="this.style.background=''">
           <div style="width:10px;height:10px;border-radius:50%;background:#ff4d6d;flex-shrink:0;"></div>
-          <div style="font-size:10px;color:var(--muted);width:100px;flex-shrink:0;">Critical (1)</div>
+          <div style="font-size:10px;color:var(--muted);width:100px;flex-shrink:0;">Critical (2)</div>
           <div style="flex:1;height:5px;background:rgba(255,77,109,0.12);border-radius:3px;overflow:hidden;"><div style="width:5%;height:100%;background:#ff4d6d;border-radius:3px;"></div></div>
           <div style="font-size:10px;font-weight:600;color:#ff4d6d;min-width:28px;text-align:right;">avg 8%</div>
         </div>
@@ -1131,13 +1108,13 @@ main {
         </div>
         <div onclick="document.getElementById('obj-01')?.scrollIntoView({behavior:'smooth',block:'center'})" style="display:flex;align-items:center;gap:10px;cursor:pointer;border-radius:5px;padding:2px 4px;transition:background .15s;" onmouseover="this.style.background='rgba(0,229,160,0.06)'" onmouseout="this.style.background=''">
           <div style="width:10px;height:10px;border-radius:50%;background:#00e5a0;flex-shrink:0;"></div>
-          <div style="font-size:10px;color:var(--muted);width:100px;flex-shrink:0;">On Track (7)</div>
+          <div style="font-size:10px;color:var(--muted);width:100px;flex-shrink:0;">On Track (9)</div>
           <div style="flex:1;height:5px;background:rgba(0,229,160,0.12);border-radius:3px;overflow:hidden;"><div style="width:50%;height:100%;background:#00e5a0;border-radius:3px;"></div></div>
           <div style="font-size:10px;font-weight:600;color:#00e5a0;min-width:28px;text-align:right;">avg 50%</div>
         </div>
         <div onclick="document.getElementById('obj-03')?.scrollIntoView({behavior:'smooth',block:'center'})" style="display:flex;align-items:center;gap:10px;cursor:pointer;border-radius:5px;padding:2px 4px;transition:background .15s;" onmouseover="this.style.background='rgba(168,196,192,0.06)'" onmouseout="this.style.background=''">
           <div style="width:10px;height:10px;border-radius:50%;background:#a8c4c0;flex-shrink:0;"></div>
-          <div style="font-size:10px;color:var(--muted);width:100px;flex-shrink:0;">Completed (4)</div>
+          <div style="font-size:10px;color:var(--muted);width:100px;flex-shrink:0;">Completed (5)</div>
           <div style="flex:1;height:5px;background:rgba(168,196,192,0.12);border-radius:3px;overflow:hidden;"><div style="width:100%;height:100%;background:#a8c4c0;border-radius:3px;"></div></div>
           <div style="font-size:10px;font-weight:600;color:#a8c4c0;min-width:28px;text-align:right;">100%</div>
         </div>
@@ -1202,59 +1179,44 @@ main {
           <line x1="175" y1="175" x2="89.0" y2="106.4" stroke="rgba(30,50,50,0.9)" stroke-width="1"/>
           <line x1="175" y1="175" x2="127.3" y2="75.9" stroke="rgba(30,50,50,0.9)" stroke-width="1"/>
 
-          <!-- Last week ghost polygon (w/e 10 Jul) -->
-                    <polygon points="175.0,98.0 186.2,149.9 195.4,156.6 253.5,149.5 180.5,175.6 222.6,202.5 207.3,219.5 186.4,228.8 164.7,223.4 142.7,219.5 165.5,180.5 71.1,185.9 70.4,141.0 93.3,101.4 130.3,74.5" fill="rgba(255,255,255,0.02)" stroke="rgba(160,200,190,0.22)" stroke-width="1" stroke-dasharray="4 3" stroke-linejoin="round"/>
-          <!-- Current week data polygon (w/e 17 Jul) -->
-                    <polygon points="175.0,92.5 186.2,149.9 195.4,156.6 253.5,149.5 180.5,175.6 222.6,202.5 207.3,219.5 186.4,228.8 163.6,228.8 142.7,219.5 165.5,180.5 65.6,186.5 70.4,141.0 93.3,101.4 130.3,74.5" fill="rgba(0,170,130,0.08)" stroke="rgba(0,170,130,0.5)" stroke-width="1.5" stroke-linejoin="round"/>
+          <!-- Last week ghost polygon (w/e 7 Aug) -->
+                    <polygon points="175.0,120.0 186.2,149.9 248.6,108.8 180.2,173.3 240.6,181.9 222.6,202.5 207.3,219.5 186.4,228.8 163.6,228.8 168.5,183.9 79.7,230.0 65.6,186.5 70.4,141.0 93.3,101.4 130.3,74.5" fill="rgba(255,255,255,0.02)" stroke="rgba(160,200,190,0.22)" stroke-width="1" stroke-dasharray="4 3" stroke-linejoin="round"/>
+          <!-- Current week data polygon (w/e 28 Aug) -->
+                    <polygon points="175.0,120.0 197.4,124.8 252.7,105.1 180.2,173.3 240.6,181.9 222.6,202.5 207.3,219.5 188.7,239.6 163.6,228.8 155.6,201.7 79.7,230.0 65.6,186.5 70.4,141.0 93.3,101.4 130.3,74.5" fill="rgba(0,170,130,0.08)" stroke="rgba(0,170,130,0.5)" stroke-width="1.5" stroke-linejoin="round"/>
 
-          <!-- Interactive dots — Green × 8 · Amber × 2 · Red × 1 · Grey × 4 -->
-                    <circle class="rdot" cx="175.0" cy="92.5" r="5" fill="#00e5a0" stroke="#0c1414" stroke-width="1.5" style="cursor:pointer;" data-obj="obj-01" data-name="ICV Strategy" data-pct="75%" data-rag="On Track"/>
-                    <circle class="rdot" cx="186.2" cy="149.9" r="5" fill="#00e5a0" stroke="#0c1414" stroke-width="1.5" style="cursor:pointer;" data-obj="obj-02b" data-name="Subsidy — ESP" data-pct="25%" data-rag="On Track"/>
-                    <circle class="rdot" cx="195.4" cy="156.6" r="5" fill="#00e5a0" stroke="#0c1414" stroke-width="1.5" style="cursor:pointer;" data-obj="obj-06b" data-name="Space Insurance" data-pct="25%" data-rag="On Track"/>
-                    <circle class="rdot" cx="253.5" cy="149.5" r="5" fill="#00e5a0" stroke="#0c1414" stroke-width="1.5" style="cursor:pointer;" data-obj="obj-06" data-name="ESOP Structuring" data-pct="75%" data-rag="On Track"/>
-                    <circle class="rdot" cx="180.5" cy="175.6" r="5" fill="#00e5a0" stroke="#0c1414" stroke-width="1.5" style="cursor:pointer;" data-obj="obj-07" data-name="Contracting Framework" data-pct="5%" data-rag="On Track"/>
-                    <circle class="rdot" cx="222.6" cy="202.5" r="5" fill="#00e5a0" stroke="#0c1414" stroke-width="1.5" style="cursor:pointer;" data-obj="obj-08a" data-name="Revenue Recognit." data-pct="50%" data-rag="On Track"/>
-                    <circle class="rdot" cx="207.3" cy="219.5" r="5" fill="#00e5a0" stroke="#0c1414" stroke-width="1.5" style="cursor:pointer;" data-obj="obj-08b" data-name="eInvoicing" data-pct="50%" data-rag="On Track"/>
-                    <circle class="rdot" cx="186.4" cy="228.8" r="5" fill="#00e5a0" stroke="#0c1414" stroke-width="1.5" style="cursor:pointer;" data-obj="obj-10" data-name="Reporting Dashboard" data-pct="50%" data-rag="On Track"/>
-                    <circle class="rdot" cx="163.6" cy="228.8" r="5" fill="#f5a623" stroke="#0c1414" stroke-width="1.5" style="cursor:pointer;" data-obj="obj-09" data-name="Program Costing" data-pct="50%" data-rag="At Risk"/>
-                    <circle class="rdot" cx="142.7" cy="219.5" r="5" fill="#f5a623" stroke="#0c1414" stroke-width="1.5" style="cursor:pointer;" data-obj="obj-05" data-name="Capital Strategy" data-pct="50%" data-rag="At Risk"/>
-                    <circle class="rdot" cx="165.5" cy="180.5" r="5" fill="#ff4d6d" stroke="#0c1414" stroke-width="1.5" style="cursor:pointer;" data-obj="obj-11" data-name="DOA &amp; Governance" data-pct="10%" data-rag="Critical"/>
+          <!-- Interactive dots — Green × 9 · Amber × 1 · Red × 1 · Grey × 5 -->
+                    <circle class="rdot" cx="175.0" cy="120.0" r="5" fill="#00e5a0" stroke="#0c1414" stroke-width="1.5" style="cursor:pointer;" data-obj="obj-02b" data-name="Subsidy — ESP" data-pct="50%" data-rag="On Track"/>
+                    <circle class="rdot" cx="197.4" cy="124.8" r="5" fill="#00e5a0" stroke="#0c1414" stroke-width="1.5" style="cursor:pointer;" data-obj="obj-06b" data-name="Space Insurance" data-pct="50%" data-rag="On Track"/>
+                    <circle class="rdot" cx="252.7" cy="105.1" r="5" fill="#00e5a0" stroke="#0c1414" stroke-width="1.5" style="cursor:pointer;" data-obj="obj-06" data-name="ESOP Structuring" data-pct="95%" data-rag="On Track"/>
+                    <circle class="rdot" cx="180.2" cy="173.3" r="5" fill="#f5a623" stroke="#0c1414" stroke-width="1.5" style="cursor:pointer;" data-obj="obj-07" data-name="Contracting Framework" data-pct="5%" data-rag="At Risk"/>
+                    <circle class="rdot" cx="240.6" cy="181.9" r="5" fill="#00e5a0" stroke="#0c1414" stroke-width="1.5" style="cursor:pointer;" data-obj="obj-08a" data-name="Revenue Recognition" data-pct="60%" data-rag="On Track"/>
+                    <circle class="rdot" cx="222.6" cy="202.5" r="5" fill="#00e5a0" stroke="#0c1414" stroke-width="1.5" style="cursor:pointer;" data-obj="obj-08b" data-name="eInvoicing" data-pct="50%" data-rag="On Track"/>
+                    <circle class="rdot" cx="207.3" cy="219.5" r="5" fill="#00e5a0" stroke="#0c1414" stroke-width="1.5" style="cursor:pointer;" data-obj="obj-10" data-name="Reporting Dashboard" data-pct="50%" data-rag="On Track"/>
+                    <circle class="rdot" cx="188.7" cy="239.6" r="5" fill="#00e5a0" stroke="#0c1414" stroke-width="1.5" style="cursor:pointer;" data-obj="obj-09" data-name="Program Costing" data-pct="60%" data-rag="On Track"/>
+                    <circle class="rdot" cx="163.6" cy="228.8" r="5" fill="#ff4d6d" stroke="#0c1414" stroke-width="1.5" style="cursor:pointer;" data-obj="obj-05" data-name="Capital Strategy" data-pct="50%" data-rag="Critical"/>
+                    <circle class="rdot" cx="155.6" cy="201.7" r="5" fill="#00e5a0" stroke="#0c1414" stroke-width="1.5" style="cursor:pointer;" data-obj="obj-11" data-name="DOA &amp; Governance" data-pct="30%" data-rag="On Track"/>
+                    <circle class="rdot" cx="79.7" cy="230.0" r="5" fill="#a8c4c0" stroke="#0c1414" stroke-width="1.5" style="cursor:pointer;" data-obj="obj-01" data-name="ICV Strategy ✓" data-pct="100%" data-rag="Completed"/>
                     <circle class="rdot" cx="65.6" cy="186.5" r="5" fill="#a8c4c0" stroke="#0c1414" stroke-width="1.5" style="cursor:pointer;" data-obj="obj-12" data-name="ERP Balances ✓" data-pct="100%" data-rag="Completed"/>
                     <circle class="rdot" cx="70.4" cy="141.0" r="5" fill="#a8c4c0" stroke="#0c1414" stroke-width="1.5" style="cursor:pointer;" data-obj="obj-03" data-name="Finance Stabiliz. ✓" data-pct="100%" data-rag="Completed"/>
                     <circle class="rdot" cx="93.3" cy="101.4" r="5" fill="#a8c4c0" stroke="#0c1414" stroke-width="1.5" style="cursor:pointer;" data-obj="obj-04" data-name="BG Line (FAB) ✓" data-pct="100%" data-rag="Completed"/>
                     <circle class="rdot" cx="130.3" cy="74.5" r="5" fill="#a8c4c0" stroke="#0c1414" stroke-width="1.5" style="cursor:pointer;" data-obj="obj-02a" data-name="Subsidy — LRIP ✓" data-pct="100%" data-rag="Completed"/>
 
           <!-- Labels -->
-          <text x="175.0" y="37.0" text-anchor="middle" font-family="Inter,sans-serif" font-size="8.5" fill="#00e5a0" font-weight="600"><tspan x="175.0" dy="-5">ICV</tspan><tspan x="175.0" dy="10">Strategy</tspan></text>
-          <text x="231.1" y="48.9" text-anchor="start" font-family="Inter,sans-serif" font-size="8.5" fill="#00e5a0" font-weight="600"><tspan x="231.1" dy="-5">Subsidy</tspan><tspan x="231.1" dy="10">— ESP</tspan></text>
-          <text x="277.6" y="82.7" text-anchor="start" font-family="Inter,sans-serif" font-size="8.5" fill="#00e5a0" font-weight="600"><tspan x="277.6" dy="-5">Space</tspan><tspan x="277.6" dy="10">Insurance</tspan></text>
-          <text x="306.2" y="132.4" text-anchor="start" font-family="Inter,sans-serif" font-size="8.5" fill="#00e5a0" font-weight="600"><tspan x="306.2" dy="-5">ESOP</tspan><tspan x="306.2" dy="10">Structuring</tspan></text>
-          <text x="312.2" y="189.4" text-anchor="start" font-family="Inter,sans-serif" font-size="8.5" fill="#00e5a0" font-weight="600"><tspan x="312.2" dy="-5">Contracting</tspan><tspan x="312.2" dy="10">Framework</tspan></text>
-          <text x="294.5" y="244.0" text-anchor="start" font-family="Inter,sans-serif" font-size="8.5" fill="#00e5a0" font-weight="600"><tspan x="294.5" dy="-5">Revenue</tspan><tspan x="294.5" dy="10">Recognit.</tspan></text>
-          <text x="256.1" y="286.6" text-anchor="start" font-family="Inter,sans-serif" font-size="8.5" fill="#00e5a0" font-weight="600"><tspan x="256.1" dy="0">eInvoicing</tspan></text>
-          <text x="203.7" y="310.0" text-anchor="start" font-family="Inter,sans-serif" font-size="8.5" fill="#00e5a0" font-weight="600"><tspan x="203.7" dy="-5">Reporting</tspan><tspan x="203.7" dy="10">Dashboard</tspan></text>
-          <text x="146.3" y="310.0" text-anchor="end" font-family="Inter,sans-serif" font-size="8.5" fill="#f5a623" font-weight="600"><tspan x="146.3" dy="-5">Program</tspan><tspan x="146.3" dy="10">Costing</tspan></text>
-          <text x="93.9" y="286.6" text-anchor="end" font-family="Inter,sans-serif" font-size="8.5" fill="#f5a623" font-weight="600"><tspan x="93.9" dy="-5">Capital</tspan><tspan x="93.9" dy="10">Strategy</tspan></text>
-          <text x="55.5" y="244.0" text-anchor="end" font-family="Inter,sans-serif" font-size="8.5" fill="#ff4d6d" font-weight="600"><tspan x="55.5" dy="-5">DOA</tspan><tspan x="55.5" dy="10">&amp; Governance</tspan></text>
-          <text x="37.8" y="189.4" text-anchor="end" font-family="Inter,sans-serif" font-size="8.5" fill="#a8c4c0" font-weight="600"><tspan x="37.8" dy="-5">ERP</tspan><tspan x="37.8" dy="10">Balances ✓</tspan></text>
-          <text x="43.8" y="132.4" text-anchor="end" font-family="Inter,sans-serif" font-size="8.5" fill="#a8c4c0" font-weight="600"><tspan x="43.8" dy="-5">Finance</tspan><tspan x="43.8" dy="10">Stabiliz. ✓</tspan></text>
-          <text x="72.4" y="82.7" text-anchor="end" font-family="Inter,sans-serif" font-size="8.5" fill="#a8c4c0" font-weight="600"><tspan x="72.4" dy="-5">BG Line</tspan><tspan x="72.4" dy="10">(FAB) ✓</tspan></text>
-          <text x="118.9" y="48.9" text-anchor="end" font-family="Inter,sans-serif" font-size="8.5" fill="#a8c4c0" font-weight="600"><tspan x="118.9" dy="-5">Subsidy —</tspan><tspan x="118.9" dy="10">LRIP ✓</tspan></text>
-          <text x="231.1" y="48.9" text-anchor="start" font-family="Inter,sans-serif" font-size="8.5" fill="#00e5a0" font-weight="600"><tspan x="231.1" dy="-5">Subsidy</tspan><tspan x="231.1" dy="10">ESP</tspan></text>
-          <text x="277.6" y="82.7" text-anchor="start" font-family="Inter,sans-serif" font-size="8.5" fill="#00e5a0" font-weight="600"><tspan x="277.6" dy="-5">Space</tspan><tspan x="277.6" dy="10">Insurance</tspan></text>
-          <text x="306.2" y="132.4" text-anchor="start" font-family="Inter,sans-serif" font-size="8.5" fill="#00e5a0" font-weight="600"><tspan x="306.2" dy="-5">ESOP</tspan><tspan x="306.2" dy="10">Structuring</tspan></text>
-          <text x="312.2" y="189.4" text-anchor="start" font-family="Inter,sans-serif" font-size="8.5" fill="#00e5a0" font-weight="600"><tspan x="312.2" dy="-5">Contracting</tspan><tspan x="312.2" dy="10">Framework</tspan></text>
-          <text x="294.5" y="244.0" text-anchor="start" font-family="Inter,sans-serif" font-size="8.5" fill="#00e5a0" font-weight="600"><tspan x="294.5" dy="-5">Revenue</tspan><tspan x="294.5" dy="10">Recognit.</tspan></text>
-          <text x="256.1" y="286.6" text-anchor="start" font-family="Inter,sans-serif" font-size="8.5" fill="#00e5a0" font-weight="600"><tspan x="256.1" dy="-5">eInvoicing</tspan></text>
-          <text x="203.7" y="310.0" text-anchor="start" font-family="Inter,sans-serif" font-size="8.5" fill="#00e5a0" font-weight="600"><tspan x="203.7" dy="-5">Reporting</tspan><tspan x="203.7" dy="10">Dashboard</tspan></text>
-          <text x="146.3" y="310.0" text-anchor="end" font-family="Inter,sans-serif" font-size="8.5" fill="#f5a623" font-weight="600"><tspan x="146.3" dy="-5">Program</tspan><tspan x="146.3" dy="10">Costing</tspan></text>
-          <text x="93.9" y="286.6" text-anchor="end" font-family="Inter,sans-serif" font-size="8.5" fill="#f5a623" font-weight="600"><tspan x="93.9" dy="-5">Capital</tspan><tspan x="93.9" dy="10">Strategy</tspan></text>
-          <text x="55.5" y="244.0" text-anchor="end" font-family="Inter,sans-serif" font-size="8.5" fill="#ff4d6d" font-weight="600"><tspan x="55.5" dy="-5">DOA &amp;</tspan><tspan x="55.5" dy="10">Govern.</tspan></text>
-          <text x="37.8" y="189.4" text-anchor="end" font-family="Inter,sans-serif" font-size="8.5" fill="#a8c4c0" font-weight="600"><tspan x="37.8" dy="-5">ERP</tspan><tspan x="37.8" dy="10">Balances ✓</tspan></text>
-          <text x="43.8" y="132.4" text-anchor="end" font-family="Inter,sans-serif" font-size="8.5" fill="#a8c4c0" font-weight="600"><tspan x="43.8" dy="-5">Finance</tspan><tspan x="43.8" dy="10">Stabiliz. ✓</tspan></text>
-          <text x="72.4" y="82.7" text-anchor="end" font-family="Inter,sans-serif" font-size="8.5" fill="#a8c4c0" font-weight="600"><tspan x="72.4" dy="-5">BG Line</tspan><tspan x="72.4" dy="10">(FAB) ✓</tspan></text>
-          <text x="118.9" y="48.9" text-anchor="end" font-family="Inter,sans-serif" font-size="8.5" fill="#a8c4c0" font-weight="600"><tspan x="118.9" dy="-5">Subsidy</tspan><tspan x="118.9" dy="10">LRIP ✓</tspan></text>
-
+          <text x="175.0" y="35.0" text-anchor="middle" font-family="Inter,sans-serif" font-size="8.5" fill="#00e5a0" font-weight="600"><tspan x="175.0" dy="-5">Subsidy</tspan><tspan x="175.0" dy="10">ESP</tspan></text>
+          <text x="231.9" y="47.1" text-anchor="start" font-family="Inter,sans-serif" font-size="8.5" fill="#00e5a0" font-weight="600"><tspan x="231.9" dy="-5">Space</tspan><tspan x="231.9" dy="10">Insurance</tspan></text>
+          <text x="279.0" y="81.3" text-anchor="start" font-family="Inter,sans-serif" font-size="8.5" fill="#00e5a0" font-weight="600"><tspan x="279.0" dy="-5">ESOP</tspan><tspan x="279.0" dy="10">Structuring</tspan></text>
+          <text x="308.1" y="131.7" text-anchor="start" font-family="Inter,sans-serif" font-size="8.5" fill="#f5a623" font-weight="600"><tspan x="308.1" dy="-5">Contracting</tspan><tspan x="308.1" dy="10">Framework</tspan></text>
+          <text x="314.2" y="189.6" text-anchor="start" font-family="Inter,sans-serif" font-size="8.5" fill="#00e5a0" font-weight="600"><tspan x="314.2" dy="-5">Revenue</tspan><tspan x="314.2" dy="10">Recognit.</tspan></text>
+          <text x="296.2" y="245.0" text-anchor="start" font-family="Inter,sans-serif" font-size="8.5" fill="#00e5a0" font-weight="600"><tspan x="296.2" dy="-5">eInvoicing</tspan></text>
+          <text x="260.8" y="293.1" text-anchor="start" font-family="Inter,sans-serif" font-size="8.5" fill="#00e5a0" font-weight="600"><tspan x="260.8" dy="-5">Reporting</tspan><tspan x="260.8" dy="10">Dashboard</tspan></text>
+          <text x="205.4" y="317.8" text-anchor="start" font-family="Inter,sans-serif" font-size="8.5" fill="#00e5a0" font-weight="600"><tspan x="205.4" dy="-5">Program</tspan><tspan x="205.4" dy="10">Costing</tspan></text>
+          <text x="144.6" y="317.8" text-anchor="end" font-family="Inter,sans-serif" font-size="8.5" fill="#ff4d6d" font-weight="600"><tspan x="144.6" dy="-5">Capital</tspan><tspan x="144.6" dy="10">Strategy</tspan></text>
+          <text x="92.7" y="288.3" text-anchor="end" font-family="Inter,sans-serif" font-size="8.5" fill="#00e5a0" font-weight="600"><tspan x="92.7" dy="-5">DOA &amp;</tspan><tspan x="92.7" dy="10">Govern.</tspan></text>
+          <text x="53.8" y="245.0" text-anchor="end" font-family="Inter,sans-serif" font-size="8.5" fill="#a8c4c0" font-weight="600"><tspan x="53.8" dy="-5">ICV</tspan><tspan x="53.8" dy="10">Strategy ✓</tspan></text>
+          <text x="35.8" y="189.6" text-anchor="end" font-family="Inter,sans-serif" font-size="8.5" fill="#a8c4c0" font-weight="600"><tspan x="35.8" dy="-5">ERP</tspan><tspan x="35.8" dy="10">Balances ✓</tspan></text>
+          <text x="41.9" y="131.7" text-anchor="end" font-family="Inter,sans-serif" font-size="8.5" fill="#a8c4c0" font-weight="600"><tspan x="41.9" dy="-5">Finance</tspan><tspan x="41.9" dy="10">Stabiliz. ✓</tspan></text>
+          <text x="71.0" y="81.3" text-anchor="end" font-family="Inter,sans-serif" font-size="8.5" fill="#a8c4c0" font-weight="600"><tspan x="71.0" dy="-5">BG Line</tspan><tspan x="71.0" dy="10">(FAB) ✓</tspan></text>
+          <text x="118.1" y="47.1" text-anchor="end" font-family="Inter,sans-serif" font-size="8.5" fill="#a8c4c0" font-weight="600"><tspan x="118.1" dy="-5">Subsidy</tspan><tspan x="118.1" dy="10">LRIP ✓</tspan></text>
         </svg>
       </div>
 
@@ -1327,9 +1289,6 @@ main {
         });
       });
       </script>
-      <div style="margin-top:8px;font-size:9.5px;color:var(--muted);border-top:1px solid var(--border);padding-top:7px;">
-        <span style="color:#a8c4c0;font-weight:600;">✓ Completed this week (w/e 17 Jul):</span> ERP Finance — Opening Balance Migration (Obj 12) · 2025 data imports completed and Alaan integration kicked off.
-      </div>
     </div>
 
   </div>
@@ -1351,17 +1310,17 @@ main {
       <tbody>
         <tr class="obj-cat"><td colspan="8">Strategic Value Creation &amp; National Industrial Positioning</td></tr>
         <tr>
-          <td class="obj-num">01</td>
-          <td><div class="obj-title">ICV Strategy &amp; Optimization</div><div class="obj-sub">Financial tracking &amp; procurement for ICV</div></td>
+          <td class="obj-num" style="opacity:0.7">1</td>
+          <td style="opacity:0.7"><div class="obj-title">ICV Strategy &amp; Optimization</div><div class="obj-sub">Financial tracking &amp; procurement for ICV</div></td>
           <td style="font-size:10.5px;color:var(--muted)">2025 cert + 10% improvement in 2026 ICV</td>
           <td style="text-align:center;font-size:9px;font-weight:600;color:var(--blue)">Biny Ninan</td>
           <td style="text-align:center"><span class="obj-pill obj-pill-m">Must</span></td>
-          <td style="text-align:center"><span class="obj-pill obj-pill-g">On Track</span></td>
-          <td><div style="display:flex;align-items:center;gap:6px"><div class="obj-pbar" style="flex:1"><div class="obj-pfill" style="width:75%;background:var(--green)"></div></div><span style="font-size:9px;font-weight:600;color:var(--green);min-width:26px;text-align:right">75%</span></div></td>
-          <td style="text-align:center"><span class="obj-status-active">● Active</span></td>
+          <td style="text-align:center"><span class="obj-pill" style="background:rgba(90,128,128,0.12);color:#5a8080;border:1px solid rgba(90,128,128,0.3);">Completed</span></td>
+          <td><div style="display:flex;align-items:center;gap:6px"><div class="obj-pbar" style="flex:1"><div class="obj-pfill" style="width:100%;background:#5a8080"></div></div><span style="font-size:9px;font-weight:600;color:#a8c4c0;min-width:26px;text-align:right">100%</span></div></td>
+          <td style="text-align:center"><span class="obj-status-done">✓ Completed w/e 31-Jul</span></td>
         </tr>
         <tr style="opacity:0.7">
-          <td class="obj-num">02a</td>
+          <td class="obj-num">2a</td>
           <td><div class="obj-title">Subsidy — LRIP (Rent)</div><div class="obj-sub">Facility rent subsidy application · <strong style="color:#a8c4c0">Submitted &amp; approved — w/e 3 Jul</strong></div></td>
           <td style="font-size:10.5px;color:var(--muted)">Savings up to AED 1.8M on rent annually</td>
           <td style="text-align:center;font-size:9px;font-weight:600;color:var(--ow-teal)">Ella Cano</td>
@@ -1371,7 +1330,7 @@ main {
           <td style="text-align:center"><span class="obj-status-done">✓ Completed w/e 3-Jul</span></td>
         </tr>
         <tr>
-          <td class="obj-num">02b</td>
+          <td class="obj-num">2b</td>
           <td><div class="obj-title">Subsidy — ESP (Power)</div><div class="obj-sub">Power usage subsidy application</div></td>
           <td style="font-size:10.5px;color:var(--muted)">AED 0.5M savings (cond. to 2.5MW)</td>
           <td style="text-align:center;font-size:9px;font-weight:600;color:var(--ow-teal)">Ella Cano</td>
@@ -1381,28 +1340,54 @@ main {
           <td style="text-align:center"><span class="obj-status-active">● Active</span></td>
         </tr>
                 <tr>
-          <td class="obj-num">3b</td>
+          <td class="obj-num">2c</td>
           <td><div class="obj-title">Space Insurance</div><div class="obj-sub">D&amp;O, Hull &amp; Liability coverage — placement &amp; governance</div></td>
           <td style="font-size:10.5px;color:var(--muted)">Policy placed in line with JV governance requirements</td>
           <td style="text-align:center;font-size:9px;font-weight:600;color:var(--blue)">Biny Ninan</td>
           <td style="text-align:center"><span class="obj-pill obj-pill-m">Support</span></td>
           <td style="text-align:center"><span class="obj-pill obj-pill-g">On Track</span></td>
-          <td><div style="display:flex;align-items:center;gap:6px"><div class="obj-pbar" style="flex:1"><div class="obj-pfill" style="width:25%;background:var(--green)"></div></div><span style="font-size:9px;font-weight:600;color:var(--green);min-width:26px;text-align:right">25%</span></div></td>
+          <td><div style="display:flex;align-items:center;gap:6px"><div class="obj-pbar" style="flex:1"><div class="obj-pfill" style="width:50%;background:var(--green)"></div></div><span style="font-size:9px;font-weight:600;color:var(--green);min-width:26px;text-align:right">50%</span></div></td>
           <td style="text-align:center"><span class="obj-status-active">● Active</span></td>
         </tr>
         <tr class="obj-cat"><td colspan="8">Capital Strategy &amp; Financing</td></tr>
         <tr style="opacity:0.7">
-          <td class="obj-num">03</td>
-          <td><div class="obj-title">Finance Stabilization Plan</div><div class="obj-sub">Completed Q1-26 at 95% · items transitioned to BAU</div></td>
+          <td class="obj-num">3</td>
+          <td><div class="obj-title" style="position:relative;display:inline-block;cursor:help;">Finance Stabilization Plan
+            <div style="display:none;position:absolute;left:0;top:100%;z-index:999;background:#0a1616;border:1px solid rgba(0,229,160,0.25);border-radius:8px;padding:12px 16px;min-width:320px;box-shadow:0 8px 32px rgba(0,0,0,0.9);font-size:10px;color:var(--text-2);line-height:1.9;font-weight:400;white-space:normal;" class="fsp-tooltip">
+              <div style="color:var(--ow-teal);font-weight:600;margin-bottom:6px;font-size:10.5px;">Scope of Work Completed</div>
+              <div>· Financial Model update &amp; Debt Financing DD Readiness</div>
+              <div>· 2025 ICV baseline &amp; 2026 improvement wireframe</div>
+              <div>· Bank Guarantee Financing Limits</div>
+              <div>· ESP &amp; LRIP subsidy applications kick-off</div>
+              <div>· Space Insurance — Quotations from 2 insurers</div>
+              <div>· Finance AI/Automation Roadmap</div>
+              <div>· Finance Playbook — IFRS-compliant policies &amp; procedures, ERP manuals</div>
+              <div>· Monthly Reporting Dashboard to CEO</div>
+              <div>· Time Tracker on ERP</div>
+              <div>· ERP Work Order flows &amp; Segmentation, Approval workflows &amp; mobile approvals</div>
+              <div>· First Tender Committee</div>
+              <div>· KEZAD lease for 3 years</div>
+              <div>· FY25 Audit report</div>
+              <div>· Invoice Milestone Tracker for Programs</div>
+              <div>· ERP Inventory Data Integrity</div>
+              <div>· Loft Contracts baseline review (SAR I&amp;T, Procurement)</div>
+              <div>· In-house Team Transition</div>
+              <div>· Onboarding new finance team</div>
+              <div>· Team Rhythm — Daily Huddles, Weekly Tacticals, Quarterly check-ins</div>
+              <div>· Upskilling Team Reporting Skills and Data Visualization</div>
+              <div>· Alignment with RG Finance</div>
+            </div>
+          </div>
+          <div class="obj-sub">Completed 31-Mar at 95% · items transitioned to BAU</div></td>
           <td style="font-size:10.5px;color:var(--muted)">ERP live, 2025 FS issued, Playbook</td>
           <td style="text-align:center;font-size:9px;font-weight:600;color:var(--blue)">Biny Ninan</td>
           <td style="text-align:center"><span class="obj-pill obj-pill-m">Must</span></td>
           <td style="text-align:center"><span class="obj-pill" style="background:rgba(90,128,128,0.12);color:#a8c4c0;border:1px solid rgba(90,128,128,0.3);">Completed</span></td>
           <td><div style="display:flex;align-items:center;gap:6px"><div class="obj-pbar" style="flex:1"><div class="obj-pfill" style="width:100%;background:#5a8080"></div></div><span style="font-size:9px;font-weight:600;color:#a8c4c0;min-width:26px;text-align:right">100%</span></div></td>
-          <td style="text-align:center"><span class="obj-status-done">✓ Completed Q1-26</span></td>
+          <td style="text-align:center"><span class="obj-status-done">✓ Completed 31-Mar</span></td>
         </tr>
         <tr style="opacity:0.7">
-          <td class="obj-num">04</td>
+          <td class="obj-num">4</td>
           <td><div class="obj-title">Bank Guarantee Financing Line</div><div class="obj-sub">AED 25M BG facility — FAB</div></td>
           <td style="font-size:10.5px;color:var(--muted)">AED 25M BG line ready by 30 Jun 2026</td>
           <td style="text-align:center;font-size:9px;font-weight:600;color:var(--blue)">Biny Ninan</td>
@@ -1412,48 +1397,48 @@ main {
           <td style="text-align:center"><span class="obj-status-done">✓ Completed w/e 22-May</span></td>
         </tr>
         <tr>
-          <td class="obj-num">05</td>
-          <td><div class="obj-title">Capital Strategy / Debt Financing</div><div class="obj-sub">Amended: equity-driven strategy</div></td>
+          <td class="obj-num">5</td>
+          <td><div class="obj-title">Capital Strategy / Debt Financing</div><div class="obj-sub">Amended: equity-driven strategy · <span style="color:var(--ow-teal);cursor:pointer;" onclick="document.querySelector('nav button:nth-child(4)').click()">→ refer Other Initiatives tab</span></div></td>
           <td style="font-size:10.5px;color:var(--muted)">US$25M facility structured &amp; available</td>
           <td style="text-align:center;font-size:9px;font-weight:600;color:var(--blue)">Biny Ninan</td>
           <td style="text-align:center"><span class="obj-pill obj-pill-m">Support</span></td>
-          <td style="text-align:center"><span class="obj-pill obj-pill-a">At Risk</span></td>
-          <td><div style="display:flex;align-items:center;gap:6px"><div class="obj-pbar" style="flex:1"><div class="obj-pfill" style="width:50%;background:var(--amber)"></div></div><span style="font-size:9px;font-weight:600;color:var(--amber);min-width:26px;text-align:right">50%</span></div></td>
-          <td style="text-align:center"><span class="obj-status-risk">▲ At Risk</span></td>
+          <td style="text-align:center"><span class="obj-pill obj-pill-r">Critical</span></td>
+          <td><div style="display:flex;align-items:center;gap:6px"><div class="obj-pbar" style="flex:1"><div class="obj-pfill" style="width:50%;background:var(--red)"></div></div><span style="font-size:9px;font-weight:600;color:var(--red);min-width:26px;text-align:right">50%</span></div></td>
+          <td style="text-align:center"><span class="obj-status-critical">● Critical</span></td>
         </tr>
         <tr>
-          <td class="obj-num">06</td>
+          <td class="obj-num">6</td>
           <td><div class="obj-title">ESOP Structuring</div><div class="obj-sub">Employee stock option plan structure &amp; agreements</div></td>
           <td style="font-size:10.5px;color:var(--muted)">Structure docs and agreements in place</td>
           <td style="text-align:center;font-size:9px;font-weight:600;color:var(--ow-teal)">Biny Ninan</td>
           <td style="text-align:center"><span class="obj-pill obj-pill-m">Support</span></td>
           <td style="text-align:center"><span class="obj-pill obj-pill-g">On Track</span></td>
-          <td><div style="display:flex;align-items:center;gap:6px"><div class="obj-pbar" style="flex:1"><div class="obj-pfill" style="width:75%;background:var(--green)"></div></div><span style="font-size:9px;font-weight:600;color:var(--green);min-width:26px;text-align:right">75%</span></div></td>
+          <td><div style="display:flex;align-items:center;gap:6px"><div class="obj-pbar" style="flex:1"><div class="obj-pfill" style="width:95%;background:var(--green)"></div></div><span style="font-size:9px;font-weight:600;color:var(--green);min-width:26px;text-align:right">95%</span></div></td>
           <td style="text-align:center"><span class="obj-status-active">● Active</span></td>
         </tr>
         <tr class="obj-cat"><td colspan="8">Operational Finance &amp; Systems-Based Reporting</td></tr>
         <tr>
-          <td class="obj-num">07</td>
+          <td class="obj-num">7</td>
           <td><div class="obj-title">Contracting Framework</div><div class="obj-sub">Standardized T&amp;Cs with Contracts function</div></td>
           <td style="font-size:10.5px;color:var(--muted)">Templates across agreements by 30 Sep</td>
           <td style="text-align:center;font-size:9px;font-weight:600;color:var(--blue)">Biny Ninan</td>
           <td style="text-align:center"><span class="obj-pill obj-pill-m">Support</span></td>
-          <td style="text-align:center"><span class="obj-pill obj-pill-g">On Track</span></td>
-          <td><div style="display:flex;align-items:center;gap:6px"><div class="obj-pbar" style="flex:1"><div class="obj-pfill" style="width:5%;background:var(--green)"></div></div><span style="font-size:9px;font-weight:600;color:var(--green);min-width:26px;text-align:right">5%</span></div></td>
-          <td style="text-align:center"><span class="obj-status-active">● Active</span></td>
+          <td style="text-align:center"><span class="obj-pill obj-pill-a">At Risk</span></td>
+          <td><div style="display:flex;align-items:center;gap:6px"><div class="obj-pbar" style="flex:1"><div class="obj-pfill" style="width:5%;background:var(--amber)"></div></div><span style="font-size:9px;font-weight:600;color:var(--amber);min-width:26px;text-align:right">5%</span></div></td>
+          <td style="text-align:center"><span class="obj-status-risk">▲ At Risk</span></td>
         </tr>
         <tr>
-          <td class="obj-num">08a</td>
+          <td class="obj-num">8</td>
           <td><div class="obj-title">Revenue Recognition Principles</div><div class="obj-sub">IFRS policy for US$46M revenues</div></td>
           <td style="font-size:10.5px;color:var(--muted)">Audit-approved policy + FTA by 30 Jun</td>
           <td style="text-align:center;font-size:9px;font-weight:600;color:var(--blue)">Biny Ninan</td>
           <td style="text-align:center"><span class="obj-pill obj-pill-m">Support</span></td>
-          <td style="text-align:center"><span class="obj-pill obj-pill-a">At Risk</span></td>
-          <td><div style="display:flex;align-items:center;gap:6px"><div class="obj-pbar" style="flex:1"><div class="obj-pfill" style="width:50%;background:var(--amber)"></div></div><span style="font-size:9px;font-weight:600;color:var(--amber);min-width:26px;text-align:right">50%</span></div></td>
-          <td style="text-align:center"><span class="obj-status-risk">▲ At Risk</span></td>
+          <td style="text-align:center"><span class="obj-pill obj-pill-g">On Track</span></td>
+          <td><div style="display:flex;align-items:center;gap:6px"><div class="obj-pbar" style="flex:1"><div class="obj-pfill" style="width:50%;background:var(--green)"></div></div><span style="font-size:9px;font-weight:600;color:var(--green);min-width:26px;text-align:right">60%</span></div></td>
+          <td style="text-align:center"><span class="obj-status-active">● Active</span></td>
         </tr>
         <tr>
-          <td class="obj-num">08b</td>
+          <td class="obj-num">9</td>
           <td><div class="obj-title">eInvoicing &amp; FTA Compliance</div><div class="obj-sub">NetSuite → FTA platform</div></td>
           <td style="font-size:10.5px;color:var(--muted)">FTA deadline: 30 Jun 2026</td>
           <td style="text-align:center;font-size:9px;font-weight:600;color:var(--ow-teal)">Ella Cano</td>
@@ -1463,18 +1448,18 @@ main {
           <td style="text-align:center"><span class="obj-status-active">● Active</span></td>
         </tr>
         <tr>
-          <td class="obj-num">09</td>
+          <td class="obj-num">10</td>
           <td><div class="obj-title">Program Costing &amp; EAC Tracking</div><div class="obj-sub">System-driven cost reports</div></td>
           <td style="font-size:10.5px;color:var(--muted)">EAC tracking operational by Q3</td>
           <td style="text-align:center;font-size:9px;font-weight:600;color:var(--green)">Nathan Waite</td>
           <td style="text-align:center"><span class="obj-pill obj-pill-m">Must</span></td>
-          <td style="text-align:center"><span class="obj-pill obj-pill-a">At Risk</span></td>
-          <td><div style="display:flex;align-items:center;gap:6px"><div class="obj-pbar" style="flex:1"><div class="obj-pfill" style="width:50%;background:var(--amber)"></div></div><span style="font-size:9px;font-weight:600;color:var(--amber);min-width:26px;text-align:right">50%</span></div></td>
-          <td style="text-align:center"><span class="obj-status-risk">▲ At Risk</span></td>
+          <td style="text-align:center"><span class="obj-pill obj-pill-g">On Track</span></td>
+          <td><div style="display:flex;align-items:center;gap:6px"><div class="obj-pbar" style="flex:1"><div class="obj-pfill" style="width:60%;background:var(--green)"></div></div><span style="font-size:9px;font-weight:600;color:var(--green);min-width:26px;text-align:right">60%</span></div></td>
+          <td style="text-align:center"><span class="obj-status-active">● Active</span></td>
         </tr>
         <tr class="obj-cat"><td colspan="8">Financial Governance &amp; Automation Roadmap</td></tr>
         <tr>
-          <td class="obj-num">10</td>
+          <td class="obj-num">11</td>
           <td><div class="obj-title">Unified Reporting Dashboard</div><div class="obj-sub">PowerBI + Claude dashboard on GitHub</div></td>
           <td style="font-size:10.5px;color:var(--muted)">Dashboards integrated by 30 Jun</td>
           <td style="text-align:center;font-size:9px;font-weight:600;color:var(--green)">Nathan Waite</td>
@@ -1484,17 +1469,17 @@ main {
           <td style="text-align:center"><span class="obj-status-active">● Active</span></td>
         </tr>
         <tr>
-          <td class="obj-num">11</td>
-          <td><div class="obj-title">DOA &amp; Governance Framework</div><div class="obj-sub">Alignment on approval limits across all workflows in NetSuite</div></td>
+          <td class="obj-num">12</td>
+          <td><div class="obj-title">DOA &amp; Governance Framework</div><div class="obj-sub">eInvoicing kicked-off 25 Aug with RG Tax team · Alignment on approval limits across all workflows in NetSuite</div></td>
           <td style="font-size:10.5px;color:var(--muted)">DOA implemented by 30 Sep</td>
           <td style="text-align:center;font-size:9px;font-weight:600;color:var(--blue)">Biny Ninan</td>
           <td style="text-align:center"><span class="obj-pill obj-pill-m">Must</span></td>
-          <td style="text-align:center"><span class="obj-pill obj-pill-r">Critical</span></td>
-          <td><div style="display:flex;align-items:center;gap:6px"><div class="obj-pbar" style="flex:1"><div class="obj-pfill" style="width:10%;background:var(--red)"></div></div><span style="font-size:9px;font-weight:600;color:var(--red);min-width:26px;text-align:right">10%</span></div></td>
-          <td style="text-align:center"><span class="obj-status-critical">▲ Critical</span></td>
+          <td style="text-align:center"><span class="obj-pill obj-pill-g">On Track</span></td>
+          <td><div style="display:flex;align-items:center;gap:6px"><div class="obj-pbar" style="flex:1"><div class="obj-pfill" style="width:30%;background:var(--green)"></div></div><span style="font-size:9px;font-weight:600;color:var(--green);min-width:26px;text-align:right">30%</span></div></td>
+          <td style="text-align:center"><span class="obj-status-active">● Active</span></td>
         </tr>
         <tr>
-          <td class="obj-num">12</td>
+          <td class="obj-num">13</td>
           <td><div class="obj-title">ERP Opening Balance Migration</div><div class="obj-sub">Inventory &amp; asset balances into NS</div></td>
           <td style="font-size:10.5px;color:var(--muted)">All opening balances migrated by 30 Jun 2026</td>
           <td style="text-align:center;font-size:9px;font-weight:600;color:var(--ow-teal)">Ella Cano</td>
@@ -1519,10 +1504,10 @@ main {
   <div class="kpi-grid">
     <!-- Cash: teal -->
     <div class="kpi-card" style="--card-color: var(--ow-teal)">
-      <div class="kpi-label">OW+MLO Cash · 17-Jul-26</div>
-      <div class="kpi-value">$18.28M</div>
-      <div class="kpi-delta neg">▼ $0.25M vs last week</div>
-      <div class="kpi-sub">-1.3% week-on-week</div>
+      <div class="kpi-label">OW+MLO Cash · 28-Aug-26</div>
+      <div class="kpi-value">$16.73M</div>
+      <div class="kpi-delta neg">▼ $0.43M vs last week</div>
+      <div class="kpi-sub">-2.5% week-on-week</div>
     </div>
     <!-- Runway -->
     <div class="kpi-card" style="--card-color: var(--green)">
@@ -1745,27 +1730,22 @@ main {
 
     <!-- AR Ageing -->
     <div class="chart-card c6">
-      <div class="card-label" style="font-size:13px;font-weight:600;">Accounts Receivable Ageing · 30 Jun 2026 (USD)</div>
+      <div class="card-label" style="font-size:13px;font-weight:600;">Accounts Receivable Ageing · 31 Jul 2026 (USD)</div>
       <div style="display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 12px;">
         <div style="flex:1;min-width:120px;background:rgba(0,170,130,0.08);border:1px solid rgba(0,170,130,0.2);border-radius:6px;padding:8px 10px;">
           <div style="font-size:9.5px;color:var(--muted);margin-bottom:2px;">Current</div>
-          <div style="font-size:13px;font-weight:700;color:var(--ow-teal);">$0</div>
-        </div>
-        <div style="flex:1;min-width:120px;background:rgba(245,166,35,0.07);border:1px solid rgba(245,166,35,0.2);border-radius:6px;padding:8px 10px;">
-          <div style="font-size:9.5px;color:var(--muted);margin-bottom:2px;">1 Month — ADFD</div>
-          <div style="font-size:13px;font-weight:700;color:var(--amber);">$263k</div>
+          <div style="font-size:13px;font-weight:700;color:var(--ow-teal);">$600k</div>
+          <div style="font-size:9px;color:var(--muted);">Loft — Jul invoice</div>
         </div>
         <div style="flex:1;min-width:120px;background:rgba(255,77,109,0.07);border:1px solid rgba(255,77,109,0.2);border-radius:6px;padding:8px 10px;">
-          <div style="font-size:9.5px;color:var(--muted);margin-bottom:2px;">2 Months — Loft</div>
+          <div style="font-size:9.5px;color:var(--muted);margin-bottom:2px;">&gt;90 Days</div>
           <div style="font-size:13px;font-weight:700;color:var(--red);">$400k</div>
+          <div style="font-size:9px;color:var(--muted);">Loft — historical</div>
         </div>
       </div>
       <canvas id="arAgeChart" height="130"></canvas>
       <div style="margin-top:10px;font-size:10px;color:var(--muted);border-top:1px solid var(--border);padding-top:8px;">
-        Total AR: <strong style="color:var(--text-2)">$663k</strong> · Values converted from AED at 3.67<br>
-        Note: $250k received from ADMA on 30 Mar 2026 for their half of the first milestone invoice.<br>
-        <strong style="color:var(--text-2)">Loft ($400k)</strong> — to be netted off against future AP procurement invoices from Loft for the program.<br>
-        <strong style="color:var(--text-2)">ADFD ($263k)</strong> — balance followed up; payment expected before April end.
+        Total AR: <strong style="color:var(--text-2)">$1,000,022</strong> (converted from AED at 3.6723). <strong style="color:var(--text-2)">Loft Orbital $600K</strong> — Jul-26 invoice, current bracket. <strong style="color:var(--text-2)">Loft Orbital $400,022</strong> — outstanding >90 days, to be netted against future Loft AP invoices. ADFD balance fully collected.
       </div>
     </div>
   </div>
@@ -1934,6 +1914,79 @@ main {
 <!-- KPIS PAGE REMOVED -->
 <div class="page" id="page-kpis" style="display:none!important"></div>
 
+
+
+<!-- ══════════════════ PAGE: OTHER INITIATIVES ══════════════════ -->
+<div class="page" id="page-initiatives">
+
+  <!-- ── NAMING & PR PACKAGE OUTREACH ── -->
+  <div class="sec-label" style="font-size:14.5px;letter-spacing:0.06em;">Naming &amp; PR Package Outreach</div>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:32px;">
+    <div style="background:#1c3030;border:1px solid rgba(0,229,160,0.15);border-radius:10px;padding:16px 18px;">
+      <div style="font-size:9.5px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:6px;">National Air Cargo</div>
+      <div style="display:inline-block;padding:2px 9px;border-radius:12px;font-size:9.5px;font-weight:600;background:rgba(0,229,160,0.12);color:#00e5a0;margin-bottom:8px;">Term Sheet</div>
+      <div style="font-size:10.5px;color:var(--text-2);line-height:1.7;">Pricing package sent. Awaiting response.</div>
+      <div style="margin-top:8px;padding:5px 10px;background:rgba(0,229,160,0.06);border-radius:5px;font-size:10px;color:var(--ow-teal);"><strong>Complete Package:</strong> $1.75M &nbsp;·&nbsp; <strong>PR Package:</strong> $850K</div>
+      <div style="display:flex;align-items:flex-start;margin-top:10px;padding:4px 0;"><div style="display:flex;flex-direction:column;align-items:center;gap:3px;flex:1;"><div style="width:9px;height:9px;border-radius:50%;background:#00aa82;border:1.5px solid #00e5a0;"></div><div style="font-size:7px;color:#00e5a0;font-weight:600;text-align:center;line-height:1.2;white-space:nowrap;">Intro</div></div><div style="height:1px;background:#00aa82;flex:1;margin-bottom:12px;"></div><div style="display:flex;flex-direction:column;align-items:center;gap:3px;flex:1;"><div style="width:9px;height:9px;border-radius:50%;background:#00aa82;border:1.5px solid #00e5a0;"></div><div style="font-size:7px;color:#00e5a0;font-weight:600;text-align:center;line-height:1.2;white-space:nowrap;">Discussions</div></div><div style="height:1px;background:#00aa82;flex:1;margin-bottom:12px;"></div><div style="display:flex;flex-direction:column;align-items:center;gap:3px;flex:1;"><div style="width:9px;height:9px;border-radius:50%;background:#00e5a0;border:1.5px solid #00e5a0;"></div><div style="font-size:7px;color:#00e5a0;font-weight:700;text-align:center;line-height:1.2;white-space:nowrap;">Term Sheet</div></div><div style="height:1px;background:rgba(30,50,50,0.6);flex:1;margin-bottom:12px;"></div><div style="display:flex;flex-direction:column;align-items:center;gap:3px;flex:1;"><div style="width:9px;height:9px;border-radius:50%;background:rgba(20,40,40,0.8);border:1.5px solid #2a4040;"></div><div style="font-size:7px;color:#2a4040;font-weight:400;text-align:center;line-height:1.2;white-space:nowrap;">Signed</div></div></div>
+    </div>
+    <div style="background:#1c3030;border:1px solid rgba(0,229,160,0.15);border-radius:10px;padding:16px 18px;">
+      <div style="font-size:9.5px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:6px;">Shory</div>
+      <div style="display:inline-block;padding:2px 9px;border-radius:12px;font-size:9.5px;font-weight:600;background:rgba(0,229,160,0.12);color:#00e5a0;margin-bottom:8px;">Term Sheet</div>
+      <div style="font-size:10.5px;color:var(--text-2);line-height:1.7;">Shory offered to knock off approx. 30% of insurance stack (Space, Property, D&amp;O) for the next 3 years against Full PR Package of $1.5M.</div>
+      
+      <div style="display:flex;align-items:flex-start;margin-top:10px;padding:4px 0;"><div style="display:flex;flex-direction:column;align-items:center;gap:3px;flex:1;"><div style="width:9px;height:9px;border-radius:50%;background:#00aa82;border:1.5px solid #00e5a0;"></div><div style="font-size:7px;color:#00e5a0;font-weight:600;text-align:center;line-height:1.2;white-space:nowrap;">Intro</div></div><div style="height:1px;background:#00aa82;flex:1;margin-bottom:12px;"></div><div style="display:flex;flex-direction:column;align-items:center;gap:3px;flex:1;"><div style="width:9px;height:9px;border-radius:50%;background:#00aa82;border:1.5px solid #00e5a0;"></div><div style="font-size:7px;color:#00e5a0;font-weight:600;text-align:center;line-height:1.2;white-space:nowrap;">Discussions</div></div><div style="height:1px;background:#00aa82;flex:1;margin-bottom:12px;"></div><div style="display:flex;flex-direction:column;align-items:center;gap:3px;flex:1;"><div style="width:9px;height:9px;border-radius:50%;background:#00e5a0;border:1.5px solid #00e5a0;"></div><div style="font-size:7px;color:#00e5a0;font-weight:700;text-align:center;line-height:1.2;white-space:nowrap;">Term Sheet</div></div><div style="height:1px;background:rgba(30,50,50,0.6);flex:1;margin-bottom:12px;"></div><div style="display:flex;flex-direction:column;align-items:center;gap:3px;flex:1;"><div style="width:9px;height:9px;border-radius:50%;background:rgba(20,40,40,0.8);border:1.5px solid #2a4040;"></div><div style="font-size:7px;color:#2a4040;font-weight:400;text-align:center;line-height:1.2;white-space:nowrap;">Signed</div></div></div>
+    </div>
+    <div style="background:#151e1e;border:1px solid rgba(90,128,128,0.2);border-radius:10px;padding:16px 18px;opacity:0.7;">
+      <div style="font-size:9.5px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:6px;">KEZAD</div>
+      <div style="display:inline-block;padding:2px 9px;border-radius:12px;font-size:9.5px;font-weight:600;background:rgba(90,128,128,0.15);color:#5a8080;margin-bottom:8px;">Closed</div>
+      <div style="font-size:10.5px;color:var(--muted);line-height:1.7;">Offered videography and venue support at no charge. Social media shout-out done. Will not join the PR programme.</div>
+      
+      <div style="display:flex;align-items:flex-start;margin-top:10px;padding:4px 0;"><div style="display:flex;flex-direction:column;align-items:center;gap:3px;flex:1;"><div style="width:9px;height:9px;border-radius:50%;background:rgba(90,128,128,0.3);border:1.5px solid #5a8080;"></div><div style="font-size:7px;color:#3a5858;font-weight:400;text-align:center;line-height:1.2;white-space:nowrap;">Intro</div></div><div style="height:1px;background:rgba(90,128,128,0.2);flex:1;margin-bottom:12px;"></div><div style="display:flex;flex-direction:column;align-items:center;gap:3px;flex:1;"><div style="width:9px;height:9px;border-radius:50%;background:rgba(90,128,128,0.3);border:1.5px solid #5a8080;"></div><div style="font-size:7px;color:#3a5858;font-weight:400;text-align:center;line-height:1.2;white-space:nowrap;">Discussions</div></div><div style="height:1px;background:rgba(90,128,128,0.2);flex:1;margin-bottom:12px;"></div><div style="display:flex;flex-direction:column;align-items:center;gap:3px;flex:1;"><div style="width:9px;height:9px;border-radius:50%;background:rgba(90,128,128,0.3);border:1.5px solid #5a8080;"></div><div style="font-size:7px;color:#3a5858;font-weight:400;text-align:center;line-height:1.2;white-space:nowrap;">Term Sheet</div></div><div style="height:1px;background:rgba(90,128,128,0.2);flex:1;margin-bottom:12px;"></div><div style="display:flex;flex-direction:column;align-items:center;gap:3px;flex:1;"><div style="width:9px;height:9px;border-radius:50%;background:rgba(90,128,128,0.3);border:1.5px solid #5a8080;"></div><div style="font-size:7px;color:#3a5858;font-weight:400;text-align:center;line-height:1.2;white-space:nowrap;">Signed</div></div></div>
+    </div>
+    <div style="background:#1c3030;border:1px solid rgba(0,229,160,0.15);border-radius:10px;padding:16px 18px;">
+      <div style="font-size:9.5px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:6px;">e&amp;</div>
+      <div style="display:inline-block;padding:2px 9px;border-radius:12px;font-size:9.5px;font-weight:600;background:rgba(26,106,255,0.12);color:#6a9fff;margin-bottom:8px;">Introduction</div>
+      <div style="font-size:10.5px;color:var(--text-2);line-height:1.7;">Package overview shared.</div>
+      
+      <div style="display:flex;align-items:flex-start;margin-top:10px;padding:4px 0;"><div style="display:flex;flex-direction:column;align-items:center;gap:3px;flex:1;"><div style="width:9px;height:9px;border-radius:50%;background:#00e5a0;border:1.5px solid #00e5a0;"></div><div style="font-size:7px;color:#00e5a0;font-weight:700;text-align:center;line-height:1.2;white-space:nowrap;">Intro</div></div><div style="height:1px;background:rgba(30,50,50,0.6);flex:1;margin-bottom:12px;"></div><div style="display:flex;flex-direction:column;align-items:center;gap:3px;flex:1;"><div style="width:9px;height:9px;border-radius:50%;background:rgba(20,40,40,0.8);border:1.5px solid #2a4040;"></div><div style="font-size:7px;color:#2a4040;font-weight:400;text-align:center;line-height:1.2;white-space:nowrap;">Discussions</div></div><div style="height:1px;background:rgba(30,50,50,0.6);flex:1;margin-bottom:12px;"></div><div style="display:flex;flex-direction:column;align-items:center;gap:3px;flex:1;"><div style="width:9px;height:9px;border-radius:50%;background:rgba(20,40,40,0.8);border:1.5px solid #2a4040;"></div><div style="font-size:7px;color:#2a4040;font-weight:400;text-align:center;line-height:1.2;white-space:nowrap;">Term Sheet</div></div><div style="height:1px;background:rgba(30,50,50,0.6);flex:1;margin-bottom:12px;"></div><div style="display:flex;flex-direction:column;align-items:center;gap:3px;flex:1;"><div style="width:9px;height:9px;border-radius:50%;background:rgba(20,40,40,0.8);border:1.5px solid #2a4040;"></div><div style="font-size:7px;color:#2a4040;font-weight:400;text-align:center;line-height:1.2;white-space:nowrap;">Signed</div></div></div>
+    </div>
+    <div style="background:#1c3030;border:1px solid rgba(0,229,160,0.15);border-radius:10px;padding:16px 18px;">
+      <div style="font-size:9.5px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:6px;">FAB</div>
+      <div style="display:inline-block;padding:2px 9px;border-radius:12px;font-size:9.5px;font-weight:600;background:rgba(90,128,128,0.12);color:#a8c4c0;margin-bottom:8px;">Pending Initiation</div>
+      <div style="font-size:10.5px;color:var(--text-2);line-height:1.7;">Outreach pending.</div>
+      
+      <div style="display:flex;align-items:flex-start;margin-top:10px;padding:4px 0;"><div style="display:flex;flex-direction:column;align-items:center;gap:3px;flex:1;"><div style="width:9px;height:9px;border-radius:50%;background:rgba(90,128,128,0.2);border:1.5px solid #5a8080;"></div><div style="font-size:7px;color:#3a5858;font-weight:400;text-align:center;line-height:1.2;white-space:nowrap;">Intro</div></div><div style="height:1px;background:rgba(30,50,50,0.6);flex:1;margin-bottom:12px;"></div><div style="display:flex;flex-direction:column;align-items:center;gap:3px;flex:1;"><div style="width:9px;height:9px;border-radius:50%;background:rgba(90,128,128,0.2);border:1.5px solid #5a8080;"></div><div style="font-size:7px;color:#3a5858;font-weight:400;text-align:center;line-height:1.2;white-space:nowrap;">Discussions</div></div><div style="height:1px;background:rgba(30,50,50,0.6);flex:1;margin-bottom:12px;"></div><div style="display:flex;flex-direction:column;align-items:center;gap:3px;flex:1;"><div style="width:9px;height:9px;border-radius:50%;background:rgba(90,128,128,0.2);border:1.5px solid #5a8080;"></div><div style="font-size:7px;color:#3a5858;font-weight:400;text-align:center;line-height:1.2;white-space:nowrap;">Term Sheet</div></div><div style="height:1px;background:rgba(30,50,50,0.6);flex:1;margin-bottom:12px;"></div><div style="display:flex;flex-direction:column;align-items:center;gap:3px;flex:1;"><div style="width:9px;height:9px;border-radius:50%;background:rgba(90,128,128,0.2);border:1.5px solid #5a8080;"></div><div style="font-size:7px;color:#3a5858;font-weight:400;text-align:center;line-height:1.2;white-space:nowrap;">Signed</div></div></div>
+    </div>
+  </div>
+
+    <!-- ── FUNDRAISING ── -->
+  <div class="sec-label" style="font-size:14.5px;letter-spacing:0.06em;">Fundraising &amp; Capital</div>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:32px;">
+    <div style="background:#1c3030;border:1px solid rgba(0,229,160,0.15);border-radius:10px;padding:16px 18px;">
+      <div style="font-size:9.5px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:6px;">ADIO Rebate</div>
+      <div style="display:inline-block;padding:2px 9px;border-radius:12px;font-size:9.5px;font-weight:600;background:rgba(245,166,35,0.12);color:#f5a623;margin-bottom:8px;">Discussions</div>
+      <div style="font-size:10.5px;color:var(--text-2);line-height:1.7;">Feedback received from ADIO. Model and Business Plan update in progress per guidance.</div>
+      <div style="margin-top:8px;padding:5px 10px;background:rgba(0,229,160,0.06);border-radius:5px;font-size:10px;color:var(--ow-teal);"><strong>Up to 30%</strong> of EBITDA, People Spend &amp; Tax</div>
+      <div style="display:flex;align-items:flex-start;margin-top:10px;padding:4px 0;"><div style="display:flex;flex-direction:column;align-items:center;gap:3px;flex:1;"><div style="width:9px;height:9px;border-radius:50%;background:#00aa82;border:1.5px solid #00e5a0;"></div><div style="font-size:7px;color:#00e5a0;font-weight:600;text-align:center;line-height:1.2;white-space:nowrap;">Intro</div></div><div style="height:1px;background:#00aa82;flex:1;margin-bottom:12px;"></div><div style="display:flex;flex-direction:column;align-items:center;gap:3px;flex:1;"><div style="width:9px;height:9px;border-radius:50%;background:#00e5a0;border:1.5px solid #00e5a0;"></div><div style="font-size:7px;color:#00e5a0;font-weight:700;text-align:center;line-height:1.2;white-space:nowrap;">Discussions</div></div><div style="height:1px;background:rgba(30,50,50,0.6);flex:1;margin-bottom:12px;"></div><div style="display:flex;flex-direction:column;align-items:center;gap:3px;flex:1;"><div style="width:9px;height:9px;border-radius:50%;background:rgba(20,40,40,0.8);border:1.5px solid #2a4040;"></div><div style="font-size:7px;color:#2a4040;font-weight:400;text-align:center;line-height:1.2;white-space:nowrap;">Due Diligence</div></div><div style="height:1px;background:rgba(30,50,50,0.6);flex:1;margin-bottom:12px;"></div><div style="display:flex;flex-direction:column;align-items:center;gap:3px;flex:1;"><div style="width:9px;height:9px;border-radius:50%;background:rgba(20,40,40,0.8);border:1.5px solid #2a4040;"></div><div style="font-size:7px;color:#2a4040;font-weight:400;text-align:center;line-height:1.2;white-space:nowrap;">Term Sheet</div></div><div style="height:1px;background:rgba(30,50,50,0.6);flex:1;margin-bottom:12px;"></div><div style="display:flex;flex-direction:column;align-items:center;gap:3px;flex:1;"><div style="width:9px;height:9px;border-radius:50%;background:rgba(20,40,40,0.8);border:1.5px solid #2a4040;"></div><div style="font-size:7px;color:#2a4040;font-weight:400;text-align:center;line-height:1.2;white-space:nowrap;">Signed</div></div></div>
+    </div>
+    <div style="background:#1c3030;border:1px solid rgba(0,229,160,0.15);border-radius:10px;padding:16px 18px;">
+      <div style="font-size:9.5px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:6px;">Leapfrog Investments <span style="color:#5a8080;font-size:9px;font-weight:400;">(Equity)</span></div>
+      <div style="display:inline-block;padding:2px 9px;border-radius:12px;font-size:9.5px;font-weight:600;background:rgba(26,106,255,0.12);color:#6a9fff;margin-bottom:8px;">Introduction</div>
+      <div style="font-size:10.5px;color:var(--text-2);line-height:1.7;">Intro call completed. Exploring equity funding in AIS.</div>
+      <div style="margin-top:8px;padding:5px 10px;background:rgba(0,229,160,0.06);border-radius:5px;font-size:10px;color:var(--ow-teal);"><strong>Climate Fund:</strong> $25M – $60M equity</div>
+      <div style="display:flex;align-items:flex-start;margin-top:10px;padding:4px 0;"><div style="display:flex;flex-direction:column;align-items:center;gap:3px;flex:1;"><div style="width:9px;height:9px;border-radius:50%;background:#00aa82;border:1.5px solid #00e5a0;"></div><div style="font-size:7px;color:#00e5a0;font-weight:600;text-align:center;line-height:1.2;white-space:nowrap;">Intro</div></div><div style="height:1px;background:#00aa82;flex:1;margin-bottom:12px;"></div><div style="display:flex;flex-direction:column;align-items:center;gap:3px;flex:1;"><div style="width:9px;height:9px;border-radius:50%;background:#00aa82;border:1.5px solid #00e5a0;"></div><div style="font-size:7px;color:#00e5a0;font-weight:600;text-align:center;line-height:1.2;white-space:nowrap;">Discussions</div></div><div style="height:1px;background:#00aa82;flex:1;margin-bottom:12px;"></div><div style="display:flex;flex-direction:column;align-items:center;gap:3px;flex:1;"><div style="width:9px;height:9px;border-radius:50%;background:#00e5a0;border:1.5px solid #00e5a0;"></div><div style="font-size:7px;color:#00e5a0;font-weight:700;text-align:center;line-height:1.2;white-space:nowrap;">Due Diligence</div></div><div style="height:1px;background:rgba(30,50,50,0.6);flex:1;margin-bottom:12px;"></div><div style="display:flex;flex-direction:column;align-items:center;gap:3px;flex:1;"><div style="width:9px;height:9px;border-radius:50%;background:rgba(20,40,40,0.8);border:1.5px solid #2a4040;"></div><div style="font-size:7px;color:#2a4040;font-weight:400;text-align:center;line-height:1.2;white-space:nowrap;">Term Sheet</div></div><div style="height:1px;background:rgba(30,50,50,0.6);flex:1;margin-bottom:12px;"></div><div style="display:flex;flex-direction:column;align-items:center;gap:3px;flex:1;"><div style="width:9px;height:9px;border-radius:50%;background:rgba(20,40,40,0.8);border:1.5px solid #2a4040;"></div><div style="font-size:7px;color:#2a4040;font-weight:400;text-align:center;line-height:1.2;white-space:nowrap;">Signed</div></div></div>
+    </div>
+    <div style="background:#1c3030;border:1px solid rgba(0,229,160,0.15);border-radius:10px;padding:16px 18px;">
+      <div style="font-size:9.5px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:6px;">ADFD/ADEX <span style="color:#5a8080;font-size:9px;font-weight:400;">(Debt - JPM Structured)</span></div>
+      <div style="display:inline-block;padding:2px 9px;border-radius:12px;font-size:9.5px;font-weight:600;background:rgba(245,166,35,0.12);color:#f5a623;margin-bottom:8px;">Due Diligence</div>
+      <div style="font-size:10.5px;color:var(--text-2);line-height:1.7;">Intro JPM team initiated. Overview presentation shared.</div>
+      <div style="margin-top:8px;padding:5px 10px;background:rgba(0,229,160,0.06);border-radius:5px;font-size:10px;color:var(--ow-teal);"><strong>Up to $125M</strong> debt facility</div>
+      <div style="display:flex;align-items:flex-start;margin-top:10px;padding:4px 0;"><div style="display:flex;flex-direction:column;align-items:center;gap:3px;flex:1;"><div style="width:9px;height:9px;border-radius:50%;background:#00e5a0;border:1.5px solid #00e5a0;"></div><div style="font-size:7px;color:#00e5a0;font-weight:700;text-align:center;line-height:1.2;white-space:nowrap;">Intro</div></div><div style="height:1px;background:rgba(30,50,50,0.6);flex:1;margin-bottom:12px;"></div><div style="display:flex;flex-direction:column;align-items:center;gap:3px;flex:1;"><div style="width:9px;height:9px;border-radius:50%;background:rgba(20,40,40,0.8);border:1.5px solid #2a4040;"></div><div style="font-size:7px;color:#2a4040;font-weight:400;text-align:center;line-height:1.2;white-space:nowrap;">Discussions</div></div><div style="height:1px;background:rgba(30,50,50,0.6);flex:1;margin-bottom:12px;"></div><div style="display:flex;flex-direction:column;align-items:center;gap:3px;flex:1;"><div style="width:9px;height:9px;border-radius:50%;background:rgba(20,40,40,0.8);border:1.5px solid #2a4040;"></div><div style="font-size:7px;color:#2a4040;font-weight:400;text-align:center;line-height:1.2;white-space:nowrap;">Due Diligence</div></div><div style="height:1px;background:rgba(30,50,50,0.6);flex:1;margin-bottom:12px;"></div><div style="display:flex;flex-direction:column;align-items:center;gap:3px;flex:1;"><div style="width:9px;height:9px;border-radius:50%;background:rgba(20,40,40,0.8);border:1.5px solid #2a4040;"></div><div style="font-size:7px;color:#2a4040;font-weight:400;text-align:center;line-height:1.2;white-space:nowrap;">Term Sheet</div></div><div style="height:1px;background:rgba(30,50,50,0.6);flex:1;margin-bottom:12px;"></div><div style="display:flex;flex-direction:column;align-items:center;gap:3px;flex:1;"><div style="width:9px;height:9px;border-radius:50%;background:rgba(20,40,40,0.8);border:1.5px solid #2a4040;"></div><div style="font-size:7px;color:#2a4040;font-weight:400;text-align:center;line-height:1.2;white-space:nowrap;">Signed</div></div></div>
+    </div>
+  </div>
+
+</div>
+
 </main>
 
 <script>
@@ -1993,16 +2046,17 @@ new Chart(document.getElementById('apAgeChart'), {
 
 // ─── AR Ageing Chart ───
 const arVendors = {
+  'Current (Loft)': ['Loft Orbital Technologies: $600k', 'Jul-26 invoice — within current bracket'],
   '> 90 days (Loft)': ['Loft Orbital Technologies: $400,022', 'To be netted against future Loft AP invoices'],
 };
 new Chart(document.getElementById('arAgeChart'), {
   type: 'bar',
   data: {
-    labels: ['> 90 days (Loft)'],
+    labels: ['Current (Loft)', '> 90 days (Loft)'],
     datasets: [{
-      data: [400],
-      backgroundColor: ['rgba(255,77,109,0.55)'],
-      borderColor:     ['#ff4d6d'],
+      data: [600, 400],
+      backgroundColor: ['rgba(0,170,130,0.65)', 'rgba(255,77,109,0.55)'],
+      borderColor:     ['#00aa82', '#ff4d6d'],
       borderWidth: 1.5, borderRadius: 4
     }]
   },
@@ -2398,6 +2452,7 @@ function showPage(id, btn) {
   window.scrollTo({ top: 0, behavior: 'smooth' });
   if (id === 'pipeline') setTimeout(initGauge, 50);
   if (id === 'cash' && window._buildCfChart) setTimeout(window._buildCfChart, 50);
+  if (id === 'initiatives') { /* no deferred chart */ }
 }
 
 
